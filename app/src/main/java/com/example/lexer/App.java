@@ -51,9 +51,13 @@ public class App {
         
         MainJFlexCup mfjc; 
 
+        //pedimos ruta del archivo a leer
+        System.out.println("Ingrese la ruta del archivo a leer: ");
+        String path = System.console().readLine();
+
         basePath = System.getProperty("user.dir"); 
         
-        fullPathParser = basePath + "\\src\\Prueba\\codigo.txt";
+        fullPathParser = basePath + path;
 
         mfjc = new MainJFlexCup();
         
