@@ -1,0 +1,77 @@
+/* Simple +/-/* expression language; parser evaluates constant expressions on the fly*/
+package ParserLexer;
+import java_cup.runtime.*;
+
+
+action code {:
+    public void hola(){
+        System.out.println("Hola");
+    }
+
+    public void adios(){
+        System.out.println("Adios");
+    }
+:}
+
+parser code {:
+    BasicLexerCupV lex;
+
+    @SupressWarnings("deprecation")
+    public parser(LexerCup lex){
+        this.lex = lex;
+        this.symbolFactory = new DefaultSymbolFactory();
+    }
+:}
+
+/* define how to connect to the scanner! */
+init with {: :};
+scan with {: return lex.next_token(); :};
+
+//Terminales de tipos
+terminal INTEGER, FLOAT, BOOL, CHAR, STRING;
+
+//Terminales relacionales
+terminal MENOR, MENORIGUAL, MAYOR, MAYORIGUAL, IGUALDAD, DIFERENTE;
+
+//Terminales de parentesis y llaves
+terminal PARENIZQ, PARENDER, BRACEIZQ, BRACEDER, CORCHETEIZQ, CORCHETEDER;
+
+//Terminales aritmeticos unarios 
+terminal INCREMENTO, DECREMENTO;
+
+//Terminales aritmeticos binarios
+terminal SUMA, RESTA, DIVISION, MULTIPLICACION, MODULO, POTENCIA;
+
+//Terminales operadores logicos
+terminal CONJUNCION, DISYUNCION, NEGACION;
+
+//Terminales estructuras de control de flujo
+terminal IF, ELSE, FOR, WHILE, SWITCH, CASE, BREAK, RETURN, DOSPUNTOS;
+
+//Terminales de identificadores y main
+terminal IDENTIFICADOR, NUMBER, ERROR, ASIGNACION, MAIN;
+
+//Terminales de finalizacion
+terminal ENDEXPR, COMMA, COMILLA, COMILLADOBLE;
+
+//terminales IO
+terminal PRINT, READ;
+
+//terminales booleanos
+terminal TRUE, FALSE;
+
+
+//terminal de default
+terminal DEFAULT;
+
+//no terminales 
+non terminal progra;
+
+//inicio
+start with progra;
+
+progra ::= {: 
+                    hola(); :} 
+ 
+                {: 
+                    adios(); :};

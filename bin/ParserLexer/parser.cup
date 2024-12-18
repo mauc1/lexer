@@ -2,15 +2,30 @@
 package ParserLexer;
 import java_cup.runtime.*;
 
+
+action code {:
+    public void hola(){
+        System.out.println("Hola");
+    }
+
+    public void adios(){
+        System.out.println("Adios");
+    }
+:}
+
 parser code {:
-    // Connect this parser to a scanner!
-    scanner s;
-    Parser(scanner s){ this.s=s; }
+    BasicLexerCupV lex;
+
+    @SupressWarnings("deprecation")
+    public parser(LexerCup lex){
+        this.lex = lex;
+        this.symbolFactory = new DefaultSymbolFactory();
+    }
 :}
 
 /* define how to connect to the scanner! */
-init with {: s.init(); :};
-scan with {: return s.next_token(); :};
+init with {: :};
+scan with {: return lex.next_token(); :};
 
 //Terminales de tipos
 terminal INTEGER, FLOAT, BOOL, CHAR, STRING;
@@ -34,15 +49,29 @@ terminal CONJUNCION, DISYUNCION, NEGACION;
 terminal IF, ELSE, FOR, WHILE, SWITCH, CASE, BREAK, RETURN, DOSPUNTOS;
 
 //Terminales de identificadores y main
-terminal ID, NUMBER, ERROR, ASIGNACION, MAIN;
+terminal IDENTIFICADOR, NUMBER, ERROR, ASIGNACION, MAIN;
 
 //Terminales de finalizacion
-terminal ENDEXPR, COMMA;
+terminal ENDEXPR, COMMA, COMILLA, COMILLADOBLE;
+
+//terminales IO
+terminal PRINT, READ;
+
+//terminales booleanos
+terminal TRUE, FALSE;
+
+
+//terminal de default
+terminal DEFAULT;
 
 //no terminales 
-non terminal programa;
+non terminal progra;
 
 //inicio
-starts with programa;
+start with progra;
 
-programa  ::=
+progra ::= {: 
+                    hola(); :} 
+ 
+                {: 
+                    adios(); :};

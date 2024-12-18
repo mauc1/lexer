@@ -40,8 +40,9 @@ LineTerminator = \r|\n|\r\n
 WHITESPACE     = {LineTerminator} | [ \t\f]
 LETRA = [a-zA-Z]
 DIGITO = [0-9]
-IDENTIFICADOR = ("_" {LETRA} "_")
-Float = -? (0 | {digitoNoCero} {digito}*) ("." {digito}+)? (("e" | "E") -? {digito}+)?
+digitoNoCero = [1-9]
+ID = "_"({LETRA}|{DIGITO})*"_"
+Float = -? (0 | {digitoNoCero} {DIGITO}*) ("." {DIGITO}+)? (("e" | "E") -? {DIGITO}+)?
 
 /* Se definen las expresiones para commentarios */
 Comment = {TraditionalComment} | {EndOfLineComment}
@@ -74,6 +75,7 @@ CommentContent       =  ([^\_] | \_+ [^/\_])*
 <YYINITIAL> "abreregalo"      { return symbol(sym.PARENIZQ); }
 <YYINITIAL> "cierraregalo"    { return symbol(sym.PARENDER); }
 <YYINITIAL> "finregalo"       { return symbol(sym.ENDEXPR); }
+<YYINITIAL> "entrega"         { return symbol(sym.ASIGNACION); }
 <YYINITIAL> "navidad"         { return symbol(sym.SUMA); }
 <YYINITIAL> "intercambio"     { return symbol(sym.RESTA); }
 <YYINITIAL> "reyes"           { return symbol(sym.DIVISION); }
@@ -104,6 +106,10 @@ CommentContent       =  ([^\_] | \_+ [^/\_])*
 <YYINITIAL> "narra"           { return symbol(sym.PRINT); }
 <YYINITIAL> "escucha"         { return symbol(sym.READ); }
 <YYINITIAL> "_verano_"        { return symbol(sym.MAIN); }
+<YYINITIAL> ","               { return symbol(sym.COMMA); }
+<YYINITIAL> "'"               { return symbol(sym.COMILLA); }
+<YYINITIAL> "\""               { return symbol(sym.COMILLADOBLE); }
+<YYINITIAL> "!"               { return symbol(sym.CHAR); } //LO DEJAMOS COMO CHAR ---------------
 //comentarios
 <YYINITIAL> "#"               { /* comentarios de una línea */ }
 <YYINITIAL> "\\_ .* _/"       { /* comentarios multilínea */ }
@@ -111,15 +117,15 @@ CommentContent       =  ([^\_] | \_+ [^/\_])*
 <YYINITIAL> "//".*          { /*  comentarios de una línea */ }
 <YYINITIAL> "/\\*"([^*]|\\*+[^*/])*"\\*/" { /*  comentarios multilínea */ }
 //ids
-<YYINITIAL>{IDENTIFICADOR}   { return symbol(sym.IDENTIFICADOR); }
+<YYINITIAL> {ID}   { return symbol(sym.IDENTIFICADOR); }
 // Ignorar espacios en blanco
-{WHITESPACE}    { /* Ignorar */ }
+<YYINITIAL> {WHITESPACE}    { /* Ignorar */ }
 
 
 
 <STRING> {
     \"                             { yybegin(YYINITIAL); 
-                                    return symbol(sym.t_string_nicolas, 
+                                    return symbol(sym.STRING, new String
                                     ("\"" + string.toString() + "\"")); }
 
     [^\n\r\"\\]                   { string.append( yytext() ); }

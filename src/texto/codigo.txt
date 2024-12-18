@@ -1,0 +1,4 @@
+bromista _func2_ abreregalo cupido x22 , cupido x22 cierraregalo abrecuento 
+cupido miChar entrega '!' finregalo
+cometa str1 entrega "Hola $%&/gaspar$& cierraregalo mundo" finregalo
+bromista fl1 entrega 56.6 finregalo
