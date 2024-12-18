@@ -10,7 +10,7 @@ public class MainJFlexCup {
 
     public void initLexerParser(String fullPathLexer, String[] strArrParser) {
         // TODO Auto-generated method stub
-        GenerateLexer(rutaLexer);
+        GenerateLexer(fullPathLexer);
         Generateparser(strArrParser);
         throw new UnsupportedOperationException("Unimplemented method 'initLexerParser'");
     }
@@ -19,16 +19,11 @@ public class MainJFlexCup {
         String[] strArr = { ruta };
         jflex.Main.generate(strArr);
     }
-    public void pruebaLexer(String fullPathParser) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'pruebaLexer2'");
-    }
-
     public void Generateparser(String[] strArr) throws internal_error, IOException, Exception {
         java_cup.Main.main(strArr);
     }
 
-    public void pruebaLexer2(String rutaScanear) throws Exception {
+    public void pruebaLexer(String path) throws Exception {
     Reader reader = new BufferedReader(new FileReader(rutaScanear));
     Lexer lex = new Lexer(reader);
 
@@ -39,12 +34,9 @@ public class MainJFlexCup {
     BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath));
 
     while (true) {
-        token = lex.next_token();
+        token = lexer.next_token();
         if (token.sym != 0) {
-            String tokenInfo = "Codigo Token: " + token.sym +
-                    ", Nombre Token: " + sym.terminalNames[token.sym] +
-                    ", Valor: " + (token.value == null ? lex.yytext() : token.value.toString()) +
-                    ", Linea: " + (token.left + 1) + ", Columna: " + (token.right + 1) + "\n";
+            String tokenInfo = "Codigo Token: " + token.sym +", Nombre Token: " + sym.terminalNames[token.sym] + ", Valor: " + (token.value == null ? lex.yytext() : token.value.toString()) + ", Linea: " + (token.left + 1) + ", Columna: " + (token.right + 1) + "\n";
             System.out.println(tokenInfo);
             writer.write(tokenInfo);
             writer.write("\n");
@@ -57,6 +49,26 @@ public class MainJFlexCup {
             return;
         }
         i++;
+    }
+    public static void main(String[] args) {
+        MainJFlexCup main = new MainJFlexCup();
+
+        try {
+            // Rutas de los archivos
+            String rutaJFlex = "src/ParserLexer/lexer.jflex";
+            String[] rutaCUP = { "src/ParserLexer/parser.cup" };
+            String rutaEntrada = "src/ParserLexer/archivoEntrada.txt";
+
+            // Generar lexer y parser
+            main.generateLexer(rutaJFlex);
+            main.generateParser(rutaCUP);
+
+            // Ejecutar prueba del lexer
+            main.pruebaLexer(rutaEntrada);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
 }
