@@ -9,54 +9,48 @@ import java_cup.runtime.Symbol;
 public class MainJFlexCup {
 
     public void initLexerParser(String fullPathLexer, String[] strArrParser) {
-        // TODO Auto-generated method stub
         GenerateLexer(rutaLexer);
         Generateparser(strArrParser);
-        throw new UnsupportedOperationException("Unimplemented method 'initLexerParser'");
     }
 
     public void GenerateLexer(String ruta) throws IOException, SilentExit {
         String[] strArr = { ruta };
         jflex.Main.generate(strArr);
     }
-    public void pruebaLexer(String fullPathParser) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'pruebaLexer2'");
-    }
 
     public void Generateparser(String[] strArr) throws internal_error, IOException, Exception {
         java_cup.Main.main(strArr);
     }
 
-    public void pruebaLexer2(String rutaScanear) throws Exception {
-    Reader reader = new BufferedReader(new FileReader(rutaScanear));
-    Lexer lex = new Lexer(reader);
+    public void pruebaLexer(String rutaScanear) throws Exception {
+        Reader reader = new BufferedReader(new FileReader(rutaScanear));
+        Lexer lex = new Lexer(reader);
 
-    int i = 0;
-    Symbol token;
+        int i = 0;
+        Symbol token;
 
-    String outputPath = (System.getProperty("user.dir")) + "\\src\\Prueba\\resultado.txt";
-    BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath));
+        String outputPath = (System.getProperty("user.dir")) + "\\src\\Prueba\\resultado.txt";
+        BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath));
 
-    while (true) {
-        token = lex.next_token();
-        if (token.sym != 0) {
-            String tokenInfo = "Codigo Token: " + token.sym +
-                    ", Nombre Token: " + sym.terminalNames[token.sym] +
-                    ", Valor: " + (token.value == null ? lex.yytext() : token.value.toString()) +
-                    ", Linea: " + (token.left + 1) + ", Columna: " + (token.right + 1) + "\n";
-            System.out.println(tokenInfo);
-            writer.write(tokenInfo);
-            writer.write("\n");
-        } else {
-            String cantLexemas = "Cantidad de lexemas encontrados: " + i;
-            System.out.println(cantLexemas);
-            writer.write(cantLexemas);
-            writer.newLine();
-            writer.close();
-            return;
+        while (true) {
+            token = lex.next_token();
+            if (token.sym != 0) {
+                String tokenInfo = "Codigo Token: " + token.sym +
+                        ", Nombre Token: " + sym.terminalNames[token.sym] +
+                        ", Valor: " + (token.value == null ? lex.yytext() : token.value.toString()) +
+                        ", Linea: " + (token.left + 1) + ", Columna: " + (token.right + 1) + "\n";
+                System.out.println(tokenInfo);
+                writer.write(tokenInfo);
+                writer.write("\n");
+            } else {
+                String cantLexemas = "Cantidad de lexemas encontrados: " + i;
+                System.out.println(cantLexemas);
+                writer.write(cantLexemas);
+                writer.newLine();
+                writer.close();
+                return;
+            }
+            i++;
         }
-        i++;
     }
-}
 }

@@ -22,15 +22,15 @@ public class App {
         mfjc = new MainJFlexCup();
 
         //eliminar el sym.java por si existe
-        Files.deleteIfExists(Paths.get(basePath + "\\src\\ParserLexer\\sym.java"));
+        Files.deleteIfExists(Paths.get(basePath + "\\src\\main\\java\\com\\example\\lexer\\ParserLexer\\sym.java"));
 
         //rutas para los archivos lexer y parser
-        fullPathLexer = basePath + "\\src\\ParserLexer\\lexerCup.jflex";
-        fullPathParser = basePath + "\\src\\ParserLexer\\parser.cup";
+        fullPathLexer = basePath + "\\src\\main\\java\\com\\example\\lexer\\ParserLexer\\lexerCup.jflex";
+        fullPathParser = basePath + "\\src\\main\\java\\com\\example\\lexer\\ParserLexer\\parser.cup";
 
         //se borran los archivos si ya existen
-        Files.deleteIfExists(Paths.get(basePath + "\\src\\ParserLexer\\" + jparser));
-        Files.deleteIfExists(Paths.get(basePath + "\\src\\ParserLexer\\" + jlexer));
+        Files.deleteIfExists(Paths.get(basePath + "\\src\\main\\java\\com\\example\\lexer\\ParserLexer\\" + jparser));
+        Files.deleteIfExists(Paths.get(basePath + "\\src\\main\\java\\com\\example\\lexer\\ParserLexer\\" + jlexer));
 
         // Se genera el lexer y parser
         String[] strArrParser = { fullPathParser };
@@ -39,9 +39,9 @@ public class App {
         // Se generan el sym.java el parser.java y el lexer.java en la carpeta
         // ParserLexer
         Files.move(Paths.get(basePath + "\\sym.java"), Paths.get(basePath +
-                "\\src\\ParserLexer\\sym.java"));
+                "\\src\\main\\java\\com\\example\\lexer\\ParserLexer\\sym.java"));
         Files.move(Paths.get(basePath + "\\" + jparser), Paths.get(basePath +
-                "\\src\\ParserLexer\\" + jparser));
+                "\\src\\main\\java\\com\\example\\lexer\\ParserLexer\\" + jparser));
 
     }
 
