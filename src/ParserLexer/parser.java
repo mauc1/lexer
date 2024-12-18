@@ -115,14 +115,6 @@ public class parser extends java_cup.runtime.lr_parser {
 class CUP$parser$actions {
 
 
-    public void hola(){
-        System.out.println("Hola");
-    }
-
-    public void adios(){
-        System.out.println("Adios");
-    }
-
   private final parser parser;
 
   /** Constructor */
@@ -162,9 +154,7 @@ class CUP$parser$actions {
           case 1: // progra ::= 
             {
               Object RESULT =null;
-		 
-                    hola();  
-                    adios(); 
+		
               CUP$parser$result = parser.getSymbolFactory().newSymbol("progra",0, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

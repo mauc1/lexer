@@ -3,15 +3,7 @@ package ParserLexer;
 import java_cup.runtime.*;
 
 
-action code {:
-    public void hola(){
-        System.out.println("Hola");
-    }
-
-    public void adios(){
-        System.out.println("Adios");
-    }
-:}
+action code {::}
 
 parser code {:
     BasicLexerCupV lex;
@@ -60,6 +52,8 @@ terminal PRINT, READ;
 //terminales booleanos
 terminal TRUE, FALSE;
 
+//terminales comentarios
+terminal COMENTARIO, MULTICOMENTARIO;
 
 //terminal de default
 terminal DEFAULT;
@@ -70,8 +64,4 @@ non terminal progra;
 //inicio
 start with progra;
 
-progra ::= {: 
-                    hola(); :} 
- 
-                {: 
-                    adios(); :};
+progra ::= {::};

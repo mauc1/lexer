@@ -6,60 +6,60 @@ Codigo Token: 13, Nombre Token: PARENIZQ, Valor: abreregalo, Linea: 1, Columna: 
 
 Codigo Token: 5, Nombre Token: CHAR, Valor: cupido, Linea: 1, Columna: 29
 
-Codigo Token: 41, Nombre Token: ERROR, Valor: x22, Linea: 1, Columna: 39
+Codigo Token: 6, Nombre Token: STRING, Valor: x22, Linea: 1, Columna: 36
 
-Codigo Token: 41, Nombre Token: ERROR, Valor: ,, Linea: 1, Columna: 44
+Codigo Token: 45, Nombre Token: COMMA, Valor: ,, Linea: 1, Columna: 40
 
-Codigo Token: 5, Nombre Token: CHAR, Valor: cupido, Linea: 1, Columna: 46
+Codigo Token: 5, Nombre Token: CHAR, Valor: cupido, Linea: 1, Columna: 42
 
-Codigo Token: 41, Nombre Token: ERROR, Valor: x22, Linea: 1, Columna: 56
+Codigo Token: 6, Nombre Token: STRING, Valor: x22, Linea: 1, Columna: 49
 
-Codigo Token: 14, Nombre Token: PARENDER, Valor: cierraregalo, Linea: 1, Columna: 60
+Codigo Token: 14, Nombre Token: PARENDER, Valor: cierraregalo, Linea: 1, Columna: 53
 
-Codigo Token: 15, Nombre Token: BRACEIZQ, Valor: abrecuento, Linea: 1, Columna: 73
+Codigo Token: 15, Nombre Token: BRACEIZQ, Valor: abrecuento, Linea: 1, Columna: 66
 
 Codigo Token: 5, Nombre Token: CHAR, Valor: cupido, Linea: 2, Columna: 1
 
-Codigo Token: 41, Nombre Token: ERROR, Valor: miChar, Linea: 2, Columna: 14
+Codigo Token: 6, Nombre Token: STRING, Valor: miChar, Linea: 2, Columna: 8
 
-Codigo Token: 42, Nombre Token: ASIGNACION, Valor: entrega, Linea: 2, Columna: 21
+Codigo Token: 42, Nombre Token: ASIGNACION, Valor: entrega, Linea: 2, Columna: 15
 
-Codigo Token: 41, Nombre Token: ERROR, Valor: ', Linea: 2, Columna: 30
+Codigo Token: 46, Nombre Token: COMILLA, Valor: ', Linea: 2, Columna: 23
 
-Codigo Token: 41, Nombre Token: ERROR, Valor: !, Linea: 2, Columna: 32
+Codigo Token: 5, Nombre Token: CHAR, Valor: !, Linea: 2, Columna: 24
 
-Codigo Token: 41, Nombre Token: ERROR, Valor: ', Linea: 2, Columna: 34
+Codigo Token: 46, Nombre Token: COMILLA, Valor: ', Linea: 2, Columna: 25
 
-Codigo Token: 44, Nombre Token: ENDEXPR, Valor: finregalo, Linea: 2, Columna: 36
+Codigo Token: 44, Nombre Token: ENDEXPR, Valor: finregalo, Linea: 2, Columna: 27
 
 Codigo Token: 6, Nombre Token: STRING, Valor: cometa, Linea: 3, Columna: 1
 
-Codigo Token: 41, Nombre Token: ERROR, Valor: str1, Linea: 3, Columna: 12
+Codigo Token: 6, Nombre Token: STRING, Valor: str1, Linea: 3, Columna: 8
 
-Codigo Token: 42, Nombre Token: ASIGNACION, Valor: entrega, Linea: 3, Columna: 17
+Codigo Token: 42, Nombre Token: ASIGNACION, Valor: entrega, Linea: 3, Columna: 13
 
-Codigo Token: 41, Nombre Token: ERROR, Valor: ", Linea: 3, Columna: 26
+Codigo Token: 47, Nombre Token: COMILLADOBLE, Valor: ", Linea: 3, Columna: 21
 
-Codigo Token: 41, Nombre Token: ERROR, Valor: Hola, Linea: 3, Columna: 31
+Codigo Token: 6, Nombre Token: STRING, Valor: Hola, Linea: 3, Columna: 22
 
-Codigo Token: 41, Nombre Token: ERROR, Valor: $%&/gaspar$&, Linea: 3, Columna: 48
+Codigo Token: 41, Nombre Token: ERROR, Valor: $%&/gaspar$&, Linea: 3, Columna: 39
 
-Codigo Token: 14, Nombre Token: PARENDER, Valor: cierraregalo, Linea: 3, Columna: 61
+Codigo Token: 14, Nombre Token: PARENDER, Valor: cierraregalo, Linea: 3, Columna: 52
 
-Codigo Token: 41, Nombre Token: ERROR, Valor: mundo, Linea: 3, Columna: 79
+Codigo Token: 6, Nombre Token: STRING, Valor: mundo, Linea: 3, Columna: 65
 
-Codigo Token: 41, Nombre Token: ERROR, Valor: ", Linea: 3, Columna: 85
+Codigo Token: 47, Nombre Token: COMILLADOBLE, Valor: ", Linea: 3, Columna: 70
 
-Codigo Token: 44, Nombre Token: ENDEXPR, Valor: finregalo, Linea: 3, Columna: 87
+Codigo Token: 44, Nombre Token: ENDEXPR, Valor: finregalo, Linea: 3, Columna: 72
 
 Codigo Token: 3, Nombre Token: FLOAT, Valor: bromista, Linea: 4, Columna: 1
 
-Codigo Token: 41, Nombre Token: ERROR, Valor: fl1, Linea: 4, Columna: 13
+Codigo Token: 6, Nombre Token: STRING, Valor: fl1, Linea: 4, Columna: 10
 
-Codigo Token: 42, Nombre Token: ASIGNACION, Valor: entrega, Linea: 4, Columna: 17
+Codigo Token: 42, Nombre Token: ASIGNACION, Valor: entrega, Linea: 4, Columna: 14
 
-Codigo Token: 41, Nombre Token: ERROR, Valor: 56.6, Linea: 4, Columna: 29
+Codigo Token: 41, Nombre Token: ERROR, Valor: 56.6, Linea: 4, Columna: 26
 
-Codigo Token: 44, Nombre Token: ENDEXPR, Valor: finregalo, Linea: 4, Columna: 34
+Codigo Token: 44, Nombre Token: ENDEXPR, Valor: finregalo, Linea: 4, Columna: 31
 
 Cantidad de lexemas encontrados: 32

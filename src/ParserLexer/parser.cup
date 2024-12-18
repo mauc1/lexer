@@ -3,19 +3,8 @@ package ParserLexer;
 import java_cup.runtime.*;
 
 
-action code {:
-    public void hola(){
-        System.out.println("Hola");
-    }
+action code {::}
 
-    public void adios(){
-        System.out.println("Adios");
-    }
-:}
-
-/*
-* Contiene configuraciones personalizadas para el parser y la integración con el lexer.
-*/
 parser code {:
     BasicLexerCupV lex;
 
@@ -27,7 +16,6 @@ parser code {:
 :}
 
 /* define how to connect to the scanner! */
-//da tokens utilizando el next_token que da el siguiente token
 init with {: :};
 scan with {: return lex.next_token(); :};
 
@@ -64,6 +52,8 @@ terminal PRINT, READ;
 //terminales booleanos
 terminal TRUE, FALSE;
 
+//terminales comentarios
+terminal COMENTARIO, MULTICOMENTARIO;
 
 //terminal de default
 terminal DEFAULT;
@@ -74,8 +64,4 @@ non terminal progra;
 //inicio
 start with progra;
 
-progra ::= {: 
-                    hola(); :} 
- 
-                {: 
-                    adios(); :};
+progra ::= {::};

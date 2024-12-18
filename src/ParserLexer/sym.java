@@ -8,7 +8,9 @@ package ParserLexer;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
+  public static final int COMILLADOBLE = 47;
   public static final int DOSPUNTOS = 38;
+  public static final int MULTICOMENTARIO = 53;
   public static final int CHAR = 5;
   public static final int CASE = 35;
   public static final int DIFERENTE = 12;
@@ -30,9 +32,11 @@ public class sym {
   public static final int MAYORIGUAL = 10;
   public static final int EOF = 0;
   public static final int RETURN = 37;
-  public static final int TRUE = 48;
+  public static final int TRUE = 50;
+  public static final int COMILLA = 46;
   public static final int DECREMENTO = 20;
   public static final int error = 1;
+  public static final int COMENTARIO = 52;
   public static final int MODULO = 25;
   public static final int NEGACION = 29;
   public static final int MENOR = 7;
@@ -47,16 +51,16 @@ public class sym {
   public static final int POTENCIA = 26;
   public static final int CORCHETEDER = 18;
   public static final int ELSE = 31;
-  public static final int READ = 47;
+  public static final int READ = 49;
   public static final int WHILE = 33;
-  public static final int DEFAULT = 50;
+  public static final int DEFAULT = 54;
   public static final int FLOAT = 3;
   public static final int CONJUNCION = 27;
   public static final int STRING = 6;
   public static final int DISYUNCION = 28;
-  public static final int FALSE = 49;
+  public static final int FALSE = 51;
   public static final int DIVISION = 23;
-  public static final int PRINT = 46;
+  public static final int PRINT = 48;
   public static final int ENDEXPR = 44;
   public static final int MULTIPLICACION = 24;
   public static final String[] terminalNames = new String[] {
@@ -106,10 +110,14 @@ public class sym {
   "MAIN",
   "ENDEXPR",
   "COMMA",
+  "COMILLA",
+  "COMILLADOBLE",
   "PRINT",
   "READ",
   "TRUE",
   "FALSE",
+  "COMENTARIO",
+  "MULTICOMENTARIO",
   "DEFAULT"
   };
 }

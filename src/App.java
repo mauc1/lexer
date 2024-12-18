@@ -1,28 +1,30 @@
 import java.nio.file.*;
 
 public class App {
+    //Correr este archivo para ejecutar el programa, 
+    //se generaran los archivos y luego de 4 segundos se ejecutara la prueba, 
+    //debe proporcionar la ruta del archivo a leer
+    
     //main
     public static void main(String[] args) throws Exception {
-        //descomentar según lo que se requiera
-        //ya sea generar o probar
         
-       // GenerarLexerParser();
+        GenerarLexerParser(); //comienza a generar el lexer y parser    
+        
+        Thread.sleep(4000); //timeout para que pueda generar los archivos
         
         GenerarPrueba(); //en resultado.txt estarán los resultados
     }
+
     //funcion para generar parser lexer
     public static void GenerarLexerParser() throws Exception {
-        //variables basicas que tendran las rutas de los archivos
-        String basePath, fullPathLexer, fullPathParser, jlexer, jparser;
+        String basePath, fullPathLexer, fullPathParser, jlexer, jparser; //vars para las rutas de los archivos
 
-        //instancia de la clase MainJFlexCup para construir el lexer
         MainJFlexCup mfjc;
         
-        //basepath es la ruta del directorio donde se ubica el proyecto
-        basePath = System.getProperty("user.dir");
+        basePath = System.getProperty("user.dir"); //basepath es la ruta del directorio donde se ubica el proyecto
 
         //archivos .java del parser y el lexer
-        jparser = "parser.java";
+        jparser = "Parser.java";
         jlexer = "Lexer.java";
 
         mfjc = new MainJFlexCup();
@@ -38,12 +40,11 @@ public class App {
         Files.deleteIfExists(Paths.get(basePath + "\\src\\ParserLexer\\" + jparser));
         Files.deleteIfExists(Paths.get(basePath + "\\src\\ParserLexer\\" + jlexer));
 
-        // Se genera el lexer y parser
+        // genera el lexer y parser
         String[] strArrParser = { fullPathParser };
         mfjc.initLexerParser(fullPathLexer, strArrParser);
 
-        // Se generan el sym.java el parser.java y el lexer.java en la carpeta
-        // ParserLexer
+        //mover los archivos generados a la carpeta ParserLexer
         Files.move(Paths.get(basePath + "\\sym.java"), Paths.get(basePath +
                 "\\src\\ParserLexer\\sym.java"));
         Files.move(Paths.get(basePath + "\\" + jparser), Paths.get(basePath +

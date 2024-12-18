@@ -36,22 +36,24 @@ import java_cup.runtime.*;
 %}
 
 //expresiones basicas
-LineTerminator = \r|\n|\r\n
-WHITESPACE     = {LineTerminator} | [ \t\f]
+delim = \r|\n|\r\n
+ESPACIO = {delim} | [ \t\f]
 LETRA = [a-zA-Z]
 DIGITO = [0-9]
-digitoNoCero = [1-9]
+ESCAPE = "\\"
+DOBLECOMILLA = "\""
+DIGITONOCERO = [1-9]
 ID = "_"({LETRA}|{DIGITO})*"_"
-Float = -? (0 | {digitoNoCero} {DIGITO}*) ("." {DIGITO}+)? (("e" | "E") -? {DIGITO}+)?
+Float = -? (0 | {DIGITONOCERO} {DIGITO}*) ("." {DIGITO}+)? (("e" | "E") -? {DIGITO}+)?
+STRCOMPLETO = {DOBLECOMILLA}({LETRA}|{DIGITO})({LETRA}|{DIGITO})*{DOBLECOMILLA}
+STRPALABRA = {LETRA}({LETRA}|{DIGITO})*
 
-/* Se definen las expresiones para commentarios */
-Comment = {TraditionalComment} | {EndOfLineComment}
-
-TraditionalComment   = "/\_" [^\_] ~"\_/" | "/\_" "\_"+ "/"
-TraditionalCommentError = "/_" [^\_]* 
-EndOfLineComment     = "@" {InputCharacter}* {LineTerminator}?
-CommentContent       =  ([^\_] | \_+ [^/\_])*
-
+//comentario de una linea
+COMENTARIOSIMPLE = "#" [^\n]* {delim}?
+//comentario multilinea
+MULTICOMENTARIO = "\\_" ([^\\_] | "\\_")* "_/"
+//var de cualquier tipo de comentario para registrarla
+COMENTARIO = {COMENTARIOSIMPLE} | {MULTICOMENTARIO}
 
 /* Reglas y estados lexicos */
 %state STRING
@@ -108,67 +110,40 @@ CommentContent       =  ([^\_] | \_+ [^/\_])*
 <YYINITIAL> "_verano_"        { return symbol(sym.MAIN); }
 <YYINITIAL> ","               { return symbol(sym.COMMA); }
 <YYINITIAL> "'"               { return symbol(sym.COMILLA); }
-<YYINITIAL> "\""               { return symbol(sym.COMILLADOBLE); }
-<YYINITIAL> "!"               { return symbol(sym.CHAR); } //LO DEJAMOS COMO CHAR ---------------
+<YYINITIAL> "\""              { return symbol(sym.COMILLADOBLE); } 
+<YYINITIAL> "!"               { return symbol(sym.CHAR); } //LO DEJAMOS COMO CHAR POR UN CODIGO DE EJEMPLO DEL PROFESOR
+<YYINITIAL> {STRCOMPLETO}     { return symbol(sym.STRING); }
+<YYINITIAL> {STRPALABRA}      { return symbol(sym.STRING); }
 //comentarios
-<YYINITIAL> "#"               { /* comentarios de una línea */ }
-<YYINITIAL> "\\_ .* _/"       { /* comentarios multilínea */ }
-//comentarios
-<YYINITIAL> "//".*          { /*  comentarios de una línea */ }
-<YYINITIAL> "/\\*"([^*]|\\*+[^*/])*"\\*/" { /*  comentarios multilínea */ }
+<YYINITIAL> {COMENTARIO} { }
+<YYINITIAL> "//".*            { }
+<YYINITIAL> "/\\*"([^*]|\\*+[^*/])*"\\*/" { }
 //ids
 <YYINITIAL> {ID}   { return symbol(sym.IDENTIFICADOR); }
 // Ignorar espacios en blanco
-<YYINITIAL> {WHITESPACE}    { /* Ignorar */ }
+<YYINITIAL> {ESPACIO}    { }
 
 
-
-<STRING> {
-    \"                             { yybegin(YYINITIAL); 
-                                    return symbol(sym.STRING, new String
-                                    ("\"" + string.toString() + "\"")); }
-
-    [^\n\r\"\\]                   { string.append( yytext() ); }
-    \\t                            { string.append('\t'); }
-    \\n                            { string.append('\n'); }
-
-    \\r                            { string.append('\r'); }
-    \\\"                           { string.append('\"'); }
-    \\                             { string.append('\\'); }  
-    
-    .                              { handleError("Carácter no reconocido en la cadena"); }
-}
-
-
-
-//REGLAS---------------------------
-//reglas de recuperación en modo panico
+//MANEJO DE ERRORES
 <YYINITIAL,ERROR> {
-    //caracteres no validos, se intenta avanzar al siguiente caracter reconocible
     [^] { 
         yycolumn++;
         return symbol(sym.ERROR);
     }
 }
 
-
-<YYINITIAL,ERROR> "_/" {
-    //fin de comentario no encontrado, se intenta recuperar
-    yybegin(YYINITIAL);
-    yycolumn += 2; //avanzar 2 caracteres para evitar un bucle infinito
-    return symbol(sym.ERROR);
-}
-
-
+//manejo de errores en caso de no reconocer el caracter
 <YYINITIAL,ERROR> [^ \t\n\r\"\-\)\(\+\!\{\}\[\]\|\,\#]* {
-    //ignorar cualquier otro carácter durante la recuperación
     yycolumn += yylength();
     return symbol(sym.ERROR);
 }
 
-
-// fallback en caso de encontrar un caracter no reconocido
 [^]                              { 
                                     yycolumn++;
                                     return symbol(sym.ERROR);
                                 }
+
+//fuentes:
+//para esta parte usamos un ejemplo de stackoverflow y una web con informacion 
+// https://www.angelfire.com/mac/michelo0/Tema6.html
+// https://stackoverflow.com/questions/21837308/jflex-error-unexpected-character-yyinitial
