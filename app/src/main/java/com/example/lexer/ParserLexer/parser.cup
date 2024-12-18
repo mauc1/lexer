@@ -1,0 +1,48 @@
+/* Simple +/-/* expression language; parser evaluates constant expressions on the fly*/
+package ParserLexer;
+import java_cup.runtime.*;
+
+parser code {:
+    // Connect this parser to a scanner!
+    scanner s;
+    Parser(scanner s){ this.s=s; }
+:}
+
+/* define how to connect to the scanner! */
+init with {: s.init(); :};
+scan with {: return s.next_token(); :};
+
+//Terminales de tipos
+terminal INTEGER, FLOAT, BOOL, CHAR, STRING;
+
+//Terminales relacionales
+terminal LESS, LESSOREQ, GREATER, GREATEROREQ, EQUAL, NOEQUAL;
+
+//Terminales de parentesis y llaves
+terminal PARENIZQ, PARENDER, BRACEIZQ, BRACEDER, CORCHETEIZQ, CORCHETEDER;
+
+//Terminales aritmeticos unarios 
+terminal INCR, DECR;
+
+//Terminales aritmeticos binarios
+terminal SUMA, RESTA, DIV, MULT, MOD, POW;
+
+//Terminales operadores logicos
+terminal CONJUCNCTION, DISYUNCTION, NOT;
+
+//Terminales estructuras de control de flujo
+terminal IF, ELSE, FOR, WHILE, SWITCH, CASE, BREAK, RETURN, TWOPOINTS;
+
+//Terminales de identificadores y main
+terminal ID, NUMBER, ERROR, ASIGNACION, MAIN;
+
+//Terminales de finalizacion
+terminal ENDEXPR, COMMA;
+
+//no terminales 
+non terminal programa;
+
+//inicio
+starts with programa;
+
+programa  ::=
