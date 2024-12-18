@@ -13,6 +13,9 @@ action code {:
     }
 :}
 
+/*
+* Contiene configuraciones personalizadas para el parser y la integración con el lexer.
+*/
 parser code {:
     BasicLexerCupV lex;
 
@@ -24,6 +27,7 @@ parser code {:
 :}
 
 /* define how to connect to the scanner! */
+//da tokens utilizando el next_token que da el siguiente token
 init with {: :};
 scan with {: return lex.next_token(); :};
 
