@@ -16,22 +16,22 @@ scan with {: return s.next_token(); :};
 terminal INTEGER, FLOAT, BOOL, CHAR, STRING;
 
 //Terminales relacionales
-terminal LESS, LESSOREQ, GREATER, GREATEROREQ, EQUAL, NOEQUAL;
+terminal MENOR, MENORIGUAL, MAYOR, MAYORIGUAL, IGUALDAD, DIFERENTE;
 
 //Terminales de parentesis y llaves
 terminal PARENIZQ, PARENDER, BRACEIZQ, BRACEDER, CORCHETEIZQ, CORCHETEDER;
 
 //Terminales aritmeticos unarios 
-terminal INCR, DECR;
+terminal INCREMENTO, DECREMENTO;
 
 //Terminales aritmeticos binarios
-terminal SUMA, RESTA, DIV, MULT, MOD, POW;
+terminal SUMA, RESTA, DIVISION, MULTIPLICACION, MODULO, POTENCIA;
 
 //Terminales operadores logicos
-terminal CONJUCNCTION, DISYUNCTION, NOT;
+terminal CONJUNCION, DISYUNCION, NEGACION;
 
 //Terminales estructuras de control de flujo
-terminal IF, ELSE, FOR, WHILE, SWITCH, CASE, BREAK, RETURN, TWOPOINTS;
+terminal IF, ELSE, FOR, WHILE, SWITCH, CASE, BREAK, RETURN, DOSPUNTOS;
 
 //Terminales de identificadores y main
 terminal ID, NUMBER, ERROR, ASIGNACION, MAIN;
