@@ -1,0 +1,16 @@
+56a7e43 - mauc1, 49 minutes ago : Fix: Type error
+1f780cc - mauc1, 74 minutes ago : fix: numeros ahora se reconocen
+258fe20 - mauc1, 2 hours ago : Fix: jflex y main
+5889856 - julianrodzs, 4 hours ago : Comentarios
+8156564 - mauc1, 21 hours ago : move from gradle to vsc project
+eb50a7f - mauc1, 23 hours ago : merge fix
+c3d5ff3 - mauc1, 24 hours ago : fix rutas
+94300c0 - julianrodzs, 24 hours ago : Merge branch 'main' of https://github.com/mauc1/lexer
+9dd86ca - julianrodzs, 24 hours ago : coordinacion de terminales
+8ffaf21 - mauc1, 24 hours ago : Merge branch 'main' of https://github.com/mauc1/lexer
+4b9ba8a - mauc1, 24 hours ago : quitamos alambrado, pedimos ruta
+e91795a - julianrodzs, 24 hours ago : mainJFlexCup.java
+6b68034 - mauc1, 25 hours ago : Merge branch 'main' of https://github.com/mauc1/lexer
+685f1d3 - mauc1, 25 hours ago : jflex file init - mejorar y revisar
+224c193 - julianrodzs, 26 hours ago : parser.cup
+86b850e - mauc1, 2 days ago : init: App file w/ file manage
