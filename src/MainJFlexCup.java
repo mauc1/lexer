@@ -38,7 +38,7 @@ public class MainJFlexCup {
         while (true) {
             token = lex.next_token();
             if (token.sym != 0) {
-                String tokenInfo = "Codigo Token: " + token.sym +", Nombre Token: " + sym.terminalNames[token.sym] + ", Valor: " + (token.value == null ? lex.yytext() : token.value.toString()) + ", Linea: " + (token.left + 1) + ", Columna: " + (token.right + 1) + "\n";
+                String tokenInfo = "Código Token: " + token.sym +", Nombre Token: " + sym.terminalNames[token.sym] + ", Valor: " + (token.value == null ? lex.yytext() : token.value.toString()) + ", Linea: " + (token.left + 1) + ", Columna: " + (token.right + 1) + "\n";
                 System.out.println(tokenInfo);
                 writer.write(tokenInfo);
                 writer.write("\n");
