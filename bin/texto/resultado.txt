@@ -58,8 +58,8 @@ Codigo Token: 6, Nombre Token: STRING, Valor: fl1, Linea: 4, Columna: 10
 
 Codigo Token: 42, Nombre Token: ASIGNACION, Valor: entrega, Linea: 4, Columna: 14
 
-Codigo Token: 41, Nombre Token: ERROR, Valor: 56.6, Linea: 4, Columna: 26
+Codigo Token: 40, Nombre Token: NUMERO, Valor: 56.6, Linea: 4, Columna: 22
 
-Codigo Token: 44, Nombre Token: ENDEXPR, Valor: finregalo, Linea: 4, Columna: 31
+Codigo Token: 44, Nombre Token: ENDEXPR, Valor: finregalo, Linea: 4, Columna: 27
 
 Cantidad de lexemas encontrados: 32

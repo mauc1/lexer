@@ -9,6 +9,7 @@ package ParserLexer;
 public class sym {
   /* terminals */
   public static final int COMILLADOBLE = 47;
+  public static final int NUMERO = 40;
   public static final int DOSPUNTOS = 38;
   public static final int MULTICOMENTARIO = 53;
   public static final int CHAR = 5;
@@ -40,7 +41,6 @@ public class sym {
   public static final int MODULO = 25;
   public static final int NEGACION = 29;
   public static final int MENOR = 7;
-  public static final int NUMBER = 40;
   public static final int BREAK = 36;
   public static final int PARENDER = 14;
   public static final int ERROR = 41;
@@ -104,7 +104,7 @@ public class sym {
   "RETURN",
   "DOSPUNTOS",
   "IDENTIFICADOR",
-  "NUMBER",
+  "NUMERO",
   "ERROR",
   "ASIGNACION",
   "MAIN",

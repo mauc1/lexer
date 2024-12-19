@@ -44,7 +44,8 @@ ESCAPE = "\\"
 DOBLECOMILLA = "\""
 DIGITONOCERO = [1-9]
 ID = "_"({LETRA}|{DIGITO})*"_"
-Float = -? (0 | {DIGITONOCERO} {DIGITO}*) ("." {DIGITO}+)? (("e" | "E") -? {DIGITO}+)?
+FLOATNUM = -? (0 | {DIGITONOCERO} {DIGITO}*) ("." {DIGITO}+)? (("e" | "E") -? {DIGITO}+)?
+NUM = {DIGITO}+ | {FLOATNUM}
 STRCOMPLETO = {DOBLECOMILLA}({LETRA}|{DIGITO})({LETRA}|{DIGITO})*{DOBLECOMILLA}
 STRPALABRA = {LETRA}({LETRA}|{DIGITO})*
 
@@ -114,6 +115,8 @@ COMENTARIO = {COMENTARIOSIMPLE} | {MULTICOMENTARIO}
 <YYINITIAL> "!"               { return symbol(sym.CHAR); } //LO DEJAMOS COMO CHAR POR UN CODIGO DE EJEMPLO DEL PROFESOR
 <YYINITIAL> {STRCOMPLETO}     { return symbol(sym.STRING); }
 <YYINITIAL> {STRPALABRA}      { return symbol(sym.STRING); }
+//numeros
+<YYINITIAL> {NUM}        { return symbol(sym.NUMERO); }
 //comentarios
 <YYINITIAL> {COMENTARIO} { }
 <YYINITIAL> "//".*            { }

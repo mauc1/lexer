@@ -24,7 +24,7 @@ public class App {
         basePath = System.getProperty("user.dir"); //basepath es la ruta del directorio donde se ubica el proyecto
 
         //archivos .java del parser y el lexer
-        jparser = "Parser.java";
+        jparser = "parser.java";
         jlexer = "Lexer.java";
 
         mfjc = new MainJFlexCup();
