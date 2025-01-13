@@ -1,9 +1,44 @@
 /* Simple +/-/* expression language; parser evaluates constant expressions on the fly*/
 package ParserLexer;
 import java_cup.runtime.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
+action code {:
+    HashMap<String, ArrayList<String>> listaTablasSimbolos = new HashMap<String, ArrayList<String>>();
+    String currentHash;
 
-action code {::}
+    public void imprimirTablaSimbolos(){
+        for (String key : listaTablasSimbolos.keySet()) {
+            System.out.println("Tabla de simbolos: " + key);
+            System.out.println("Valores: ");
+            for (String item : listaTablasSimbolos.get(key)) {
+                System.out.println(item);
+            }
+            System.out.println("");
+        }
+    }
+
+    //escribir en archivo la tabla de simbolos
+    public void escribirTablaSimbolos(String nombreArchivo){
+        try {
+            FileWriter myWriter = new FileWriter(nombreArchivo);
+            for (String key : listaTablasSimbolos.keySet()) {
+                myWriter.write("Tabla de simbolos: " + key + "\n");
+                myWriter.write("Valores: \n");
+                for (String item : listaTablasSimbolos.get(key)) {
+                    myWriter.write(item + "\n");
+                }
+                myWriter.write("\n");
+            }
+            myWriter.close();
+            System.out.println("Tabla de simbolos guardada en " + nombreArchivo);
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+:}
 
 parser code {:
     BasicLexerCupV lex;
@@ -59,9 +94,17 @@ terminal COMENTARIO, MULTICOMENTARIO;
 terminal DEFAULT;
 
 //no terminales 
-non terminal progra;
+non terminal funcion, inicio, main
 
-//inicio
-start with progra;
+funciones ::= funcion
+            | funciones funcion
+            ;
 
-progra ::= {::};
+inicio ::= funciones main
+        ;
+
+ini ::= {::} inicio {: 
+imprimirTablaSimbolos();
+escribirTablaSimbolos("tablaSimbolos.txt");
+:}
+    

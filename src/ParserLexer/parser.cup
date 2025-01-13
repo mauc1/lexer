@@ -1,7 +1,8 @@
 /* Simple +/-/* expression language; parser evaluates constant expressions on the fly*/
 package ParserLexer;
 import java_cup.runtime.*;
-
+import java.util.ArrayList;
+import java.util.HashMap;
 
 action code {:
     HashMap<String, ArrayList<String>> listaTablasSimbolos = new HashMap<String, ArrayList<String>>();
