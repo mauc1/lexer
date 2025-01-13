@@ -106,4 +106,77 @@ ini ::= {::} inicio {:
 imprimirTablaSimbolos();
 escribirTablaSimbolos("tablaSimbolos.txt");
 :}
-    
+
+//programa inicial
+programa ::= _verano_ funciones
+
+//definicion de funciones y sus producciones
+funciones ::= funcion | funciones funcion
+funcion ::= encabezadoFunc bloque
+encabezadoFunc ::= tipos identificador abreregalo parametros cierraregalo
+parametros ::= parametro | parametro "," parametros
+parametro ::= tipos identificador
+bloque ::= abrecuento sentencias cierracuento
+
+//definicion de sentencias y sus producciones
+sentencias ::= sentencia finregalo | sentencias sentencia finregalo
+sentencia ::= creacionVariable 
+                | creacionAsignacion 
+                | expresion 
+                | imprimir 
+                | leer 
+                | retornar 
+                | controlFlujo
+
+//declaraciones y asignaciones
+creacionVariable  ::= tipos identificador entrega expresion
+creacionAsignacion ::= identificador entrega expresion
+
+//definicion de expresiones y sus producciones
+expresion          ::= expresionRelacional 
+                   | expresionAritmetica 
+                   | llamadaFuncion
+                   | literal
+
+//literales
+literal ::= digitos | letras | identificador
+
+//llamadas
+llamadaFuncion ::= identificador abreregalo argumentos cierraregalo
+argumentos ::= expresion | expresion "," argumentos
+
+//relacionales
+expresionRelacional ::= expresion operadorRelacional expresion
+operadorRelacional  ::= snowball | evergreen | minstix | upatree | mary | openslae
+
+//aritmeticas
+expresionAritmetica ::= expresion operadorAritmetico expresion
+operadorAritmetico  ::= navidad | intercambio | reyes | nochebuena | magos | adviento
+
+//definicion de estrucutras de control
+controlFlujo ::= if | while | for | switch
+if  ::= elfo abreregalo expresionRelacional cierraregalo bloque (hada bloque)?
+while ::= envuelve abreregalo expresionRelacional cierraregalo bloque
+for ::= duende abreregalo inicializacion ";" expresionRelacional ";" incremento cierraregalo bloque
+incremento  ::= identificador quien | identificador grinch
+inicializacion  ::= creacionVariable | creacionAsignacion
+switch ::= varios abreregalo identificador cierraregalo abrecuento casos cierracuento
+casos  ::= caso | casos caso
+caso   ::= historia literal sigue bloque | último sigue bloque
+
+//retronos
+retornar ::= envia expresion finregalo
+imprimir ::= narra expresion finregalo
+leer ::= escucha identificador finregalo
+
+//tipos y tokens
+tipos ::= rodolfo | bromista | trueno | cupido | cometa
+identificador = letra (letra | digito | "_")*
+digito = [0-9]
+letra = [a-zA-Z]
+abreregalo = "("
+cierraregalo = ")"
+abrecuento = "{"
+cierracuento = "}"
+entrega = "="
+finregalo = ";"    
