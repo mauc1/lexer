@@ -146,6 +146,7 @@ COMENTARIO = {COMENTARIOSIMPLE} | {MULTICOMENTARIO}
                                     return symbol(sym.ERROR);
                                 }
 
+
 //fuentes:
 //para esta parte usamos un ejemplo de stackoverflow y una web con informacion 
 // https://www.angelfire.com/mac/michelo0/Tema6.html
