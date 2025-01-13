@@ -154,20 +154,20 @@ expresionAritmetica ::= expresion operadorAritmetico expresion
 operadorAritmetico  ::= navidad | intercambio | reyes | nochebuena | magos | adviento
 
 //definicion de estrucutras de control
-controlFlujo ::= if | while | for | switch
-if  ::= elfo abreregalo expresionRelacional cierraregalo bloque (hada bloque)?
-while ::= envuelve abreregalo expresionRelacional cierraregalo bloque
-for ::= duende abreregalo inicializacion ";" expresionRelacional ";" incremento cierraregalo bloque
+controlFlujo ::= elfo | envuelve | duende | varios | hada
+elfo ::= elfo abreregalo expresionRelacional cierraregalo bloque (hada bloque)?
+envuelve ::= envuelve abreregalo expresionRelacional cierraregalo bloque
+duende ::= duende abreregalo inicializacion ";" expresionRelacional ";" incremento cierraregalo bloque
 incremento  ::= identificador quien | identificador grinch
 inicializacion  ::= creacionVariable | creacionAsignacion
-switch ::= varios abreregalo identificador cierraregalo abrecuento casos cierracuento
+varios::= varios abreregalo identificador cierraregalo abrecuento casos cierracuento
 casos  ::= caso | casos caso
 caso   ::= historia literal sigue bloque | último sigue bloque
 
 //retronos
-retornar ::= envia expresion finregalo
-imprimir ::= narra expresion finregalo
-leer ::= escucha identificador finregalo
+envia ::= envia expresion finregalo
+narra ::= narra expresion finregalo
+escuchapáá ::= escucha identificador finregalo
 
 //tipos y tokens
 tipos ::= rodolfo | bromista | trueno | cupido | cometa
