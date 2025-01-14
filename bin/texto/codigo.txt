@@ -1,7 +1,1 @@
-// Ejemplo de archivo de entrada
-_verano_ {
-    // Aquí irían las funciones y el contenido que sigue tu gramática
-    funcion {
-        // Contenido de la función
-    }
-}
+rodolfo _a_ abreregalo cierraregalo 

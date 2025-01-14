@@ -1,10 +1,15 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.file.*;
 import ParserLexer.Lexer;
 import ParserLexer.parser;
+import java_cup.runtime.Symbol;
+import ParserLexer.sym;
 
 public class App {
     //Correr este archivo para ejecutar el programa, 
@@ -14,56 +19,60 @@ public class App {
     //main
     public static void main(String[] args) throws Exception {
         
-        GenerarLexerParser(); //comienza a generar el lexer y parser    
+        //PASO 1: Generar el lexer y parser
+        //GenerarLexerParser(); //comienza a generar el lexer y parser    
         
-        Thread.sleep(4000); //timeout para que pueda generar los archivos
-        
-       // GenerarPrueba(); //en resultado.txt estarán los resultados
+        //PASO 2
+        String ruta = "C:\\Users\\mauri\\OneDrive\\Documentos\\GitHub\\lexer\\src\\texto\\codigo.txt";//r.readLine();
+       // pruebaLexer(ruta);
 
-        //segundo proyecto
-        //tabla de simbolos
-        GenerarTablaSimbolos();
+        //PASO 3 : Ejecutar el parser
+        ejecutarParser(ruta);
     }
 
-    //funcion para generar la tabla de simbolos
-    public static void GenerarTablaSimbolos() throws Exception {
-        MainJFlexCup mfjc;
-        Reader reader;
-        parser parser;
-        String path, basePath, fullPathLexer, fullPathParser, jlexer, jparser;
+    public static void ejecutarParser(String ruta) throws Exception {
+        FileInputStream fileInputStream = new FileInputStream(ruta);
+        Reader reader = new InputStreamReader(fileInputStream);
+        Lexer lexer = new Lexer(reader);
+        parser parser = new parser(lexer);
 
-        basePath = System.getProperty("user.dir"); //basepath es la ruta del directorio donde se ubica el proyecto
-
-        //archivos .java del parser y el lexer
-        jparser = "parser.java";
-        jlexer = "Lexer.java";
-
-        mfjc = new MainJFlexCup();
-
-        //pedimos ruta del archivo a leer
-        System.out.println("Ingrese la ruta del archivo a leer: ");
-        path = System.console().readLine();
-
-        //rutas para los archivos lexer y parser
-        fullPathLexer = basePath + "\\src\\ParserLexer\\lexerCup.jflex";
-        fullPathParser = basePath + "\\src\\ParserLexer\\parser.cup";
-
-        //se borran los archivos si ya existen
-        Files.deleteIfExists(Paths.get(basePath + "\\src\\ParserLexer\\" + jparser));
-        Files.deleteIfExists(Paths.get(basePath + "\\src\\ParserLexer\\" + jlexer));
-
-        // genera el lexer y parser
-        String[] strArrParser = { fullPathParser };
-        mfjc.initLexerParser(fullPathLexer, strArrParser);
-
-        //se lee el archivo
-        FileInputStream fileInputStream = new FileInputStream(path);
-        reader = new InputStreamReader(fileInputStream);
-        parser = new parser(new ParserLexer.Lexer(reader));
-
-        //se ejecuta el parser
         parser.parse();
+
+        // Cerrar el flujo de entrada
+        reader.close();
+        fileInputStream.close();
     }
+
+     //funcion para probar el lexer (contar lexemas)
+    public static void pruebaLexer(String rutaScanear) throws Exception {
+        Reader reader = new BufferedReader(new FileReader(rutaScanear));
+        Lexer lex = new Lexer(reader);
+
+        int i = 0;
+        Symbol token;
+
+        String outputPath = (System.getProperty("user.dir")) + "\\src\\texto\\resultado.txt";
+        BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath));
+
+        while (true) {
+            token = lex.next_token();
+            if (token.sym != 0) {
+                String tokenInfo = "Codigo Token: " + token.sym +", Nombre Token: " + sym.terminalNames[token.sym] + ", Valor: " + (token.value == null ? lex.yytext() : token.value.toString()) + ", Linea: " + (token.left + 1) + ", Columna: " + (token.right + 1) + "\n";
+                System.out.println(tokenInfo);
+                writer.write(tokenInfo);
+                writer.write("\n");
+            } else {
+                String cantLexemas = "Cantidad de lexemas encontrados: " + i;
+                System.out.println(cantLexemas);
+                writer.write(cantLexemas);
+                writer.newLine();
+                writer.close();
+                return;
+            }
+            i++; //contador de lexemas
+            }
+    }
+
 
     //funcion para generar parser lexer
     public static void GenerarLexerParser() throws Exception {
@@ -100,18 +109,5 @@ public class App {
         Files.move(Paths.get(basePath + "\\" + jparser), Paths.get(basePath +
                 "\\src\\ParserLexer\\" + jparser));
 
-    }
-
-    //ejecutar la prueba del codigo
-    public static void GenerarPrueba() throws Exception {
-        MainJFlexCup mfjc; 
-
-        //pedimos ruta del archivo a leer
-        System.out.println("Ingrese la ruta del archivo a leer: ");
-        String path = System.console().readLine();
-
-        mfjc = new MainJFlexCup();
-        
-        mfjc.pruebaLexer(path);
     }
 }

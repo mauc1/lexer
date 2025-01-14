@@ -3,6 +3,9 @@ package ParserLexer;
 import java_cup.runtime.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.io.FileWriter;
+import java.io.IOException;
+
 
 action code {:
     HashMap<String, ArrayList<String>> listaTablasSimbolos = new HashMap<String, ArrayList<String>>();
@@ -41,9 +44,9 @@ action code {:
 :}
 
 parser code {:
-    BasicLexerCupV lex;
+    Lexer lex;
 
-    @SupressWarnings("deprecation")
+    @SuppressWarnings("deprecation")
     public parser(Lexer lex){
         this.lex = lex;
         this.symbolFactory = new DefaultSymbolFactory();
@@ -96,37 +99,108 @@ terminal DEFAULT;
 //no terminales 
 non terminal funcion, inicio, _verano_;
 non terminal funciones;
+non terminal funciones_produ;
 non terminal funcion_produ, tipos;
-non terminal bloque_produ, sentencias, sentencia_fin;
+non terminal bloque_produ, sentencias, sentencia_fin, sentencia;
+non terminal elfo, hada, duende, envuelve, rodolfo, sentenciaRelacional, sentenciaArit, creacionVariableNum;
 
 start with _verano_;
 
+
 _verano_ ::= 
-    {::} 
-    funcion {: 
+    funcion
+    {: 
         imprimirTablaSimbolos();
         escribirTablaSimbolos("tablaSimbolos.txt");
         System.out.println("---Fin---");
-    :} ;
+    :};
 
-funcion ::= {:
-    System.out.println("---Inicio---");
-:} funciones;
+funcion ::= funciones_produ;
 
-funciones ::= funcion_produ | funciones funcion_produ;
+//aqui se definen los distintos tipos de funciones
+//funciona como el encabezado
+funciones_produ ::=
+    //nota: pusimos INTEGER simulando el int main(){} de c++
+    INTEGER MAIN PARENIZQ PARENDER
+    {://Funcion main
+        String tipo_dato = "tipo: int\n";
+        ArrayList<String> listaDatos = new ArrayList<String>();
+        currentHash = "main";
+        String nombre_func = "nombre: main\n";
+        String ambito = "ambito: Funcion\n";
+        listaDatos.add(tipo_dato);
+        listaDatos.add(nombre_func);
+        listaDatos.add(ambito);
+        listaTablasSimbolos.put(currentHash, listaDatos);
+    :}
+    //cualquier funcion sin parametros
+    | tipos IDENTIFICADOR PARENIZQ PARENDER
+    {://Funcion sin parametros
+    //tipo
+        Symbol simboloTipo = (Symbol) CUP$parser$stack.elementAt(CUP$parser$top - 2);
+        
 
-funcion_produ ::= funcion_produ bloque_produ;
+        String tipo_dato = "tipo: " + simboloTipo.value.toString() + "\n";
 
-//funciones_produ main, void, con y sin parametros
-//funciones_produ ::= 
+        ArrayList<String> listaDatos = new ArrayList<String>();
+        currentHash = "funcion";
+        String nombre_func = "nombre: "  + "\n";
+        String ambito = "ambito: Funcion\n";
+        listaDatos.add(tipo_dato);
+        listaDatos.add(nombre_func);
+        listaDatos.add(ambito);
+        listaTablasSimbolos.put(currentHash, listaDatos);
+    :};
+
+tipos ::= 
+    INTEGER 
+    | FLOAT 
+    | BOOL 
+    | CHAR 
+    | STRING;
+
+bloque_produ ::= 
+    BRACEIZQ sentencias BRACEDER;
+
+//producciones de estructuras de control
+//if
+elfo ::= 
+    IF PARENIZQ sentenciaRelacional PARENDER;
+
+//else
+hada ::= 
+    ELSE;
+
+//for
+duende ::= 
+    FOR PARENIZQ creacionVariableNum ENDEXPR sentenciaRelacional ENDEXPR sentenciaArit PARENDER;
+
+//while
+envuelve ::= 
+    WHILE PARENIZQ sentenciaRelacional PARENDER;
+
+//switch
 
 
-tipos ::= INTEGER | FLOAT | BOOL | CHAR | STRING;
+//creaacion variable
+creacionVariableNum ::= 
+    rodolfo IDENTIFICADOR ASIGNACION NUMERO;
 
-bloque_produ ::= PARENIZQ sentencias PARENDER;
+//sentencia relacional
 
-sentencias ::= sentencia_fin | sentencias sentencia_fin;
+//sentencia aritmetica
+sentenciaArit ::= 
+    IDENTIFICADOR ASIGNACION NUMERO
+    | IDENTIFICADOR ASIGNACION IDENTIFICADOR SUMA NUMERO
+    | IDENTIFICADOR ASIGNACION IDENTIFICADOR RESTA NUMERO
+    | IDENTIFICADOR ASIGNACION IDENTIFICADOR MULTIPLICACION NUMERO
+    | IDENTIFICADOR ASIGNACION IDENTIFICADOR DIVISION NUMERO
+    | IDENTIFICADOR ASIGNACION IDENTIFICADOR MODULO NUMERO
+    | IDENTIFICADOR ASIGNACION IDENTIFICADOR POTENCIA NUMERO;
 
-sentencia_fin ::= PRINT;
-//programa inicial
-//programa ::= _verano_ funciones
+
+
+sentencias ::= sentencia | sentencias sentencia;
+
+sentencia ::=  
+    IDENTIFICADOR ASIGNACION NUMERO ENDEXPR;

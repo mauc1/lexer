@@ -1,0 +1,9 @@
+Tabla de simbolos: a
+Valores: 
+tipo: #6
+
+nombre: 
+
+ambito: Funcion
+
+

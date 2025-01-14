@@ -1,0 +1,30 @@
+
+
+//aqui se definen los distintos tipos de funciones
+funciones_produ ::= 
+    //nota: pusimos INTEGER simulando el int main(){} de c++
+    INTEGER MAIN PARENIZQ PARENDER
+    {://Funcion main
+        String tipo_dato = "tipo: int\n";
+        ArrayList<String> listaDatos = new ArrayList<String>();
+        currentHash = "main";
+        String nombre_func = "nombre: main\n";
+        String ambito = "ambito: Funcion\n";
+        listaDatos.add(tipo_dato);
+        listaDatos.add(nombre_func);
+        listaDatos.add(ambito);
+        listaTablasSimbolos.put(currentHash, listaDatos);
+    :}
+    //cualquier funcion sin parametros
+    | tipos IDENTIFICADOR PARENIZQ PARENDER
+    {://Funcion sin parametros
+        String tipo_dato = "tipo: " + $1 + "\n";
+        ArrayList<String> listaDatos = new ArrayList<String>();
+        currentHash = $2;
+        String nombre_func = "nombre: " + $2 + "\n";
+        String ambito = "ambito: Funcion\n";
+        listaDatos.add(tipo_dato);
+        listaDatos.add(nombre_func);
+        listaDatos.add(ambito);
+        listaTablasSimbolos.put(currentHash, listaDatos);
+    :}
