@@ -1,9 +1,9 @@
 import jflex.exceptions.*;
 import java.io.*;
 import ParserLexer.Lexer;
-import ParserLexer.sym;
 import java_cup.*;
 import java_cup.runtime.Symbol;
+import ParserLexer.sym;
 
 public class MainJFlexCup {
 

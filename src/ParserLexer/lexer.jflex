@@ -136,7 +136,7 @@ COMENTARIO = {COMENTARIOSIMPLE} | {MULTICOMENTARIO}
 }
 
 //manejo de errores en caso de no reconocer el caracter
-<YYINITIAL,ERROR> [^ \t\n\r\"\-\)\(\+\!\{\}\[\]\|\,\#]* {
+<YYINITIAL,ERROR> [^ \t\n\r\"\-\+\!\{\}\[\]\|\,\#]+ {
     yycolumn += yylength();
     return symbol(sym.ERROR);
 }
