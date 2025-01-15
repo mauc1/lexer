@@ -1,7 +1,23 @@
+Tabla de simbolos: parametro
+Valores: 
+tipo: parametro
+nombre: 
+
+ambito: parametro
+
+
 Tabla de simbolos: main
 Valores: 
 tipo: int
 nombre: _verano_
+ambito: Funcion
+
+
+Tabla de simbolos: funcion
+Valores: 
+tipo: 
+nombre: 
+
 ambito: Funcion
 
 

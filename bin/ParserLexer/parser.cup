@@ -99,10 +99,13 @@ terminal DEFAULT;
 //no terminales 
 non terminal funcion, inicio, _verano_;
 non terminal funciones;
-non terminal funciones_produ;
+non terminal funciones_produ, parametros, bloque_funcion, funcionRecur;
 non terminal funcion_produ, tipos;
 non terminal bloque_produ, sentencias, sentencia_fin, sentencia;
 non terminal elfo, hada, duende, envuelve, rodolfo, sentenciaRelacional, sentenciaArit, creacionVariableNum;
+non terminal varios, historia, CASO, ultimo, asignaRegalo;
+non terminal parametrosRecur, creacionVariable, controlFlujo, expresion, envia, narra, escucha;
+non terminal literal, sigue;  
 
 start with _verano_;
 
@@ -115,11 +118,15 @@ _verano_ ::=
         System.out.println("---Fin---");
     :};
 
-funcion ::= funciones_produ;
+funcion ::= {:System.out.println("\nInicio");:} funcionRecur;
 
+//llamada recursiva para llamar varias funciones
+funcionRecur ::= funcion_produ | funcionRecur funcion_produ ;
 //aqui se definen los distintos tipos de funciones
 //funciona como el encabezado
-funciones_produ ::=
+funcion_produ ::= funciones_produ bloque_produ;
+
+funciones_produ ::= 
     //nota: pusimos INTEGER simulando el int main(){} de c++
     INTEGER MAIN PARENIZQ PARENDER
     {://Funcion main
@@ -147,7 +154,21 @@ funciones_produ ::=
         listaDatos.add(nombre_func);
         listaDatos.add(ambito);
         listaTablasSimbolos.put(currentHash, listaDatos);
-    :};
+    :}
+    | tipos IDENTIFICADOR PARENIZQ
+    {://tipo
+        String tipo_dato = "tipo: "; //+ $1.value.toString() + "\n";
+
+        ArrayList<String> listaDatos = new ArrayList<String>();
+        currentHash = "funcion";
+        String nombre_func = "nombre: "  + "\n";
+        String ambito = "ambito: Funcion\n";
+        listaDatos.add(tipo_dato);
+        listaDatos.add(nombre_func);
+        listaDatos.add(ambito);
+        listaTablasSimbolos.put(currentHash, listaDatos);
+    :} parametros PARENDER
+    ;
     
 
 tipos ::= 
@@ -157,33 +178,61 @@ tipos ::=
     | CHAR 
     | STRING;
 
-bloque_produ ::= 
-    BRACEIZQ sentencias BRACEDER;
-    
+//cuerpo de las funciones
 
+bloque_produ ::= 
+    BRACEIZQ sentencia BRACEDER
+    ;
+
+sentencias ::= sentencia ENDEXPR | sentencias sentencia ENDEXPR;
+
+sentencia ::= creacionVariable 
+                | expresion 
+                | narra 
+                | escucha 
+                | envia 
+                | controlFlujo ;
 //producciones de estructuras de control
+controlFlujo ::= elfo | hada | duende | envuelve | varios ;
 //if
 elfo ::= 
-    IF PARENIZQ sentenciaRelacional PARENDER;
+    IF PARENIZQ sentenciaRelacional PARENDER
+    ;
 
 //else
 hada ::= 
-    ELSE;
+    ELSE
+    ;
 
 //for
 duende ::= 
-    FOR PARENIZQ creacionVariableNum ENDEXPR sentenciaRelacional ENDEXPR sentenciaArit PARENDER;
+    FOR PARENIZQ creacionVariableNum ENDEXPR sentenciaRelacional ENDEXPR sentenciaArit PARENDER
+    ;
 
 //while
 envuelve ::= 
-    WHILE PARENIZQ sentenciaRelacional PARENDER;
+    WHILE PARENIZQ sentenciaRelacional PARENDER
+    ;
 
 //switch
+/*
+varios ::= SWITCH PARENIZQ IDENTIFICADOR PARENDER BRACEIZQ historia BRACEDER 
+    ;
 
+historia ::= CASO | historia CASO;
+CASO ::= CASE literal sigue bloque_produ | ultimo sigue bloque_produ
+    ;
+*/
+//arreglo
+//asignaRegalo ::= PERSONA ABREEMPAQUE exprRegalo CIERRAEMPAQUE ENTREGA exprRegalo | PERSONA ENTREGA exprRegalo ;
 
 //creaacion variable
-creacionVariableNum ::= 
-    rodolfo IDENTIFICADOR ASIGNACION NUMERO;
+creacionVariable ::= rodolfo IDENTIFICADOR ASIGNACION NUMERO | 
+                    tipos IDENTIFICADOR ASIGNACION CHAR |
+                    tipos IDENTIFICADOR ASIGNACION STRING |
+                    bromista IDENTIFICADOR ASIGNACION FLOAT |
+                    tipos IDENTIFICADOR ASIGNACION BOOL;
+
 
 //sentencia relacional
 
@@ -199,7 +248,18 @@ sentenciaArit ::=
 
 
 
-sentencias ::= sentencia | sentencias sentencia;
+//parametros definidos recursivamente por si viene mas de uno
+parametros ::= parametrosRecur | parametros COMMA parametrosRecur ;
+parametrosRecur  ::= tipos IDENTIFICADOR 
+{://tipo
+        String tipo_dato = "tipo: parametro"; //+ $1.value.toString() + "\n";
 
-sentencia ::=  
-    IDENTIFICADOR ASIGNACION NUMERO ENDEXPR;
+        ArrayList<String> listaDatos = new ArrayList<String>();
+        currentHash = "parametro";
+        String nombre_func = "nombre: "  + "\n";
+        String ambito = "ambito: parametro\n";
+        listaDatos.add(tipo_dato);
+        listaDatos.add(nombre_func);
+        listaDatos.add(ambito);
+        listaTablasSimbolos.put(currentHash, listaDatos);
+:};
