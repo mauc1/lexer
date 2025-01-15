@@ -1,4 +1,13 @@
-rodolfo _verano_ abreregalo cierraregalo abrecuento cometa _x_ entrega 2 cierracuento
+cometa _aa_ abreregalo rodolfo _x22_ cierraregalo abrecuento 
+    cometa _h_ entrega "hola" finregalo  
+    cometa _a_ entrega "adios" finregalo 
+    narra "holaaa" finregalo
+    escucha "aaa" finregalo
+    elfo abreregalo _a_ mary "adios" cierraregalo abrecuento
+        envia "adios" finregalo
+    cierracuento
+    envia "hola" finregalo
+cierracuento
 
 
 

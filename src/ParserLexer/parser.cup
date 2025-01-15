@@ -102,10 +102,11 @@ non terminal funciones;
 non terminal funciones_produ, parametros, bloque_funcion, funcionRecur;
 non terminal funcion_produ, tipos;
 non terminal bloque_produ, sentencias, sentencia_fin, sentencia;
-non terminal elfo, hada, duende, envuelve, rodolfo, sentenciaRelacional, sentenciaArit, creacionVariableNum;
+non terminal if_produ, hada, duende, envuelve, rodolfo, sentenciaRelacional, sentenciaArit, creacionVariableNum;
 non terminal varios, historia, CASO, ultimo, asignaRegalo;
 non terminal parametrosRecur, creacionVariable, controlFlujo, expresion, envia, narra, escucha;
 non terminal literal, sigue;  
+non terminal narra_produ, flujos;
 
 start with _verano_;
 
@@ -141,14 +142,14 @@ funciones_produ ::=
         listaTablasSimbolos.put(currentHash, listaDatos);
     :}
     //cualquier funcion sin parametros
-    | tipos IDENTIFICADOR PARENIZQ PARENDER
+    | tipos:t IDENTIFICADOR:iden PARENIZQ PARENDER
     {://Funcion sin parametros
     //tipo
-        String tipo_dato = "tipo: "; //+ $1.value.toString() + "\n";
+        String tipo_dato = "tipo: " + t.toString() + "\n";
 
         ArrayList<String> listaDatos = new ArrayList<String>();
         currentHash = "funcion";
-        String nombre_func = "nombre: "  + "\n";
+        String nombre_func = "nombre: " + "\n";
         String ambito = "ambito: Funcion\n";
         listaDatos.add(tipo_dato);
         listaDatos.add(nombre_func);
@@ -172,36 +173,47 @@ funciones_produ ::=
     
 
 tipos ::= 
-    INTEGER 
-    | FLOAT 
-    | BOOL 
-    | CHAR 
-    | STRING;
+    INTEGER {:RESULT = "int";:}
+    | FLOAT {:RESULT = "float";:}
+    | BOOL {:RESULT = "bool";:}
+    | CHAR {:RESULT = "char";:}
+    | STRING {:RESULT = "string";:};
 
 //cuerpo de las funciones
 
 bloque_produ ::= 
-    BRACEIZQ sentencia BRACEDER
+    BRACEIZQ sentencias BRACEDER
     ;
 
-sentencias ::= sentencia ENDEXPR | sentencias sentencia ENDEXPR;
+sentencias ::= sentencia ENDEXPR | sentencias sentencia ENDEXPR | sentencias if_produ | sentencias duende | sentencias envuelve | sentencias varios;
 
-sentencia ::= creacionVariable 
-                | expresion 
-                | narra 
+sentencia ::= creacionVariable  
+                | narra_produ 
                 | escucha 
-                | envia 
-                | controlFlujo ;
-//producciones de estructuras de control
-controlFlujo ::= elfo | hada | duende | envuelve | varios ;
-//if
-elfo ::= 
-    IF PARENIZQ sentenciaRelacional PARENDER
-    ;
+                | envia;
 
-//else
-hada ::= 
-    ELSE
+//defincion de las ops de sentencia
+//creaacion variable
+creacionVariable ::= rodolfo IDENTIFICADOR ASIGNACION NUMERO | 
+                    tipos IDENTIFICADOR ASIGNACION CHAR |
+                    tipos IDENTIFICADOR ASIGNACION STRING |
+                    tipos IDENTIFICADOR ASIGNACION FLOAT |
+                    tipos IDENTIFICADOR ASIGNACION BOOL;
+
+//narra
+narra_produ ::= PRINT STRING;
+
+//escucha
+escucha ::= READ STRING;
+
+//envia
+envia ::= RETURN STRING | RETURN NUMERO | RETURN FLOAT | RETURN CHAR | RETURN BOOL;
+
+//producciones de estructuras de control
+//if y else
+if_produ ::= 
+    IF PARENIZQ sentenciaRelacional PARENDER bloque_produ
+    | IF PARENIZQ sentenciaRelacional PARENDER bloque_produ hada bloque_produ
     ;
 
 //for
@@ -223,16 +235,32 @@ historia ::= CASO | historia CASO;
 CASO ::= CASE literal sigue bloque_produ | ultimo sigue bloque_produ
     ;
 */
+//sentencia relacional
+sentenciaRelacional ::= 
+    | IDENTIFICADOR MENOR NUMERO
+    | IDENTIFICADOR MENOR IDENTIFICADOR
+    | IDENTIFICADOR MENORIGUAL NUMERO
+    | IDENTIFICADOR MENORIGUAL IDENTIFICADOR
+    | IDENTIFICADOR MAYOR NUMERO
+    | IDENTIFICADOR MAYOR IDENTIFICADOR
+    | IDENTIFICADOR MAYORIGUAL NUMERO
+    | IDENTIFICADOR MAYORIGUAL IDENTIFICADOR
+    | IDENTIFICADOR IGUALDAD NUMERO
+    | IDENTIFICADOR IGUALDAD IDENTIFICADOR
+    | IDENTIFICADOR DIFERENTE NUMERO
+    | IDENTIFICADOR DIFERENTE IDENTIFICADOR
+    | IDENTIFICADOR DIFERENTE STRING
+    | IDENTIFICADOR IGUALDAD STRING
+    | IDENTIFICADOR DIFERENTE CHAR
+    | IDENTIFICADOR IGUALDAD CHAR
+    | IDENTIFICADOR DIFERENTE FLOAT
+    | IDENTIFICADOR IGUALDAD FLOAT
+    | IDENTIFICADOR DIFERENTE BOOL
+    | IDENTIFICADOR IGUALDAD BOOL
+    | NUMERO IGUALDAD NUMERO
+    ;
 //arreglo
 //asignaRegalo ::= PERSONA ABREEMPAQUE exprRegalo CIERRAEMPAQUE ENTREGA exprRegalo | PERSONA ENTREGA exprRegalo ;
-
-//creaacion variable
-creacionVariable ::= rodolfo IDENTIFICADOR ASIGNACION NUMERO | 
-                    tipos IDENTIFICADOR ASIGNACION CHAR |
-                    tipos IDENTIFICADOR ASIGNACION STRING |
-                    bromista IDENTIFICADOR ASIGNACION FLOAT |
-                    tipos IDENTIFICADOR ASIGNACION BOOL;
-
 
 //sentencia relacional
 
@@ -252,14 +280,14 @@ sentenciaArit ::=
 parametros ::= parametrosRecur | parametros COMMA parametrosRecur ;
 parametrosRecur  ::= tipos IDENTIFICADOR 
 {://tipo
-        String tipo_dato = "tipo: parametro"; //+ $1.value.toString() + "\n";
+        String tipo_dat = "tipo: parametro"; //+ $1.value.toString() + "\n";
 
         ArrayList<String> listaDatos = new ArrayList<String>();
-        currentHash = "parametro";
-        String nombre_func = "nombre: "  + "\n";
-        String ambito = "ambito: parametro\n";
-        listaDatos.add(tipo_dato);
-        listaDatos.add(nombre_func);
-        listaDatos.add(ambito);
+        currentHash = "funcion";
+        String nombre = "nombre: "  + "\n";
+        String ambito_param = "ambito: variable local\n";
+        listaDatos.add(tipo_dat);
+        listaDatos.add(nombre);
+        listaDatos.add(ambito_param);
         listaTablasSimbolos.put(currentHash, listaDatos);
 :};
