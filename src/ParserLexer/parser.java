@@ -235,10 +235,10 @@ class CUP$parser$actions {
             {
               Object RESULT =null;
 		//Funcion main
-        String tipo_dato = "tipo: int\n";
+        String tipo_dato = "tipo: int";
         ArrayList<String> listaDatos = new ArrayList<String>();
         currentHash = "main";
-        String nombre_func = "nombre: main\n";
+        String nombre_func = "nombre: _verano_";
         String ambito = "ambito: Funcion\n";
         listaDatos.add(tipo_dato);
         listaDatos.add(nombre_func);
@@ -255,10 +255,7 @@ class CUP$parser$actions {
               Object RESULT =null;
 		//Funcion sin parametros
     //tipo
-        Symbol simboloTipo = (Symbol) CUP$parser$stack.elementAt(CUP$parser$top - 2);
-        
-
-        String tipo_dato = "tipo: " + simboloTipo.value.toString() + "\n";
+        String tipo_dato = "tipo: "; //+ $1.value.toString() + "\n";
 
         ArrayList<String> listaDatos = new ArrayList<String>();
         currentHash = "funcion";

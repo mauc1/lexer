@@ -20,7 +20,7 @@ public class App {
     public static void main(String[] args) throws Exception {
         
         //PASO 1: Generar el lexer y parser
-        //GenerarLexerParser(); //comienza a generar el lexer y parser    
+       // GenerarLexerParser(); //comienza a generar el lexer y parser    
         
         //PASO 2
         String ruta = "C:\\Users\\mauri\\OneDrive\\Documentos\\GitHub\\lexer\\src\\texto\\codigo.txt";//r.readLine();

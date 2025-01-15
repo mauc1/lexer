@@ -1,9 +1,7 @@
-Tabla de simbolos: a
+Tabla de simbolos: main
 Valores: 
-tipo: #6
-
-nombre: 
-
+tipo: int
+nombre: _verano_
 ambito: Funcion
 
 
