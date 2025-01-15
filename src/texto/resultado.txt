@@ -1,9 +1,201 @@
-Codigo Token: 2, Nombre Token: INTEGER, Valor: rodolfo, Linea: 1, Columna: 1
+Codigo Token: 6, Nombre Token: STRING, Valor: cometa, Linea: 1, Columna: 1
 
-Codigo Token: 39, Nombre Token: IDENTIFICADOR, Valor: _a_, Linea: 1, Columna: 9
+Codigo Token: 39, Nombre Token: IDENTIFICADOR, Valor: _aa_, Linea: 1, Columna: 8
 
 Codigo Token: 13, Nombre Token: PARENIZQ, Valor: abreregalo, Linea: 1, Columna: 13
 
-Codigo Token: 14, Nombre Token: PARENDER, Valor: cierraregalo, Linea: 1, Columna: 24
+Codigo Token: 2, Nombre Token: INTEGER, Valor: rodolfo, Linea: 1, Columna: 24
 
-Cantidad de lexemas encontrados: 4
+Codigo Token: 39, Nombre Token: IDENTIFICADOR, Valor: _x22_, Linea: 1, Columna: 32
+
+Codigo Token: 14, Nombre Token: PARENDER, Valor: cierraregalo, Linea: 1, Columna: 38
+
+Codigo Token: 15, Nombre Token: BRACEIZQ, Valor: abrecuento, Linea: 1, Columna: 51
+
+Codigo Token: 6, Nombre Token: STRING, Valor: cometa, Linea: 2, Columna: 5
+
+Codigo Token: 39, Nombre Token: IDENTIFICADOR, Valor: _h_, Linea: 2, Columna: 12
+
+Codigo Token: 42, Nombre Token: ASIGNACION, Valor: entrega, Linea: 2, Columna: 16
+
+Codigo Token: 6, Nombre Token: STRING, Valor: "hola", Linea: 2, Columna: 24
+
+Codigo Token: 44, Nombre Token: ENDEXPR, Valor: finregalo, Linea: 2, Columna: 31
+
+Codigo Token: 6, Nombre Token: STRING, Valor: cometa, Linea: 3, Columna: 5
+
+Codigo Token: 39, Nombre Token: IDENTIFICADOR, Valor: _a_, Linea: 3, Columna: 12
+
+Codigo Token: 42, Nombre Token: ASIGNACION, Valor: entrega, Linea: 3, Columna: 16
+
+Codigo Token: 6, Nombre Token: STRING, Valor: "adios", Linea: 3, Columna: 24
+
+Codigo Token: 44, Nombre Token: ENDEXPR, Valor: finregalo, Linea: 3, Columna: 32
+
+Codigo Token: 2, Nombre Token: INTEGER, Valor: rodolfo, Linea: 4, Columna: 5
+
+Codigo Token: 39, Nombre Token: IDENTIFICADOR, Valor: _x_, Linea: 4, Columna: 13
+
+Codigo Token: 42, Nombre Token: ASIGNACION, Valor: entrega, Linea: 4, Columna: 17
+
+Codigo Token: 40, Nombre Token: NUMERO, Valor: 9, Linea: 4, Columna: 25
+
+Codigo Token: 44, Nombre Token: ENDEXPR, Valor: finregalo, Linea: 4, Columna: 27
+
+Codigo Token: 48, Nombre Token: PRINT, Valor: narra, Linea: 5, Columna: 5
+
+Codigo Token: 6, Nombre Token: STRING, Valor: "holaaa", Linea: 5, Columna: 11
+
+Codigo Token: 44, Nombre Token: ENDEXPR, Valor: finregalo, Linea: 5, Columna: 20
+
+Codigo Token: 49, Nombre Token: READ, Valor: escucha, Linea: 6, Columna: 5
+
+Codigo Token: 6, Nombre Token: STRING, Valor: "aaa", Linea: 6, Columna: 13
+
+Codigo Token: 44, Nombre Token: ENDEXPR, Valor: finregalo, Linea: 6, Columna: 19
+
+Codigo Token: 30, Nombre Token: IF, Valor: elfo, Linea: 7, Columna: 5
+
+Codigo Token: 13, Nombre Token: PARENIZQ, Valor: abreregalo, Linea: 7, Columna: 10
+
+Codigo Token: 51, Nombre Token: FALSE, Valor: false, Linea: 7, Columna: 21
+
+Codigo Token: 14, Nombre Token: PARENDER, Valor: cierraregalo, Linea: 7, Columna: 27
+
+Codigo Token: 15, Nombre Token: BRACEIZQ, Valor: abrecuento, Linea: 7, Columna: 40
+
+Codigo Token: 37, Nombre Token: RETURN, Valor: envia, Linea: 8, Columna: 9
+
+Codigo Token: 6, Nombre Token: STRING, Valor: "adios", Linea: 8, Columna: 15
+
+Codigo Token: 44, Nombre Token: ENDEXPR, Valor: finregalo, Linea: 8, Columna: 23
+
+Codigo Token: 16, Nombre Token: BRACEDER, Valor: cierracuento, Linea: 9, Columna: 5
+
+Codigo Token: 32, Nombre Token: FOR, Valor: duende, Linea: 10, Columna: 5
+
+Codigo Token: 13, Nombre Token: PARENIZQ, Valor: abreregalo, Linea: 10, Columna: 12
+
+Codigo Token: 2, Nombre Token: INTEGER, Valor: rodolfo, Linea: 10, Columna: 23
+
+Codigo Token: 39, Nombre Token: IDENTIFICADOR, Valor: _i_, Linea: 10, Columna: 31
+
+Codigo Token: 42, Nombre Token: ASIGNACION, Valor: entrega, Linea: 10, Columna: 35
+
+Codigo Token: 40, Nombre Token: NUMERO, Valor: 10, Linea: 10, Columna: 43
+
+Codigo Token: 45, Nombre Token: COMMA, Valor: ,, Linea: 10, Columna: 46
+
+Codigo Token: 39, Nombre Token: IDENTIFICADOR, Valor: _i_, Linea: 10, Columna: 48
+
+Codigo Token: 7, Nombre Token: MENOR, Valor: snowball, Linea: 10, Columna: 52
+
+Codigo Token: 40, Nombre Token: NUMERO, Valor: 30, Linea: 10, Columna: 61
+
+Codigo Token: 45, Nombre Token: COMMA, Valor: ,, Linea: 10, Columna: 64
+
+Codigo Token: 39, Nombre Token: IDENTIFICADOR, Valor: _i_, Linea: 10, Columna: 66
+
+Codigo Token: 19, Nombre Token: INCREMENTO, Valor: quien, Linea: 10, Columna: 70
+
+Codigo Token: 14, Nombre Token: PARENDER, Valor: cierraregalo, Linea: 10, Columna: 76
+
+Codigo Token: 15, Nombre Token: BRACEIZQ, Valor: abrecuento, Linea: 10, Columna: 89
+
+Codigo Token: 37, Nombre Token: RETURN, Valor: envia, Linea: 11, Columna: 9
+
+Codigo Token: 6, Nombre Token: STRING, Valor: "hola", Linea: 11, Columna: 15
+
+Codigo Token: 44, Nombre Token: ENDEXPR, Valor: finregalo, Linea: 11, Columna: 22
+
+Codigo Token: 16, Nombre Token: BRACEDER, Valor: cierracuento, Linea: 12, Columna: 5
+
+Codigo Token: 33, Nombre Token: WHILE, Valor: envuelve, Linea: 13, Columna: 5
+
+Codigo Token: 13, Nombre Token: PARENIZQ, Valor: abreregalo, Linea: 13, Columna: 14
+
+Codigo Token: 39, Nombre Token: IDENTIFICADOR, Valor: _a_, Linea: 13, Columna: 25
+
+Codigo Token: 12, Nombre Token: DIFERENTE, Valor: openslae, Linea: 13, Columna: 29
+
+Codigo Token: 39, Nombre Token: IDENTIFICADOR, Valor: _i_, Linea: 13, Columna: 38
+
+Codigo Token: 14, Nombre Token: PARENDER, Valor: cierraregalo, Linea: 13, Columna: 42
+
+Codigo Token: 15, Nombre Token: BRACEIZQ, Valor: abrecuento, Linea: 13, Columna: 55
+
+Codigo Token: 48, Nombre Token: PRINT, Valor: narra, Linea: 14, Columna: 9
+
+Codigo Token: 6, Nombre Token: STRING, Valor: "holaaa", Linea: 14, Columna: 15
+
+Codigo Token: 44, Nombre Token: ENDEXPR, Valor: finregalo, Linea: 14, Columna: 24
+
+Codigo Token: 16, Nombre Token: BRACEDER, Valor: cierracuento, Linea: 15, Columna: 9
+
+Codigo Token: 34, Nombre Token: SWITCH, Valor: varios, Linea: 16, Columna: 5
+
+Codigo Token: 13, Nombre Token: PARENIZQ, Valor: abreregalo, Linea: 16, Columna: 12
+
+Codigo Token: 39, Nombre Token: IDENTIFICADOR, Valor: _swit_, Linea: 16, Columna: 23
+
+Codigo Token: 14, Nombre Token: PARENDER, Valor: cierraregalo, Linea: 16, Columna: 30
+
+Codigo Token: 15, Nombre Token: BRACEIZQ, Valor: abrecuento, Linea: 16, Columna: 43
+
+Codigo Token: 35, Nombre Token: CASE, Valor: historia, Linea: 17, Columna: 9
+
+Codigo Token: 6, Nombre Token: STRING, Valor: "A", Linea: 17, Columna: 18
+
+Codigo Token: 38, Nombre Token: DOSPUNTOS, Valor: sigue, Linea: 17, Columna: 22
+
+Codigo Token: 6, Nombre Token: STRING, Valor: cometa, Linea: 17, Columna: 28
+
+Codigo Token: 39, Nombre Token: IDENTIFICADOR, Valor: _h_, Linea: 17, Columna: 35
+
+Codigo Token: 42, Nombre Token: ASIGNACION, Valor: entrega, Linea: 17, Columna: 39
+
+Codigo Token: 6, Nombre Token: STRING, Valor: "hola", Linea: 17, Columna: 47
+
+Codigo Token: 44, Nombre Token: ENDEXPR, Valor: finregalo, Linea: 17, Columna: 54
+
+Codigo Token: 36, Nombre Token: BREAK, Valor: corta, Linea: 17, Columna: 64
+
+Codigo Token: 44, Nombre Token: ENDEXPR, Valor: finregalo, Linea: 17, Columna: 70
+
+Codigo Token: 35, Nombre Token: CASE, Valor: historia, Linea: 18, Columna: 9
+
+Codigo Token: 6, Nombre Token: STRING, Valor: "w", Linea: 18, Columna: 18
+
+Codigo Token: 38, Nombre Token: DOSPUNTOS, Valor: sigue, Linea: 18, Columna: 22
+
+Codigo Token: 48, Nombre Token: PRINT, Valor: narra, Linea: 18, Columna: 28
+
+Codigo Token: 6, Nombre Token: STRING, Valor: "holaaa", Linea: 18, Columna: 34
+
+Codigo Token: 44, Nombre Token: ENDEXPR, Valor: finregalo, Linea: 18, Columna: 43
+
+Codigo Token: 36, Nombre Token: BREAK, Valor: corta, Linea: 18, Columna: 53
+
+Codigo Token: 44, Nombre Token: ENDEXPR, Valor: finregalo, Linea: 18, Columna: 59
+
+Codigo Token: 6, Nombre Token: STRING, Valor: ultimo, Linea: 19, Columna: 9
+
+Codigo Token: 38, Nombre Token: DOSPUNTOS, Valor: sigue, Linea: 19, Columna: 16
+
+Codigo Token: 39, Nombre Token: IDENTIFICADOR, Valor: _id_, Linea: 19, Columna: 22
+
+Codigo Token: 42, Nombre Token: ASIGNACION, Valor: entrega, Linea: 19, Columna: 27
+
+Codigo Token: 39, Nombre Token: IDENTIFICADOR, Valor: _id_, Linea: 19, Columna: 35
+
+Codigo Token: 44, Nombre Token: ENDEXPR, Valor: finregalo, Linea: 19, Columna: 40
+
+Codigo Token: 36, Nombre Token: BREAK, Valor: corta, Linea: 19, Columna: 50
+
+Codigo Token: 44, Nombre Token: ENDEXPR, Valor: finregalo, Linea: 19, Columna: 56
+
+Codigo Token: 16, Nombre Token: BRACEDER, Valor: cierracuento, Linea: 20, Columna: 9
+
+Codigo Token: 16, Nombre Token: BRACEDER, Valor: cierracuento, Linea: 21, Columna: 1
+
+Cantidad de lexemas encontrados: 100

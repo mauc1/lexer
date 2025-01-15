@@ -100,13 +100,14 @@ terminal DEFAULT;
 non terminal funcion, inicio, _verano_;
 non terminal funciones;
 non terminal funciones_produ, parametros, bloque_funcion, funcionRecur;
-non terminal funcion_produ, tipos;
+non terminal funcion_produ, tipos, cupido, cometa, bromista, trueno;
 non terminal bloque_produ, sentencias, sentencia_fin, sentencia;
-non terminal if_produ, hada, duende, envuelve, rodolfo, sentenciaRelacional, sentenciaArit, creacionVariableNum;
-non terminal varios, historia, CASO, ultimo, asignaRegalo;
+non terminal if_produ, hada, for_produ, while_produ, switch_produ, historia_produ, casos, sentenciaRelacional, sentenciaArit, sentenciaAritUnaria, creacionVariableNum;
+non terminal historia, CASO, ultimo, asignaRegalo;
 non terminal parametrosRecur, creacionVariable, controlFlujo, expresion, envia, narra, escucha;
 non terminal literal, sigue;  
 non terminal narra_produ, flujos;
+non terminal condicion;
 
 start with _verano_;
 
@@ -185,7 +186,7 @@ bloque_produ ::=
     BRACEIZQ sentencias BRACEDER
     ;
 
-sentencias ::= sentencia ENDEXPR | sentencias sentencia ENDEXPR | sentencias if_produ | sentencias duende | sentencias envuelve | sentencias varios;
+sentencias ::= sentencia ENDEXPR | sentencias sentencia ENDEXPR | sentencias if_produ | sentencias for_produ | sentencias while_produ | sentencias switch_produ;
 
 sentencia ::= creacionVariable  
                 | narra_produ 
@@ -194,7 +195,7 @@ sentencia ::= creacionVariable
 
 //defincion de las ops de sentencia
 //creaacion variable
-creacionVariable ::= rodolfo IDENTIFICADOR ASIGNACION NUMERO | 
+creacionVariable ::= tipos IDENTIFICADOR ASIGNACION NUMERO | 
                     tipos IDENTIFICADOR ASIGNACION CHAR |
                     tipos IDENTIFICADOR ASIGNACION STRING |
                     tipos IDENTIFICADOR ASIGNACION FLOAT |
@@ -212,29 +213,30 @@ envia ::= RETURN STRING | RETURN NUMERO | RETURN FLOAT | RETURN CHAR | RETURN BO
 //producciones de estructuras de control
 //if y else
 if_produ ::= 
-    IF PARENIZQ sentenciaRelacional PARENDER bloque_produ
-    | IF PARENIZQ sentenciaRelacional PARENDER bloque_produ hada bloque_produ
+    IF PARENIZQ condicion PARENDER bloque_produ
+    | IF PARENIZQ condicion PARENDER bloque_produ hada bloque_produ
     ;
 
 //for
-duende ::= 
-    FOR PARENIZQ creacionVariableNum ENDEXPR sentenciaRelacional ENDEXPR sentenciaArit PARENDER
+for_produ ::= 
+    FOR PARENIZQ creacionVariable COMMA condicion COMMA sentenciaArit PARENDER bloque_produ 
+    | FOR PARENIZQ creacionVariable COMMA condicion COMMA sentenciaAritUnaria PARENDER bloque_produ
     ;
 
 //while
-envuelve ::= 
-    WHILE PARENIZQ sentenciaRelacional PARENDER
+while_produ ::= 
+    WHILE PARENIZQ condicion PARENDER bloque_produ
     ;
 
 //switch
-/*
-varios ::= SWITCH PARENIZQ IDENTIFICADOR PARENDER BRACEIZQ historia BRACEDER 
+
+switch_produ ::= SWITCH PARENIZQ IDENTIFICADOR PARENDER BRACEIZQ historia_produ BRACEDER 
     ;
 
-historia ::= CASO | historia CASO;
-CASO ::= CASE literal sigue bloque_produ | ultimo sigue bloque_produ
+historia_produ ::= casos | historia_produ casos;
+casos ::= CASE STRING DOSPUNTOS sentencias BREAK ENDEXPR | DEFAULT DOSPUNTOS sentencias BREAK ENDEXPR
     ;
-*/
+
 //sentencia relacional
 sentenciaRelacional ::= 
     | IDENTIFICADOR MENOR NUMERO
@@ -259,10 +261,11 @@ sentenciaRelacional ::=
     | IDENTIFICADOR IGUALDAD BOOL
     | NUMERO IGUALDAD NUMERO
     ;
+//sentencia de condiciones
+condicion ::= TRUE | FALSE
+            | sentenciaRelacional;
 //arreglo
 //asignaRegalo ::= PERSONA ABREEMPAQUE exprRegalo CIERRAEMPAQUE ENTREGA exprRegalo | PERSONA ENTREGA exprRegalo ;
-
-//sentencia relacional
 
 //sentencia aritmetica
 sentenciaArit ::= 
@@ -274,7 +277,10 @@ sentenciaArit ::=
     | IDENTIFICADOR ASIGNACION IDENTIFICADOR MODULO NUMERO
     | IDENTIFICADOR ASIGNACION IDENTIFICADOR POTENCIA NUMERO;
 
-
+//sentencia aritmetica unaria
+sentenciaAritUnaria ::= 
+    IDENTIFICADOR INCREMENTO
+    | IDENTIFICADOR DECREMENTO;
 
 //parametros definidos recursivamente por si viene mas de uno
 parametros ::= parametrosRecur | parametros COMMA parametrosRecur ;
