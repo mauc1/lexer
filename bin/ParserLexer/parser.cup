@@ -199,7 +199,8 @@ creacionVariable ::= tipos IDENTIFICADOR ASIGNACION NUMERO |
                     tipos IDENTIFICADOR ASIGNACION CHAR |
                     tipos IDENTIFICADOR ASIGNACION STRING |
                     tipos IDENTIFICADOR ASIGNACION FLOAT |
-                    tipos IDENTIFICADOR ASIGNACION BOOL;
+                    tipos IDENTIFICADOR ASIGNACION BOOL |
+                    tipos IDENTIFICADOR ASIGNACION tipos IDENTIFICADOR ;
 
 //narra
 narra_produ ::= PRINT STRING;
