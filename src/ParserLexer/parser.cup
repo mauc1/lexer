@@ -347,11 +347,43 @@ condicion ::= TRUE | FALSE
             | sentenciaRelacional;
 //arreglo
 arreglo_produ ::= 
-    INTEGER IDENTIFICADOR CORCHETEIZQ NUMERO CORCHETEDER
-    | CHAR IDENTIFICADOR CORCHETEIZQ NUMERO CORCHETEDER
-    | STRING IDENTIFICADOR CORCHETEIZQ NUMERO CORCHETEDER
-    | FLOAT IDENTIFICADOR CORCHETEIZQ NUMERO CORCHETEDER
-    | BOOL IDENTIFICADOR CORCHETEIZQ NUMERO CORCHETEDER
+    INTEGER IDENTIFICADOR:idd CORCHETEIZQ NUMERO CORCHETEDER
+    {:
+        ArrayList<String> listaDatos = new ArrayList<String>();
+        String nombre_param = "nombre: " + idd.toString();
+        String tipo_param = "tipo: arreglo\n"; 
+        listaDatos.add(nombre_param);
+        listaDatos.add(tipo_param);
+       // listaDatos.add(ambito_param);
+        listaTablasSimbolos.get(currentHash).addAll(listaDatos);:}
+    | CHAR IDENTIFICADOR:idd CORCHETEIZQ NUMERO CORCHETEDER
+    | STRING IDENTIFICADOR:idd CORCHETEIZQ NUMERO CORCHETEDER
+    {:
+        ArrayList<String> listaDatos = new ArrayList<String>();
+        String nombre_param = "nombre: " + idd.toString();
+        String tipo_param = "tipo: arreglo\n"; 
+        listaDatos.add(nombre_param);
+        listaDatos.add(tipo_param);
+       // listaDatos.add(ambito_param);
+        listaTablasSimbolos.get(currentHash).addAll(listaDatos);:}
+    | FLOAT IDENTIFICADOR:idd CORCHETEIZQ NUMERO CORCHETEDER
+    {:
+        ArrayList<String> listaDatos = new ArrayList<String>();
+        String nombre_param = "nombre: " + idd.toString();
+        String tipo_param = "tipo: arreglo\n"; 
+        listaDatos.add(nombre_param);
+        listaDatos.add(tipo_param);
+       // listaDatos.add(ambito_param);
+        listaTablasSimbolos.get(currentHash).addAll(listaDatos);:}
+    | BOOL IDENTIFICADOR:idd CORCHETEIZQ NUMERO CORCHETEDER
+    {:
+        ArrayList<String> listaDatos = new ArrayList<String>();
+        String nombre_param = "nombre: " + idd.toString();
+        String tipo_param = "tipo: arreglo\n"; 
+        listaDatos.add(nombre_param);
+        listaDatos.add(tipo_param);
+       // listaDatos.add(ambito_param);
+        listaTablasSimbolos.get(currentHash).addAll(listaDatos);:}
     ;
 //sentencia logicas
 sentenciaLogica ::= 

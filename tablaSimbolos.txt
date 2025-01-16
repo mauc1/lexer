@@ -9,4 +9,6 @@ Tabla de simbolos: funcion _wow_
 Valores: 
 
 nombre: _wow_, tipo: string, ambito: Funcion
+, nombre: _arrayy_, tipo: arreglo
+, variable local _z_, tipo: string
 , 

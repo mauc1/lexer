@@ -1399,7 +1399,17 @@ System.out.println("Error: encabezado no coincide con la gramatica. Buscando el 
           case 86: // arreglo_produ ::= STRING IDENTIFICADOR CORCHETEIZQ NUMERO CORCHETEDER 
             {
               Object RESULT =null;
-
+		int iddleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
+		int iddright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
+		Object idd = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
+		
+        ArrayList<String> listaDatos = new ArrayList<String>();
+        String nombre_param = "nombre: " + idd.toString();
+        String tipo_param = "tipo: arreglo\n"; 
+        listaDatos.add(nombre_param);
+        listaDatos.add(tipo_param);
+       // listaDatos.add(ambito_param);
+        listaTablasSimbolos.get(currentHash).addAll(listaDatos);
               CUP$parser$result = parser.getSymbolFactory().newSymbol("arreglo_produ",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
