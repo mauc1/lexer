@@ -99,15 +99,14 @@ terminal DEFAULT;
 
 //no terminales 
 //funciones
-non terminal funcion, funciones, _verano_, funciones_produ, parametros, parametrosRecur, bloque_funcion, funcionRecur, funcion_produ;
+non terminal funcion, _verano_, funciones_produ, parametros, parametrosRecur, funcionRecur, funcion_produ;
 
 //sentencias
-non terminal tipos, creacionVariable;
-non terminal bloque_produ, sentencias, sentencia_fin, sentencia;
+non terminal tipos, creacionVariable, arreglo_produ;
+non terminal bloque_produ, sentencias, sentencia;
 
 //flujos
-non terminal if_produ, for_produ, while_produ, switch_produ, historia_produ, casos, sentenciaRelacional, sentenciaArit, sentenciaAritUnaria;
-non terminal historia, CASO, ultimo, asignaRegalo;
+non terminal if_produ, for_produ, while_produ, switch_produ, historia_produ, casos, sentenciaRelacional, sentenciaArit, sentenciaAritUnaria, sentenciaLogica;
 non terminal envia, escucha, condicion;
 non terminal narra_produ;
 
@@ -205,7 +204,7 @@ bloque_produ ::=
     BRACEIZQ sentencias BRACEDER
     ;
 
-sentencias ::= sentencia ENDEXPR | sentencias sentencia ENDEXPR | sentencias if_produ | sentencias for_produ | sentencias while_produ | sentencias switch_produ | 
+sentencias ::= sentencia ENDEXPR | sentencias sentencia ENDEXPR | sentencias if_produ | sentencias for_produ | sentencias while_produ | sentencias switch_produ |
                 error 
                 {:
                     System.out.println("Error: falta el token de fin de sentencia (;). Recuperando...");
@@ -224,7 +223,11 @@ sentencias ::= sentencia ENDEXPR | sentencias sentencia ENDEXPR | sentencias if_
 sentencia ::= creacionVariable  
                 | narra_produ 
                 | escucha 
-                | envia;
+                | envia
+                | arreglo_produ
+                | sentenciaArit
+                | sentenciaAritUnaria
+                | sentenciaLogica ;
 
 //defincion de las ops de sentencia
 //creaacion variable
@@ -343,8 +346,28 @@ sentenciaRelacional ::=
 condicion ::= TRUE | FALSE
             | sentenciaRelacional;
 //arreglo
-//asignaRegalo ::= PERSONA ABREEMPAQUE exprRegalo CIERRAEMPAQUE ENTREGA exprRegalo | PERSONA ENTREGA exprRegalo ;
-
+arreglo_produ ::= 
+    INTEGER IDENTIFICADOR CORCHETEIZQ NUMERO CORCHETEDER
+    | CHAR IDENTIFICADOR CORCHETEIZQ NUMERO CORCHETEDER
+    | STRING IDENTIFICADOR CORCHETEIZQ NUMERO CORCHETEDER
+    | FLOAT IDENTIFICADOR CORCHETEIZQ NUMERO CORCHETEDER
+    | BOOL IDENTIFICADOR CORCHETEIZQ NUMERO CORCHETEDER
+    ;
+//sentencia logicas
+sentenciaLogica ::= 
+    IDENTIFICADOR CONJUNCION IDENTIFICADOR
+    | IDENTIFICADOR CONJUNCION BOOL
+    | IDENTIFICADOR CONJUNCION TRUE
+    | IDENTIFICADOR CONJUNCION FALSE
+    | IDENTIFICADOR DISYUNCION IDENTIFICADOR
+    | IDENTIFICADOR DISYUNCION BOOL
+    | IDENTIFICADOR DISYUNCION TRUE
+    | IDENTIFICADOR DISYUNCION FALSE
+    | NEGACION IDENTIFICADOR
+    | NEGACION BOOL
+    | NEGACION TRUE
+    | NEGACION FALSE
+    ;   
 //sentencia aritmetica
 sentenciaArit ::= 
     IDENTIFICADOR ASIGNACION NUMERO

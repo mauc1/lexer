@@ -1,11 +1,12 @@
 rodolfo _verano_ abreregalo cierraregalo abrecuento
    cometa _x_ entrega "aaa" finregalo
    rodolfo _num_ entrega 23 finregalo
-cierracuento 
 
-cometa _wow_ abreregalo cierraregalo abrecuento
-    cometa _z_ entrega "zzz"  
+cierracuento 
+    cometa _wow_ abreregalo cierraregalo abrecuento
+   cometa _z_ entrega "zzz"  
 cierracuento
+
 
 
 

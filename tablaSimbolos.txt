@@ -1,7 +1,7 @@
 Tabla de simbolos: main
 Valores: 
-tipo: int, 
-nombre: _verano_, ambito: Funcion Main
+
+nombre: _verano_, tipo: int, ambito: Funcion Main
 , variable local _x_, tipo: string
 , variable local _num_, tipo: int
 , 
