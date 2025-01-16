@@ -1,25 +1,11 @@
-cometa _aa_ abreregalo rodolfo _x22_ cierraregalo abrecuento 
-    cometa _h_ entrega "hola" finregalo  
-    cometa _a_ entrega "adios" finregalo 
-    rodolfo _x_ entrega 9 finregalo
-    narra "holaaa" finregalo
-    escucha "aaa" finregalo
-    elfo abreregalo false cierraregalo abrecuento
-        envia "adios" finregalo
-    cierracuento
-    duende abreregalo rodolfo _i_ entrega 10 , _i_ snowball 30 , _i_ quien cierraregalo abrecuento
-        envia "hola" finregalo
-    cierracuento
-    envuelve abreregalo _a_ openslae _i_ cierraregalo abrecuento 
-        narra "holaaa" finregalo
-        cierracuento
-    varios abreregalo _swit_ cierraregalo abrecuento
-        historia "A" sigue cometa _h_ entrega "hola" finregalo corta finregalo
-        historia "w" sigue cometa _h_ entrega "hola" finregalo corta finregalo
-        último sigue cometa _h_ entrega "hola" finregalo corta finregalo
-        cierracuento
-cierracuento
+rodolfo _verano_ abreregalo cierraregalo abrecuento
+   cometa _x_ entrega "aaa" finregalo
+   rodolfo _num_ entrega 23 finregalo
+cierracuento 
 
+cometa _wow_ abreregalo cierraregalo abrecuento
+    cometa _z_ entrega "zzz"  
+cierracuento
 
 
 

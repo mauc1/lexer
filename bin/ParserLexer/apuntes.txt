@@ -1,14 +1,144 @@
+/* Simple +/-/* expression language; parser evaluates constant expressions on the fly*/
+package ParserLexer;
+import java_cup.runtime.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.io.FileWriter;
+import java.io.IOException;
 
 
+action code {:
+    HashMap<String, ArrayList<String>> listaTablasSimbolos = new HashMap<String, ArrayList<String>>();
+    String currentHash;
+
+    public void imprimirTablaSimbolos(){
+        for (String key : listaTablasSimbolos.keySet()) {
+            System.out.println("Tabla de simbolos: " + key);
+            System.out.println("Valores: ");
+            for (String item : listaTablasSimbolos.get(key)) {
+                System.out.println(item);
+            }
+            System.out.println("");
+        }
+    }
+
+    //escribir en archivo la tabla de simbolos
+    public void escribirTablaSimbolos(String nombreArchivo){
+        try {
+            FileWriter myWriter = new FileWriter(nombreArchivo);
+            for (String key : listaTablasSimbolos.keySet()) {
+                myWriter.write("Tabla de simbolos: " + key + "\n");
+                myWriter.write("Valores: \n");
+                for (String item : listaTablasSimbolos.get(key)) {
+                    myWriter.write(item + "\n");
+                }
+                myWriter.write("\n");
+            }
+            myWriter.close();
+            System.out.println("Tabla de simbolos guardada en " + nombreArchivo);
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+:}
+
+parser code {:
+    Lexer lex;
+
+    boolean syntaxErrorPrograma = false;
+    @SuppressWarnings("deprecation")
+    public parser(Lexer lex){
+        this.lex = lex;
+        this.symbolFactory = new DefaultSymbolFactory();
+    }
+:}
+
+/* define how to connect to the scanner! */
+init with {: :};
+scan with {: return lex.next_token(); :};
+
+//Terminales de tipos
+terminal INTEGER, FLOAT, BOOL, CHAR, STRING, VOID;
+
+//Terminales relacionales
+terminal MENOR, MENORIGUAL, MAYOR, MAYORIGUAL, IGUALDAD, DIFERENTE;
+
+//Terminales de parentesis y llaves
+terminal PARENIZQ, PARENDER, BRACEIZQ, BRACEDER, CORCHETEIZQ, CORCHETEDER;
+
+//Terminales aritmeticos unarios 
+terminal INCREMENTO, DECREMENTO;
+
+//Terminales aritmeticos binarios
+terminal SUMA, RESTA, DIVISION, MULTIPLICACION, MODULO, POTENCIA;
+
+//Terminales operadores logicos
+terminal CONJUNCION, DISYUNCION, NEGACION;
+
+//Terminales estructuras de control de flujo
+terminal IF, ELSE, FOR, WHILE, SWITCH, CASE, BREAK, RETURN, DOSPUNTOS;
+
+//Terminales de identificadores y main
+terminal IDENTIFICADOR, NUMERO, ERROR, ASIGNACION, MAIN;
+
+//Terminales de finalizacion
+terminal ENDEXPR, COMMA, COMILLA, COMILLADOBLE;
+
+//terminales IO
+terminal PRINT, READ;
+
+//terminales booleanos
+terminal TRUE, FALSE;
+
+//terminales comentarios
+terminal COMENTARIO, MULTICOMENTARIO;
+
+//terminal de default
+terminal DEFAULT;
+
+//no terminales 
+//funciones
+non terminal funcion, funciones _verano_, funciones_produ, parametros, parametrosRecur, bloque_funcion, funcionRecur, funcion_produ;
+
+//sentencias
+non terminal tipos, creacionVariable;
+non terminal bloque_produ, sentencias, sentencia_fin, sentencia;
+
+//flujos
+non terminal if_produ, for_produ, while_produ, switch_produ, historia_produ, casos, sentenciaRelacional, sentenciaArit, sentenciaAritUnaria;
+non terminal historia, CASO, ultimo, asignaRegalo;
+non terminal envia, escucha, condicion;
+non terminal narra_produ;
+
+
+start with _verano_;
+
+
+_verano_ ::= 
+    funcion
+    {: 
+        imprimirTablaSimbolos();
+        escribirTablaSimbolos("tablaSimbolos.txt");
+        System.out.println("---Fin---");
+    :};
+
+funcion ::= {:System.out.println("\nInicio");:} funcionRecur;
+
+//llamada recursiva para llamar varias funciones
+funcionRecur ::= funcion_produ | funcionRecur funcion_produ ;
 //aqui se definen los distintos tipos de funciones
+//funciona como el encabezado
+funcion_produ ::= funciones_produ bloque_produ;
+
 funciones_produ ::= 
     //nota: pusimos INTEGER simulando el int main(){} de c++
     INTEGER MAIN PARENIZQ PARENDER
     {://Funcion main
-        String tipo_dato = "tipo: int\n";
+        String tipo_dato = "tipo: int";
         ArrayList<String> listaDatos = new ArrayList<String>();
         currentHash = "main";
-        String nombre_func = "nombre: main\n";
+        String nombre_func = "nombre: _verano_";
         String ambito = "ambito: Funcion\n";
         listaDatos.add(tipo_dato);
         listaDatos.add(nombre_func);
@@ -16,15 +146,222 @@ funciones_produ ::=
         listaTablasSimbolos.put(currentHash, listaDatos);
     :}
     //cualquier funcion sin parametros
-    | tipos IDENTIFICADOR PARENIZQ PARENDER
+    | tipos:t IDENTIFICADOR:iden PARENIZQ PARENDER
     {://Funcion sin parametros
-        String tipo_dato = "tipo: " + $1 + "\n";
+    //tipo
+        String tipo_dato = "tipo: " + t.toString();
         ArrayList<String> listaDatos = new ArrayList<String>();
-        currentHash = $2;
-        String nombre_func = "nombre: " + $2 + "\n";
+        currentHash = "funcion";
+        //String nombre_func = "nombre: " + "\n";
+        String ambito = "ambito: Funcion\n";
+        listaDatos.add(tipo_dato);
+        //listaDatos.add(nombre_func);
+        listaDatos.add(ambito);
+        listaTablasSimbolos.put(currentHash, listaDatos);
+    :}
+    | tipos:t IDENTIFICADOR:idd PARENIZQ
+    {://tipo
+        String tipo_dato = "tipo: " + t.toString();
+
+        ArrayList<String> listaDatos = new ArrayList<String>();
+        currentHash = "funcion";
+        String nombre_func = "nombre: ";//  + idd.value.toString();
         String ambito = "ambito: Funcion\n";
         listaDatos.add(tipo_dato);
         listaDatos.add(nombre_func);
         listaDatos.add(ambito);
         listaTablasSimbolos.put(currentHash, listaDatos);
-    :}
+    :} parametros PARENDER
+    | error {:System.out.println("Error: encabezado no coincide con la gramatica. Buscando el '}' final para salir de esta funcion");
+        Symbol token;
+        do {
+            token = lex.next_token(); //este metodo ya lo trae el lexer
+            if (token.sym == sym.BRACEDER || token.sym == sym.EOF) { //busca el } final
+                break; 
+            }
+        } while (token != null);
+    :};
+    
+
+tipos ::= 
+    INTEGER {:RESULT = "int";:}
+    | FLOAT {:RESULT = "float";:}
+    | BOOL {:RESULT = "bool";:}
+    | CHAR {:RESULT = "char";:}
+    | STRING {:RESULT = "string";:}
+    | VOID {:RESULT = "void";:}
+    | error {:System.out.println("Error: tipo de dato no reconocido. Recuperando...");
+        Symbol token;
+        do {
+            token = lex.next_token(); //este metodo ya lo trae el lexer
+            if (token.sym == sym.ENDEXPR || token.sym == sym.EOF) {
+                break; 
+            }
+        } while (token != null);
+    :};
+
+//cuerpo de las funciones
+
+bloque_produ ::= 
+    BRACEIZQ sentencias BRACEDER
+    ;
+
+sentencias ::= sentencia ENDEXPR | sentencias sentencia ENDEXPR | sentencias if_produ | sentencias for_produ | sentencias while_produ | sentencias switch_produ | 
+                error 
+                {:
+                    System.out.println("Error: falta el token de fin de sentencia (;). Recuperando...");
+
+                    Symbol token;
+                    do {
+                        token = lex.next_token(); //este metodo ya lo trae el lexer
+                        if (token.sym == sym.ENDEXPR || token.sym == sym.EOF) {
+                            break; 
+                        }
+                    } while (token != null); 
+
+                :};
+
+
+sentencia ::= creacionVariable  
+                | narra_produ 
+                | escucha 
+                | envia;
+
+//defincion de las ops de sentencia
+//creaacion variable
+creacionVariable ::= INTEGER IDENTIFICADOR:idd ASIGNACION NUMERO
+                    {: 
+                        String nombre_var = "variable local";// + idd.toString();
+                        String tipo_var = "tipo: int";
+                        ArrayList<String> listaDatos = new ArrayList<String>();
+                        listaDatos.add(nombre_var);
+                        listaDatos.add(tipo_var);
+                        listaTablasSimbolos.get(currentHash).addAll(listaDatos);:}
+                    | CHAR IDENTIFICADOR:idd ASIGNACION CHAR
+                    {:
+                        String nombre_var = "variable local";// + idd.toString();
+                        String tipo_dato = "tipo: char";
+                        ArrayList<String> listaDatos = new ArrayList<String>();
+                      //  listaDatos.add(tipo_dato);
+                        listaDatos.add(nombre_var);
+                        listaDatos.add(tipo_dato);
+                        listaTablasSimbolos.get(currentHash).addAll(listaDatos);:}
+                    | STRING IDENTIFICADOR ASIGNACION STRING 
+                    {: 
+                        String nombre_var = "variable local";// + idd.toString();
+                        String tipo_var = "tipo: string";
+                        ArrayList<String> listaDatos = new ArrayList<String>();
+                        listaDatos.add(nombre_var);
+                        listaDatos.add(tipo_var);
+                        listaTablasSimbolos.get(currentHash).addAll(listaDatos);:}
+                    | FLOAT IDENTIFICADOR ASIGNACION FLOAT 
+                    {: 
+                        String nombre_var = "variable local";// + idd.toString();
+                        String tipo_var = "tipo: float";
+                        ArrayList<String> listaDatos = new ArrayList<String>();
+                        listaDatos.add(nombre_var);
+                        listaDatos.add(tipo_var);
+                        listaTablasSimbolos.get(currentHash).addAll(listaDatos);:}
+                    | BOOL IDENTIFICADOR ASIGNACION BOOL 
+                    {: 
+                        String nombre_var = "variable local";// + idd.toString();
+                        String tipo_var = "tipo: bool";
+                        ArrayList<String> listaDatos = new ArrayList<String>();
+                        listaDatos.add(nombre_var);
+                        listaDatos.add(tipo_var);
+                        listaTablasSimbolos.get(currentHash).addAll(listaDatos);:};
+                 //   tipos IDENTIFICADOR ASIGNACION tipos IDENTIFICADOR ;
+
+//narra
+narra_produ ::= PRINT STRING;
+
+//escucha
+escucha ::= READ STRING;
+
+//envia
+envia ::= RETURN STRING | RETURN NUMERO | RETURN FLOAT | RETURN CHAR | RETURN BOOL;
+
+//producciones de estructuras de control
+//if y else
+if_produ ::= 
+    IF PARENIZQ condicion PARENDER bloque_produ
+    | IF PARENIZQ condicion PARENDER bloque_produ ELSE bloque_produ
+    ;
+
+//for
+for_produ ::= 
+    FOR PARENIZQ creacionVariable COMMA condicion COMMA sentenciaArit PARENDER bloque_produ 
+    | FOR PARENIZQ creacionVariable COMMA condicion COMMA sentenciaAritUnaria PARENDER bloque_produ
+    ;
+
+//while
+while_produ ::= 
+    WHILE PARENIZQ condicion PARENDER bloque_produ
+    ;
+
+//switch
+
+switch_produ ::= SWITCH PARENIZQ IDENTIFICADOR PARENDER BRACEIZQ historia_produ BRACEDER 
+    ;
+
+historia_produ ::= casos | historia_produ casos;
+casos ::= CASE STRING DOSPUNTOS sentencias BREAK ENDEXPR | DEFAULT DOSPUNTOS sentencias BREAK ENDEXPR
+    ;
+
+//sentencia relacional
+sentenciaRelacional ::= 
+    | IDENTIFICADOR MENOR NUMERO
+    | IDENTIFICADOR MENOR IDENTIFICADOR
+    | IDENTIFICADOR MENORIGUAL NUMERO
+    | IDENTIFICADOR MENORIGUAL IDENTIFICADOR
+    | IDENTIFICADOR MAYOR NUMERO
+    | IDENTIFICADOR MAYOR IDENTIFICADOR
+    | IDENTIFICADOR MAYORIGUAL NUMERO
+    | IDENTIFICADOR MAYORIGUAL IDENTIFICADOR
+    | IDENTIFICADOR IGUALDAD NUMERO
+    | IDENTIFICADOR IGUALDAD IDENTIFICADOR
+    | IDENTIFICADOR DIFERENTE NUMERO
+    | IDENTIFICADOR DIFERENTE IDENTIFICADOR
+    | IDENTIFICADOR DIFERENTE STRING
+    | IDENTIFICADOR IGUALDAD STRING
+    | IDENTIFICADOR DIFERENTE CHAR
+    | IDENTIFICADOR IGUALDAD CHAR
+    | IDENTIFICADOR DIFERENTE FLOAT
+    | IDENTIFICADOR IGUALDAD FLOAT
+    | IDENTIFICADOR DIFERENTE BOOL
+    | IDENTIFICADOR IGUALDAD BOOL
+    | NUMERO IGUALDAD NUMERO
+    ;
+//sentencia de condiciones
+condicion ::= TRUE | FALSE
+            | sentenciaRelacional;
+//arreglo
+//asignaRegalo ::= PERSONA ABREEMPAQUE exprRegalo CIERRAEMPAQUE ENTREGA exprRegalo | PERSONA ENTREGA exprRegalo ;
+
+//sentencia aritmetica
+sentenciaArit ::= 
+    IDENTIFICADOR ASIGNACION NUMERO
+    | IDENTIFICADOR ASIGNACION IDENTIFICADOR SUMA NUMERO
+    | IDENTIFICADOR ASIGNACION IDENTIFICADOR RESTA NUMERO
+    | IDENTIFICADOR ASIGNACION IDENTIFICADOR MULTIPLICACION NUMERO
+    | IDENTIFICADOR ASIGNACION IDENTIFICADOR DIVISION NUMERO
+    | IDENTIFICADOR ASIGNACION IDENTIFICADOR MODULO NUMERO
+    | IDENTIFICADOR ASIGNACION IDENTIFICADOR POTENCIA NUMERO;
+
+//sentencia aritmetica unaria
+sentenciaAritUnaria ::= 
+    IDENTIFICADOR INCREMENTO
+    | IDENTIFICADOR DECREMENTO;
+
+//parametros definidos recursivamente por si viene mas de uno
+parametros ::= parametrosRecur | parametros COMMA parametrosRecur ;
+parametrosRecur  ::= tipos:t IDENTIFICADOR 
+{://tipo
+        String tipo_param = "tipo: parametro"; 
+        ArrayList<String> listaDatos = new ArrayList<String>();
+        String ambito_param = "parametro de la funcion";
+        listaDatos.add(tipo_param);
+       // listaDatos.add(nombre_param);
+        listaDatos.add(ambito_param);
+        listaTablasSimbolos.get(currentHash).addAll(listaDatos);
+:};

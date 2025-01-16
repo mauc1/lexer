@@ -20,16 +20,19 @@ public class App {
     public static void main(String[] args) throws Exception {
         
         //PASO 1: Generar el lexer y parser
-       //GenerarLexerParser(); //comienza a generar el lexer y parser    
+       GenerarLexerParser(); //comienza a generar el lexer y parser    
         
-        //PASO 2
-        //String ruta = "C:\\Users\\mauri\\OneDrive\\Documentos\\GitHub\\lexer\\src\\texto\\codigo.txt";//r.readLine();
-        String ruta = "C:\\Users\\julil\\OneDrive\\Documentos\\GitHub\\lexer\\src\\texto\\codigo.txt";
-        //pruebaLexer(ruta); 
+        //PASO 2: Iniciar el lexer
+        // String ruta = "C:\\Users\\mauri\\OneDrive\\Documentos\\GitHub\\lexer\\src\\texto\\codigo.txt";
+        // String ruta = "C:\\Users\\julil\\OneDrive\\Documentos\\GitHub\\lexer\\src\\texto\\codigo.txt";
+        String ruta = "";
         //espera 4 segundos
         Thread.sleep(5000);
         //PASO 3 : Ejecutar el parser
         ejecutarParser(ruta);
+
+        //adicional: probar el lexer del proyecto 1
+        //pruebaLexer(ruta); 
     }
 
     public static void ejecutarParser(String ruta) throws Exception {
@@ -37,7 +40,6 @@ public class App {
         Reader reader = new InputStreamReader(fileInputStream);
         Lexer lexer = new Lexer(reader);
         parser parser = new parser(lexer);
-
         parser.parse();
 
         // Cerrar el flujo de entrada

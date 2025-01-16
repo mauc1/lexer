@@ -43,7 +43,7 @@ DIGITO = [0-9]
 ESCAPE = "\\"
 DOBLECOMILLA = "\""
 DIGITONOCERO = [1-9]
-ID = "_"({LETRA}|{DIGITO})*"_"
+IDE = "_"({LETRA}|{DIGITO})*"_"
 FLOATNUM = -? (0 | {DIGITONOCERO} {DIGITO}*) ("." {DIGITO}+)? (("e" | "E") -? {DIGITO}+)?
 NUM = {DIGITO}+ | {FLOATNUM}
 STRCOMPLETO = {DOBLECOMILLA}({LETRA}|{DIGITO})({LETRA}|{DIGITO})*{DOBLECOMILLA}
@@ -64,11 +64,12 @@ COMENTARIO = {COMENTARIOSIMPLE} | {MULTICOMENTARIO}
 %%
 
 //palabras reservadas
-<YYINITIAL> "rodolfo"         { return symbol(sym.INTEGER); }
-<YYINITIAL> "bromista"        { return symbol(sym.FLOAT); }
-<YYINITIAL> "trueno"          { return symbol(sym.BOOL); }
-<YYINITIAL> "cupido"          { return symbol(sym.CHAR); }
-<YYINITIAL> "cometa"          { return symbol(sym.STRING); }
+<YYINITIAL> "rodolfo"         { return symbol(sym.INTEGER, yytext()); }
+<YYINITIAL> "bromista"        { return symbol(sym.FLOAT, yytext()); }
+<YYINITIAL> "trueno"          { return symbol(sym.BOOL, yytext()); }
+<YYINITIAL> "cupido"          { return symbol(sym.CHAR, yytext()); }
+<YYINITIAL> "void"            { return symbol(sym.VOID); }
+<YYINITIAL> "cometa"          { return symbol(sym.STRING, yytext()); }
 <YYINITIAL> "false"           { return symbol(sym.FALSE); }
 <YYINITIAL> "true"            { return symbol(sym.TRUE); }
 <YYINITIAL> "abrecuento"      { return symbol(sym.BRACEIZQ); }
@@ -112,22 +113,20 @@ COMENTARIO = {COMENTARIOSIMPLE} | {MULTICOMENTARIO}
 <YYINITIAL> ","               { return symbol(sym.COMMA); }
 <YYINITIAL> "'"               { return symbol(sym.COMILLA); }
 <YYINITIAL> "\""              { return symbol(sym.COMILLADOBLE); } 
-<YYINITIAL> "!"               { return symbol(sym.CHAR); } //LO DEJAMOS COMO CHAR POR UN CODIGO DE EJEMPLO DEL PROFESOR
-<YYINITIAL> {STRCOMPLETO}     { return symbol(sym.STRING); }
-<YYINITIAL> {STRPALABRA}      { return symbol(sym.STRING); }
+<YYINITIAL> {STRCOMPLETO}     { return symbol(sym.STRING, yytext()); }
+<YYINITIAL> {STRPALABRA}      { return symbol(sym.STRING, yytext()); }
 //numeros
-<YYINITIAL> {NUM}        { return symbol(sym.NUMERO); }
+<YYINITIAL> {NUM}        { return symbol(sym.NUMERO, yytext()); }
 //comentarios
 <YYINITIAL> {COMENTARIO} { }
 <YYINITIAL> "//".*            { }
 <YYINITIAL> "/\\*"([^*]|\\*+[^*/])*"\\*/" { }
 //ids
-<YYINITIAL> {ID}   { return symbol(sym.IDENTIFICADOR); }
+<YYINITIAL> {IDE}   { return symbol(sym.IDENTIFICADOR, yytext()); }
 // Ignorar espacios en blanco
 <YYINITIAL> {ESPACIO}    { }
 
 
-/*
 //MANEJO DE ERRORES
 <YYINITIAL,ERROR> {
     [^] { 
@@ -147,7 +146,6 @@ COMENTARIO = {COMENTARIOSIMPLE} | {MULTICOMENTARIO}
                                     return symbol(sym.ERROR);
                                 }
 
-*/
 //fuentes:
 //para esta parte usamos un ejemplo de stackoverflow y una web con informacion 
 // https://www.angelfire.com/mac/michelo0/Tema6.html

@@ -1,8 +1,12 @@
-Tabla de simbolos: funcion
+Tabla de simbolos: main
 Valores: 
-tipo: parametro
-nombre: 
+tipo: int, 
+nombre: _verano_, ambito: Funcion Main
+, variable local _x_, tipo: string
+, variable local _num_, tipo: int
+, 
+Tabla de simbolos: funcion _wow_
+Valores: 
 
-ambito: variable local
-
-
+nombre: _wow_, tipo: string, ambito: Funcion
+, 
