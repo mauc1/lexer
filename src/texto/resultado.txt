@@ -30,24 +30,38 @@ Codigo Token: 45, Nombre Token: ENDEXPR, Valor: finregalo, Linea: 3, Columna: 29
 
 Codigo Token: 17, Nombre Token: BRACEDER, Valor: cierracuento, Linea: 5, Columna: 1
 
-Codigo Token: 6, Nombre Token: STRING, Valor: cometa, Linea: 6, Columna: 5
+Codigo Token: 6, Nombre Token: STRING, Valor: cometa, Linea: 6, Columna: 1
 
-Codigo Token: 40, Nombre Token: IDENTIFICADOR, Valor: _wow_, Linea: 6, Columna: 12
+Codigo Token: 40, Nombre Token: IDENTIFICADOR, Valor: _wow_, Linea: 6, Columna: 8
 
-Codigo Token: 14, Nombre Token: PARENIZQ, Valor: abreregalo, Linea: 6, Columna: 18
+Codigo Token: 14, Nombre Token: PARENIZQ, Valor: abreregalo, Linea: 6, Columna: 14
 
-Codigo Token: 15, Nombre Token: PARENDER, Valor: cierraregalo, Linea: 6, Columna: 29
+Codigo Token: 15, Nombre Token: PARENDER, Valor: cierraregalo, Linea: 6, Columna: 25
 
-Codigo Token: 16, Nombre Token: BRACEIZQ, Valor: abrecuento, Linea: 6, Columna: 42
+Codigo Token: 16, Nombre Token: BRACEIZQ, Valor: abrecuento, Linea: 6, Columna: 38
 
-Codigo Token: 6, Nombre Token: STRING, Valor: cometa, Linea: 7, Columna: 4
+Codigo Token: 6, Nombre Token: STRING, Valor: cometa, Linea: 7, Columna: 5
 
-Codigo Token: 40, Nombre Token: IDENTIFICADOR, Valor: _z_, Linea: 7, Columna: 11
+Codigo Token: 40, Nombre Token: IDENTIFICADOR, Valor: _arrayy_, Linea: 7, Columna: 12
 
-Codigo Token: 43, Nombre Token: ASIGNACION, Valor: entrega, Linea: 7, Columna: 15
+Codigo Token: 18, Nombre Token: CORCHETEIZQ, Valor: abreempaque, Linea: 7, Columna: 21
 
-Codigo Token: 6, Nombre Token: STRING, Valor: "zzz", Linea: 7, Columna: 23
+Codigo Token: 41, Nombre Token: NUMERO, Valor: 6, Linea: 7, Columna: 33
 
-Codigo Token: 17, Nombre Token: BRACEDER, Valor: cierracuento, Linea: 8, Columna: 1
+Codigo Token: 19, Nombre Token: CORCHETEDER, Valor: cierraempaque, Linea: 7, Columna: 35
 
-Cantidad de lexemas encontrados: 26
+Codigo Token: 45, Nombre Token: ENDEXPR, Valor: finregalo, Linea: 7, Columna: 49
+
+Codigo Token: 6, Nombre Token: STRING, Valor: cometa, Linea: 8, Columna: 4
+
+Codigo Token: 40, Nombre Token: IDENTIFICADOR, Valor: _z_, Linea: 8, Columna: 11
+
+Codigo Token: 43, Nombre Token: ASIGNACION, Valor: entrega, Linea: 8, Columna: 15
+
+Codigo Token: 6, Nombre Token: STRING, Valor: "zzz", Linea: 8, Columna: 23
+
+Codigo Token: 45, Nombre Token: ENDEXPR, Valor: finregalo, Linea: 8, Columna: 29
+
+Codigo Token: 17, Nombre Token: BRACEDER, Valor: cierracuento, Linea: 9, Columna: 1
+
+Cantidad de lexemas encontrados: 33

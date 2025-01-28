@@ -99,17 +99,20 @@ terminal DEFAULT;
 
 //no terminales 
 //funciones
-non terminal funcion, _verano_, funciones_produ, parametros, parametrosRecur, funcionRecur, funcion_produ;
+non terminal funcion, _verano_, funciones_produ, parametros, funcionRecur, funcion_produ, parametrosOpcionales;
 
 //sentencias
-non terminal tipos, creacionVariable, arreglo_produ;
+non terminal tipos;
 non terminal bloque_produ, sentencias, sentencia;
 
 //flujos
-non terminal if_produ, for_produ, while_produ, switch_produ, historia_produ, casos, sentenciaRelacional, sentenciaArit, sentenciaAritUnaria, sentenciaLogica;
-non terminal envia, escucha, condicion;
-non terminal narra_produ;
+non terminal if_produ, for_produ, while_produ, switch_produ, historia_produ, casodefault, estructurasControl;  
+non terminal return_produ, break_produ, print_produ, read_produ, llamadaFuncion;
 
+
+non terminal exprArit, exprLog, exprRel, factor, exprPrin ;
+non terminal operadorLog, operadorRel, operadorArit, operandoUnario;
+non terminal accesoArreglo, creacion, asignacion, creacionasignacion, creacionArreglo, modificacionArreglo, valoresArreglo;
 
 start with _verano_;
 
@@ -131,6 +134,7 @@ funcionRecur ::= funcion_produ | funcionRecur funcion_produ ;
 funcion_produ ::= funciones_produ bloque_produ ;
 
 funciones_produ ::= 
+//int _verano_ ()
     tipos:t MAIN PARENIZQ PARENDER
     {://Funcion main
         ArrayList<String> listaDatos = new ArrayList<String>();
@@ -187,16 +191,7 @@ tipos ::=
     | BOOL {:RESULT = "bool";:}
     | CHAR {:RESULT = "char";:}
     | STRING {:RESULT = "string";:}
-    | VOID {:RESULT = "void";:}
-    | error {:System.out.println("Error: tipo de dato no reconocido. Recuperando...");
-        Symbol token;
-        do {
-            token = lex.next_token(); //este metodo ya lo trae el lexer
-            if (token.sym == sym.ENDEXPR || token.sym == sym.EOF) {
-                break; 
-            }
-        } while (token != null);
-    :};
+    | VOID {:RESULT = "void";:};
 
 //cuerpo de las funciones
 
@@ -204,7 +199,7 @@ bloque_produ ::=
     BRACEIZQ sentencias BRACEDER
     ;
 
-sentencias ::= sentencia ENDEXPR | sentencias sentencia ENDEXPR | sentencias if_produ | sentencias for_produ | sentencias while_produ | sentencias switch_produ |
+sentencias ::= sentencia | sentencias sentencia |
                 error 
                 {:
                     System.out.println("Error: falta el token de fin de sentencia (;). Recuperando...");
@@ -220,132 +215,90 @@ sentencias ::= sentencia ENDEXPR | sentencias sentencia ENDEXPR | sentencias if_
                 :};
 
 
-sentencia ::= creacionVariable  
-                | narra_produ 
-                | escucha 
-                | envia
-                | arreglo_produ
-                | sentenciaArit
-                | sentenciaAritUnaria
-                | sentenciaLogica ;
 
-//defincion de las ops de sentencia
-//creaacion variable
-creacionVariable ::= INTEGER IDENTIFICADOR:idd ASIGNACION NUMERO
-                    {: 
-                        String nombre_var = "variable local " + idd.toString();
-                        String tipo_var = "tipo: int\n";
-                        ArrayList<String> listaDatos = new ArrayList<String>();
-                        listaDatos.add(nombre_var);
-                        listaDatos.add(tipo_var);
-                        listaTablasSimbolos.get(currentHash).addAll(listaDatos);:}
-                    | CHAR IDENTIFICADOR:idd ASIGNACION CHAR
-                    {:
-                        String nombre_var = "variable local " + idd.toString();
-                        String tipo_dato = "tipo: char\n";
-                        ArrayList<String> listaDatos = new ArrayList<String>();
-                      //  listaDatos.add(tipo_dato);
-                        listaDatos.add(nombre_var);
-                        listaDatos.add(tipo_dato);
-                        listaTablasSimbolos.get(currentHash).addAll(listaDatos);:}
-                    | STRING IDENTIFICADOR:idd ASIGNACION STRING 
-                    {: 
-                        String nombre_var = "variable local " + idd.toString();
-                        String tipo_var = "tipo: string\n";
-                        ArrayList<String> listaDatos = new ArrayList<String>();
-                        listaDatos.add(nombre_var);
-                        listaDatos.add(tipo_var);
-                        listaTablasSimbolos.get(currentHash).addAll(listaDatos);:}
-                    | FLOAT IDENTIFICADOR:idd ASIGNACION FLOAT 
-                    {: 
-                        String nombre_var = "variable local " + idd.toString();
-                        String tipo_var = "tipo: float\n";
-                        ArrayList<String> listaDatos = new ArrayList<String>();
-                        listaDatos.add(nombre_var);
-                        listaDatos.add(tipo_var);
-                        listaTablasSimbolos.get(currentHash).addAll(listaDatos);:}
-                    | BOOL IDENTIFICADOR:idd ASIGNACION BOOL 
-                    {: 
-                        String nombre_var = "variable local " + idd.toString();
-                        String tipo_var = "tipo: bool\n";
-                        ArrayList<String> listaDatos = new ArrayList<String>();
-                        listaDatos.add(nombre_var);
-                        listaDatos.add(tipo_var);
-                        listaTablasSimbolos.get(currentHash).addAll(listaDatos);:}
-                    | error {:System.out.println("Error: creacion de variable no reconocida. Recuperando...");
-                        Symbol token;
-                        do {
-                            token = lex.next_token(); //este metodo ya lo trae el lexer
-                            if (token.sym == sym.COMMA || token.sym == sym.ENDEXPR || token.sym == sym.EOF) {
-                                break; 
-                            }
-                        } while (token != null);
-                    :};
+sentencia ::= creacion | asignacion | creacionasignacion | estructurasControl | return_produ | break_produ | print_produ | read_produ | llamadaFuncion | modificacionArreglo | creacionArreglo;
+creacionasignacion ::= tipos IDENTIFICADOR ASIGNACION exprPrin ENDEXPR ;
+asignacion ::= IDENTIFICADOR ASIGNACION exprPrin ENDEXPR ;
+creacion ::= tipos IDENTIFICADOR ENDEXPR ;
+ 
+exprPrin ::= exprLog ;
+exprLog ::= exprLog operadorLog exprRel | exprRel | NEGACION exprRel ;
+operadorLog ::= DISYUNCION | CONJUNCION ;
+ 
+exprRel ::= exprArit operadorRel exprArit | exprArit ;
+operadorRel ::= MAYOR | MENOR | MENORIGUAL | MAYORIGUAL | IGUALDAD | DIFERENTE; //XXX TERMINAR
+ 
+exprArit ::= exprArit operadorArit factor
+	| factor ;
+ 
+operandoUnario ::= IDENTIFICADOR INCREMENTO
+		| IDENTIFICADOR DECREMENTO ;
+ 
+accesoArreglo ::= IDENTIFICADOR CORCHETEIZQ exprPrin CORCHETEDER ;
+ 
+factor ::= NUMERO
+    | CHAR
+    | STRING
+    | BOOL
+    | llamadaFuncion
+	| operandoUnario
+	| accesoArreglo
+	| IDENTIFICADOR /* XXX faltan factores: literal char, literal string, litaral bool, funcion, acceso arreglo*/
+	| PARENIZQ exprPrin PARENDER  ;
+ 
+operadorArit ::=  SUMA | RESTA | DIVISION | MULTIPLICACION | MODULO | POTENCIA ; 
 
-//narra
-narra_produ ::= PRINT STRING;
+//produccion de return
+return_produ ::= RETURN exprPrin ENDEXPR ;
 
-//escucha
-escucha ::= READ STRING;
+//produccion de break
+break_produ ::= BREAK ENDEXPR ;
 
-//envia
-envia ::= RETURN STRING | RETURN NUMERO | RETURN FLOAT | RETURN CHAR | RETURN BOOL;
+//produccion de print
+print_produ ::= PRINT PARENIZQ exprPrin PARENDER ENDEXPR ;
 
-//producciones de estructuras de control
+//produccion de read
+read_produ ::= READ PARENIZQ IDENTIFICADOR PARENDER ENDEXPR ;
+
+//estructuras de control de flujo
+estructurasControl ::= if_produ | for_produ | while_produ | switch_produ ;
 //if y else
 if_produ ::= 
-    IF PARENIZQ condicion PARENDER bloque_produ
-    | IF PARENIZQ condicion PARENDER bloque_produ ELSE bloque_produ
+    IF PARENIZQ exprPrin PARENDER bloque_produ
+    | IF PARENIZQ exprPrin PARENDER bloque_produ ELSE bloque_produ
     ;
 
 //for
 for_produ ::= 
-    FOR PARENIZQ creacionVariable COMMA condicion COMMA sentenciaArit PARENDER bloque_produ 
-    | FOR PARENIZQ creacionVariable COMMA condicion COMMA sentenciaAritUnaria PARENDER bloque_produ
+    FOR PARENIZQ asignacion ENDEXPR exprPrin ENDEXPR exprPrin PARENDER bloque_produ 
+    | FOR PARENIZQ creacionasignacion ENDEXPR exprPrin ENDEXPR exprPrin PARENDER bloque_produ 
     ;
 
 //while
 while_produ ::= 
-    WHILE PARENIZQ condicion PARENDER bloque_produ
+    WHILE PARENIZQ exprPrin PARENDER bloque_produ
     ;
 
 //switch
 
-switch_produ ::= SWITCH PARENIZQ IDENTIFICADOR PARENDER BRACEIZQ historia_produ BRACEDER 
-    ;
+switch_produ ::= SWITCH PARENIZQ exprPrin PARENDER BRACEIZQ historia_produ casodefault BRACEDER ;
 
-historia_produ ::= casos | historia_produ casos;
-casos ::= CASE STRING DOSPUNTOS sentencias BREAK ENDEXPR | DEFAULT DOSPUNTOS sentencias BREAK ENDEXPR
-    ;
+historia_produ ::= CASE factor DOSPUNTOS bloque_produ | historia_produ CASE tipos DOSPUNTOS bloque_produ ;
+casodefault ::= DEFAULT DOSPUNTOS bloque_produ | /* vacío */ ;
 
-//sentencia relacional
-sentenciaRelacional ::= 
-    | IDENTIFICADOR MENOR NUMERO
-    | IDENTIFICADOR MENOR IDENTIFICADOR
-    | IDENTIFICADOR MENORIGUAL NUMERO
-    | IDENTIFICADOR MENORIGUAL IDENTIFICADOR
-    | IDENTIFICADOR MAYOR NUMERO
-    | IDENTIFICADOR MAYOR IDENTIFICADOR
-    | IDENTIFICADOR MAYORIGUAL NUMERO
-    | IDENTIFICADOR MAYORIGUAL IDENTIFICADOR
-    | IDENTIFICADOR IGUALDAD NUMERO
-    | IDENTIFICADOR IGUALDAD IDENTIFICADOR
-    | IDENTIFICADOR DIFERENTE NUMERO
-    | IDENTIFICADOR DIFERENTE IDENTIFICADOR
-    | IDENTIFICADOR DIFERENTE STRING
-    | IDENTIFICADOR IGUALDAD STRING
-    | IDENTIFICADOR DIFERENTE CHAR
-    | IDENTIFICADOR IGUALDAD CHAR
-    | IDENTIFICADOR DIFERENTE FLOAT
-    | IDENTIFICADOR IGUALDAD FLOAT
-    | IDENTIFICADOR DIFERENTE BOOL
-    | IDENTIFICADOR IGUALDAD BOOL
-    | NUMERO IGUALDAD NUMERO
-    ;
-//sentencia de condiciones
-condicion ::= TRUE | FALSE
-            | sentenciaRelacional;
+//llamada de funciones
+llamadaFuncion ::= IDENTIFICADOR PARENIZQ parametrosOpcionales PARENDER ENDEXPR ;
+parametrosOpcionales ::= parametros | /* vacío */ ;
+parametros ::= exprPrin | parametros COMMA exprPrin ;
+
+creacionArreglo ::= tipos IDENTIFICADOR CORCHETEIZQ NUMERO CORCHETEDER ENDEXPR 
+                  | tipos IDENTIFICADOR CORCHETEIZQ NUMERO CORCHETEDER ASIGNACION CORCHETEIZQ valoresArreglo CORCHETEDER ENDEXPR ;
+valoresArreglo ::= exprPrin | valoresArreglo COMMA exprPrin ;
+
+modificacionArreglo ::= IDENTIFICADOR CORCHETEIZQ exprPrin CORCHETEDER ASIGNACION exprPrin ENDEXPR ;
+
 //arreglo
+/*
 arreglo_produ ::= 
     INTEGER IDENTIFICADOR:idd CORCHETEIZQ NUMERO CORCHETEDER
     {:
@@ -385,37 +338,10 @@ arreglo_produ ::=
        // listaDatos.add(ambito_param);
         listaTablasSimbolos.get(currentHash).addAll(listaDatos);:}
     ;
-//sentencia logicas
-sentenciaLogica ::= 
-    IDENTIFICADOR CONJUNCION IDENTIFICADOR
-    | IDENTIFICADOR CONJUNCION BOOL
-    | IDENTIFICADOR CONJUNCION TRUE
-    | IDENTIFICADOR CONJUNCION FALSE
-    | IDENTIFICADOR DISYUNCION IDENTIFICADOR
-    | IDENTIFICADOR DISYUNCION BOOL
-    | IDENTIFICADOR DISYUNCION TRUE
-    | IDENTIFICADOR DISYUNCION FALSE
-    | NEGACION IDENTIFICADOR
-    | NEGACION BOOL
-    | NEGACION TRUE
-    | NEGACION FALSE
-    ;   
-//sentencia aritmetica
-sentenciaArit ::= 
-    IDENTIFICADOR ASIGNACION NUMERO
-    | IDENTIFICADOR ASIGNACION IDENTIFICADOR SUMA NUMERO
-    | IDENTIFICADOR ASIGNACION IDENTIFICADOR RESTA NUMERO
-    | IDENTIFICADOR ASIGNACION IDENTIFICADOR MULTIPLICACION NUMERO
-    | IDENTIFICADOR ASIGNACION IDENTIFICADOR DIVISION NUMERO
-    | IDENTIFICADOR ASIGNACION IDENTIFICADOR MODULO NUMERO
-    | IDENTIFICADOR ASIGNACION IDENTIFICADOR POTENCIA NUMERO;
-
-//sentencia aritmetica unaria
-sentenciaAritUnaria ::= 
-    IDENTIFICADOR INCREMENTO
-    | IDENTIFICADOR DECREMENTO;
+    */
 
 //parametros definidos recursivamente por si viene mas de uno
+/*
 parametros ::= parametrosRecur | parametros COMMA parametrosRecur ;
 parametrosRecur  ::= tipos:t IDENTIFICADOR:idd
 {:
@@ -426,4 +352,4 @@ parametrosRecur  ::= tipos:t IDENTIFICADOR:idd
         listaDatos.add(tipo_param);
        // listaDatos.add(ambito_param);
         listaTablasSimbolos.get(currentHash).addAll(listaDatos);
-:};
+:}; */
