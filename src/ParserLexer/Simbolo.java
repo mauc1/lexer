@@ -1,9 +1,10 @@
-public class Simbolos {
+package ParserLexer;
+public class Simbolo {
     public String id;
     public String ambito;
     public String tipo;
     
-    public Simbolos(String pAmbito, String pTipo, String pId){
+    public Simbolo(String pAmbito, String pTipo, String pId){
        this.id = pId;
        this.ambito = pAmbito; 
        this.tipo = pTipo;

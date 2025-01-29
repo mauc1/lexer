@@ -8,62 +8,63 @@ package ParserLexer;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int COMILLADOBLE = 48;
-  public static final int NUMERO = 41;
-  public static final int DOSPUNTOS = 39;
-  public static final int MULTICOMENTARIO = 54;
+  public static final int COMILLADOBLE = 49;
+  public static final int NUMERO = 42;
+  public static final int DOSPUNTOS = 40;
+  public static final int MULTICOMENTARIO = 55;
   public static final int CHAR = 5;
-  public static final int CASE = 36;
-  public static final int DIFERENTE = 13;
-  public static final int RESTA = 23;
+  public static final int CASE = 37;
+  public static final int DIFERENTE = 14;
+  public static final int RESTA = 24;
   public static final int INTEGER = 2;
-  public static final int PARENIZQ = 14;
-  public static final int BRACEIZQ = 16;
-  public static final int FOR = 33;
-  public static final int CORCHETEIZQ = 18;
-  public static final int IDENTIFICADOR = 40;
-  public static final int MENORIGUAL = 9;
-  public static final int IGUALDAD = 12;
-  public static final int COMMA = 46;
+  public static final int PARENIZQ = 15;
+  public static final int BRACEIZQ = 17;
+  public static final int FOR = 34;
+  public static final int CORCHETEIZQ = 19;
+  public static final int IDENTIFICADOR = 41;
+  public static final int MENORIGUAL = 10;
+  public static final int IGUALDAD = 13;
+  public static final int COMMA = 47;
   public static final int BOOL = 4;
-  public static final int INCREMENTO = 20;
-  public static final int SUMA = 22;
-  public static final int MAIN = 44;
-  public static final int IF = 31;
-  public static final int MAYORIGUAL = 11;
+  public static final int INCREMENTO = 21;
+  public static final int SUMA = 23;
+  public static final int MAIN = 45;
+  public static final int IF = 32;
+  public static final int MAYORIGUAL = 12;
   public static final int EOF = 0;
-  public static final int RETURN = 38;
-  public static final int TRUE = 51;
-  public static final int COMILLA = 47;
-  public static final int DECREMENTO = 21;
+  public static final int RETURN = 39;
+  public static final int TRUE = 52;
+  public static final int COMILLA = 48;
+  public static final int DECREMENTO = 22;
   public static final int error = 1;
-  public static final int COMENTARIO = 53;
-  public static final int MODULO = 26;
-  public static final int NEGACION = 30;
-  public static final int MENOR = 8;
-  public static final int BREAK = 37;
-  public static final int PARENDER = 15;
+  public static final int NULO = 8;
+  public static final int COMENTARIO = 54;
+  public static final int MODULO = 27;
+  public static final int NEGACION = 31;
+  public static final int MENOR = 9;
+  public static final int BREAK = 38;
+  public static final int PARENDER = 16;
   public static final int VOID = 7;
-  public static final int ERROR = 42;
-  public static final int ASIGNACION = 43;
-  public static final int SWITCH = 35;
-  public static final int BRACEDER = 17;
-  public static final int MAYOR = 10;
-  public static final int POTENCIA = 27;
-  public static final int CORCHETEDER = 19;
-  public static final int ELSE = 32;
-  public static final int READ = 50;
-  public static final int WHILE = 34;
-  public static final int DEFAULT = 55;
+  public static final int ERROR = 43;
+  public static final int ASIGNACION = 44;
+  public static final int SWITCH = 36;
+  public static final int BRACEDER = 18;
+  public static final int MAYOR = 11;
+  public static final int POTENCIA = 28;
+  public static final int CORCHETEDER = 20;
+  public static final int ELSE = 33;
+  public static final int READ = 51;
+  public static final int WHILE = 35;
+  public static final int DEFAULT = 56;
   public static final int FLOAT = 3;
-  public static final int CONJUNCION = 28;
+  public static final int CONJUNCION = 29;
   public static final int STRING = 6;
-  public static final int DISYUNCION = 29;
-  public static final int FALSE = 52;
-  public static final int DIVISION = 24;
-  public static final int PRINT = 49;
-  public static final int ENDEXPR = 45;
-  public static final int MULTIPLICACION = 25;
+  public static final int DISYUNCION = 30;
+  public static final int FALSE = 53;
+  public static final int DIVISION = 25;
+  public static final int PRINT = 50;
+  public static final int ENDEXPR = 46;
+  public static final int MULTIPLICACION = 26;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -73,6 +74,7 @@ public class sym {
   "CHAR",
   "STRING",
   "VOID",
+  "NULO",
   "MENOR",
   "MENORIGUAL",
   "MAYOR",

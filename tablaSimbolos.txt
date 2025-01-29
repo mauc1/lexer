@@ -1,14 +1,6 @@
-Tabla de simbolos: main
-Valores: 
 
-nombre: _verano_, tipo: int, ambito: Funcion Main
-, variable local _x_, tipo: string
-, variable local _num_, tipo: int
-, 
-Tabla de simbolos: funcion _wow_
-Valores: 
+Tabla de simbolo: funcion _func1_
+Valores : 
 
-nombre: _wow_, tipo: string, ambito: Funcion
-, nombre: _arrayy_, tipo: arreglo
-, variable local _z_, tipo: string
-, 
+nombre: _func1_tipo: floatambito: Funcion
+

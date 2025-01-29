@@ -33,6 +33,14 @@ import java_cup.runtime.*;
         System.err.println("ERROR: " + message + ", línea " + yyline + ", columna " + yycolumn);
         errorCount++;
     }
+
+    public int getLine() {
+        return yyline;
+    }
+
+    public int getColumn() {
+        return yycolumn;
+    }
 %}
 
 //expresiones basicas
@@ -116,7 +124,7 @@ COMENTARIO = {COMENTARIOSIMPLE} | {MULTICOMENTARIO}
 <YYINITIAL> {STRCOMPLETO}     { return symbol(sym.STRING, yytext()); }
 <YYINITIAL> {STRPALABRA}      { return symbol(sym.STRING, yytext()); }
 //numeros
-<YYINITIAL> {NUM}        { return symbol(sym.NUMERO, yytext()); }
+<YYINITIAL> {NUM}        {return symbol(sym.FLOAT, yytext());}
 //comentarios
 <YYINITIAL> {COMENTARIO} { }
 <YYINITIAL> "//".*            { }

@@ -3,13 +3,17 @@ package ParserLexer;
 import java_cup.runtime.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.io.FileWriter;
 import java.io.IOException;
-
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 
 action code {:
-    HashMap<String, ArrayList<String>> listaTablasSimbolos = new HashMap<String, ArrayList<String>>();
-    String currentHash;
+    LinkedHashMap<String, ArrayList<String>> listaTablasSimbolos = new LinkedHashMap<String, ArrayList<String>>();
+    ArrayList<FunctionObject> funcs = new ArrayList<FunctionObject>();
+    HashMap<String, TablaSimbolo> pilaSimbolos = new HashMap<String, TablaSimbolo>();
+    String currHash = "";
 
     public void imprimirTablaSimbolos(){
         for (String key : listaTablasSimbolos.keySet()) {
@@ -24,33 +28,149 @@ action code {:
 
     //escribir en archivo la tabla de simbolos
     public void escribirTablaSimbolos(String nombreArchivo){
-        try {
-            FileWriter myWriter = new FileWriter(nombreArchivo);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(nombreArchivo))) { //revisar si el path esta bien
             for (String key : listaTablasSimbolos.keySet()) {
-                myWriter.write("Tabla de simbolos: " + key + "\n");
-                myWriter.write("Valores: \n");
+                writer.write("\nTabla de simbolo: " + key + "\n");
+                writer.write("Valores : \n");
                 for (String item : listaTablasSimbolos.get(key)) {
-                    myWriter.write(item + ", ");
+                    writer.write(item);
                 }
-                myWriter.write("\n");
+                writer.write("\n");
             }
-            myWriter.close();
-            System.out.println("Tabla de simbolos guardada en " + nombreArchivo);
         } catch (IOException e) {
-            System.out.println("An error occurred.");
+            System.out.println("Error escribiendo tabla de simbolos");
             e.printStackTrace();
         }
+    }
+
+    public TipoDato validarTipos(String ope, Dato op1, Dato op2, ArrayList<TipoDato> tipos){
+        if (op1.getTipo() != op2.getTipo()) {
+            System.out.println("Error: tipos no compatibles en la operacion " + ope);
+            return TipoDato.NULO; //o nulo
+        } 
+        if (!tipos.contains(op1.getTipo())) {
+            System.out.println("Error: tipo no valido en la operacion " + ope);
+            return TipoDato.NULO;
+        }
+        return op1.getTipo();
+    }
+
+     public String existeValor(String pSim){
+      for (Simbolo valor : pilaSimbolos.get(currHash).getTablaSimbolos()) {
+        if (valor.getId() == pSim) {
+          //return value.getDireccion();
+          return " ";
+        }
+      }
+      return null;
+    }
+
+    public FunctionObject buscarFunc(String pId){
+      for(FunctionObject func : funcs){
+        if(func.getIdFuncion().equals(pId)){
+            return func;
+        }
+      }
+      return null;
+    }
+
+    public TipoDato getTipo(String pId, boolean reportar){
+        for (Simbolo dato : pilaSimbolos.get(currHash).getTablaSimbolos()) {
+              System.out.println("A: "+dato.getId());
+          if (dato.getId().equals(pId)) {
+            return Dato.tipoFromString(dato.getTipo());
+          }
+        }
+        if (reportar){
+          semantic_error("misc", ("Error semantico en la linea " + (lex.getLine() + 1) + " columna " + (lex.getColumn() + 1) + ": " + "Ya que no se ha definido el id: " + pId));
+        }
+        return TipoDato.NULO;
     }
 :}
 
 parser code {:
+       // Connect this parser to a scanner!
     Lexer lex;
-
-    boolean syntaxErrorPrograma = false;
+    boolean syntaxError;
+    ArrayList<String> errores = new ArrayList<String>();
+    String errorActual = "";
     @SuppressWarnings("deprecation")
     public parser(Lexer lex){
         this.lex = lex;
         this.symbolFactory = new DefaultSymbolFactory();
+        this.syntaxError = false; // Inicializar el booleano de errores
+    }
+
+
+    /*Funcion syntax_error sobreescrita para el manejo de errores en idioma espaniol 
+    Recibe de parametro el symbol del token actual en el que se ha encontrado un error
+    No retorna nada 
+    */
+    public void syntax_error(Symbol errorSymbol) {//Se imprime la linea y columna del error
+        errorActual = "Error sintactico en la linea: " + errorSymbol.left + ", y columna " + errorSymbol.right;
+        //System.err.println("Error sintactico en la linea: " + errorSymbol.left + ", y columna " + errorSymbol.right );
+        this.errores.add(errorActual);
+        this.syntaxError = true; //El booleano se pone en true para indicar que se encontro un error 
+    }
+
+    public void semantic_error(String pTipo, String pExpresion){
+        switch(pTipo){
+          case "local":
+              //System.out.println("Error semantico local en la linea " + (lex.getLine()+1) + " columna " + lex.getColumn() + ": " + "Debido al dato ya existente: " + pExpresion);
+              errorActual = "Error semantico en la linea " + (lex.getLine()+1) + " columna " + lex.getColumn() + ": " + "Debido a la variable ya existente: " + pExpresion;
+              this.errores.add(errorActual);
+              this.syntaxError = true;
+              break;
+          case "param":
+              //System.out.println("Error semantico local en la linea " + (lex.getLine()+1) + " columna " + lex.getColumn() + ": " + "Debido al dato ya existente: " + pExpresion);
+              errorActual = "Error semantico en la linea " + (lex.getLine()+1) + " columna " + lex.getColumn() + ": " + "Debido al parametro repetido: " + pExpresion;
+              this.errores.add(errorActual);
+              this.syntaxError = true;
+              break;
+          case "fun":
+              //System.out.println("Error semantico local en la linea " + (lex.getLine()+1) + " columna " + lex.getColumn() + ": " + "Debido al dato ya existente: " + pExpresion);
+              errorActual = "Error semantico en la linea " + (lex.getLine()+1) + " columna " + lex.getColumn() + ": " + "Debido a la funcion ya existente: " + pExpresion;
+              this.errores.add(errorActual);
+              this.syntaxError = true;
+              break;
+          case "main":
+              errorActual = "Error semantico debido a que no existe funcion main";
+              this.errores.add(errorActual);
+              this.syntaxError = true;
+              break;
+          case "ftipo":
+              errorActual = "Error semantico en la linea " + (lex.getLine() + 1) + " columna " + (lex.getColumn() + 1) + ": " + "El tipo " + pExpresion + " no es valido para una funcion";
+              this.errores.add(errorActual);
+              this.syntaxError = true;
+              break;
+           case "misc":
+              this.errores.add(pExpresion);
+              this.syntaxError = true;
+              break;
+
+//variable no existente: var
+//mal retorno: return
+//mala asignacion: assign
+//
+          
+        }
+    }
+    // Metodo que verifica si hubo un error sintactico, el cual no recibe ni retorna valores 
+    public boolean huboError() {
+        return syntaxError;
+    }
+
+    //Metodo que imprime si hubo error sintactico y si la gramatica puede ser generada 
+    public void estadoGramatica() {
+        if (huboError()) {
+            System.out.println("El archivo fuente no puede ser generado por la gramatica, debido a errores encontrados en estas partes del archivo:\n");
+            for(String currentError : errores){
+                System.out.println("\t " + currentError);            
+            }
+
+        } else {
+            System.out.println("El archivo fuente si puede ser generado por la gramatica");
+        }
     }
 :}
 
@@ -59,7 +179,7 @@ init with {: :};
 scan with {: return lex.next_token(); :};
 
 //Terminales de tipos
-terminal INTEGER, FLOAT, BOOL, CHAR, STRING, VOID;
+terminal INTEGER, FLOAT, BOOL, CHAR, STRING, VOID, NULO;
 
 //Terminales relacionales
 terminal MENOR, MENORIGUAL, MAYOR, MAYORIGUAL, IGUALDAD, DIFERENTE;
@@ -99,7 +219,7 @@ terminal DEFAULT;
 
 //no terminales 
 //funciones
-non terminal funcion, _verano_, funciones_produ, parametros, funcionRecur, funcion_produ, parametrosOpcionales;
+non terminal funcion, inicio, funciones_produ, parametros, funcionRecur, funcion_produ, parametrosOpcionales;
 
 //sentencias
 non terminal tipos;
@@ -114,12 +234,19 @@ non terminal exprArit, exprLog, exprRel, factor, exprPrin ;
 non terminal operadorLog, operadorRel, operadorArit, operandoUnario;
 non terminal accesoArreglo, creacion, asignacion, creacionasignacion, creacionArreglo, modificacionArreglo, valoresArreglo;
 
-start with _verano_;
+
+//poner precedencias
+
+start with inicio;
 
 
-_verano_ ::= 
+inicio ::= 
     funcion
     {: 
+        if (!listaTablasSimbolos.containsKey("_verano_")) {
+            System.out.println("Error: no se encontro la funcion main");
+            //syntaxErrorPrograma = true;
+        }
         imprimirTablaSimbolos();
         escribirTablaSimbolos("tablaSimbolos.txt");
         System.out.println("---Fin---");
@@ -129,7 +256,7 @@ funcion ::= {:System.out.println("\nInicio");:} funcionRecur;
 
 //llamada recursiva para llamar varias funciones
 funcionRecur ::= funcion_produ | funcionRecur funcion_produ ;
-//aqui se definen los distintos tipos de funciones
+
 //funciona como el encabezado
 funcion_produ ::= funciones_produ bloque_produ ;
 
@@ -138,39 +265,39 @@ funciones_produ ::=
     tipos:t MAIN PARENIZQ PARENDER
     {://Funcion main
         ArrayList<String> listaDatos = new ArrayList<String>();
-        currentHash = "main";
+        currHash = "main";
         String nombre_func = "\nnombre: _verano_";
         String tipo_dato = "tipo: " + t.toString();
         String ambito = "ambito: Funcion Main\n";
         listaDatos.add(nombre_func);
         listaDatos.add(tipo_dato);
         listaDatos.add(ambito);
-        listaTablasSimbolos.put(currentHash, listaDatos);
+        listaTablasSimbolos.put(currHash, listaDatos);
     :}
     //cualquier funcion sin parametros
     | tipos:t IDENTIFICADOR:idd PARENIZQ PARENDER
     {://Funcion sin parametros
         ArrayList<String> listaDatos = new ArrayList<String>();
-        currentHash = "funcion " + idd.toString();
+        currHash = "funcion " + idd.toString();
         String nombre_func = "\nnombre: " + idd.toString();
         String tipo_dato = "tipo: " + t.toString();
         String ambito = "ambito: Funcion\n";
         listaDatos.add(nombre_func);
         listaDatos.add(tipo_dato);
         listaDatos.add(ambito);
-        listaTablasSimbolos.put(currentHash, listaDatos);
+        listaTablasSimbolos.put(currHash, listaDatos);
     :}
     | tipos:t IDENTIFICADOR:idd PARENIZQ
     {://tipo
         ArrayList<String> listaDatos = new ArrayList<String>();
-        currentHash = "funcion " + idd.toString();
+        currHash = "funcion " + idd.toString();
         String nombre_func = "\nnombre: " + idd.toString();
         String tipo_dato = "tipo: " + t.toString();
         String ambito = "ambito: Funcion\n";
         listaDatos.add(nombre_func);
         listaDatos.add(tipo_dato);
         listaDatos.add(ambito);
-        listaTablasSimbolos.put(currentHash, listaDatos);
+        listaTablasSimbolos.put(currHash, listaDatos);
     :} parametros PARENDER
     | error {:System.out.println("Error: encabezado no coincide con la gramatica. Buscando el '}' final para salir de esta funcion");
         Symbol token;
@@ -202,7 +329,7 @@ bloque_produ ::=
 sentencias ::= sentencia | sentencias sentencia |
                 error 
                 {:
-                    System.out.println("Error: falta el token de fin de sentencia (;). Recuperando...");
+                    System.out.println("Error: error en sentencia. Recuperando...");
 
                     Symbol token;
                     do {
