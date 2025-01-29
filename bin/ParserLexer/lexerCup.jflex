@@ -46,6 +46,7 @@ DIGITONOCERO = [1-9]
 ID = "_"({LETRA}|{DIGITO})*"_"
 FLOATNUM = -? (0 | {DIGITONOCERO} {DIGITO}*) ("." {DIGITO}+)? (("e" | "E") -? {DIGITO}+)?
 NUM = {DIGITO}+ | {FLOATNUM}
+CHAR = "'" ({LETRA}|{DIGITO}) "'"
 STRCOMPLETO = {DOBLECOMILLA}({LETRA}|{DIGITO})({LETRA}|{DIGITO})*{DOBLECOMILLA}
 STRPALABRA = {LETRA}({LETRA}|{DIGITO})*
 
@@ -102,7 +103,7 @@ COMENTARIO = {COMENTARIOSIMPLE} | {MULTICOMENTARIO}
 <YYINITIAL> "duende"          { return symbol(sym.FOR); }
 <YYINITIAL> "varios"          { return symbol(sym.SWITCH); }
 <YYINITIAL> "historia"        { return symbol(sym.CASE); }
-<YYINITIAL> "último"          { return symbol(sym.DEFAULT); }
+<YYINITIAL> "ultimo"          { return symbol(sym.DEFAULT); }
 <YYINITIAL> "corta"           { return symbol(sym.BREAK); }
 <YYINITIAL> "envia"           { return symbol(sym.RETURN); }
 <YYINITIAL> "sigue"           { return symbol(sym.DOSPUNTOS); }
@@ -112,11 +113,12 @@ COMENTARIO = {COMENTARIOSIMPLE} | {MULTICOMENTARIO}
 <YYINITIAL> ","               { return symbol(sym.COMMA); }
 <YYINITIAL> "'"               { return symbol(sym.COMILLA); }
 <YYINITIAL> "\""              { return symbol(sym.COMILLADOBLE); } 
-<YYINITIAL> "!"               { return symbol(sym.CHAR); } //LO DEJAMOS COMO CHAR POR UN CODIGO DE EJEMPLO DEL PROFESOR
+<YYINITIAL> {CHAR}               { return symbol(sym.CHAR); } 
 <YYINITIAL> {STRCOMPLETO}     { return symbol(sym.STRING); }
 <YYINITIAL> {STRPALABRA}      { return symbol(sym.STRING); }
 //numeros
-<YYINITIAL> {NUM}        { return symbol(sym.NUMERO); }
+<YYINITIAL> {NUM}        { if (match("FLOATNUM")) return symbol(sym.FLOAT); 
+                            else return symbol(sym.INTEGER); }
 //comentarios
 <YYINITIAL> {COMENTARIO} { }
 <YYINITIAL> "//".*            { }
