@@ -54,8 +54,9 @@ DIGITONOCERO = [1-9]
 IDE = "_"({LETRA}|{DIGITO})*"_"
 FLOATNUM = -? (0 | {DIGITONOCERO} {DIGITO}*) ("." {DIGITO}+)? (("e" | "E") -? {DIGITO}+)?
 NUM = {DIGITO}+ | {FLOATNUM}
-STRCOMPLETO = {DOBLECOMILLA}({LETRA}|{DIGITO})({LETRA}|{DIGITO})*{DOBLECOMILLA}
-STRPALABRA = {LETRA}({LETRA}|{DIGITO})*
+CHAR = "'" . "'"
+STRING = {DOBLECOMILLA}(.)+{DOBLECOMILLA}
+
 
 //comentario de una linea
 COMENTARIOSIMPLE = "#" [^\n]* {delim}?
@@ -121,10 +122,11 @@ COMENTARIO = {COMENTARIOSIMPLE} | {MULTICOMENTARIO}
 <YYINITIAL> ","               { return symbol(sym.COMMA); }
 <YYINITIAL> "'"               { return symbol(sym.COMILLA); }
 <YYINITIAL> "\""              { return symbol(sym.COMILLADOBLE); } 
-<YYINITIAL> {STRCOMPLETO}     { return symbol(sym.STRING, yytext()); }
-<YYINITIAL> {STRPALABRA}      { return symbol(sym.STRING, yytext()); }
+<YYINITIAL> {CHAR}            { return symbol(sym.CHAR, yytext()); }
+<YYINITIAL> {STRING}     { return symbol(sym.STRING, yytext()); }
+
 //numeros
-<YYINITIAL> {NUM}        {return symbol(sym.FLOAT, yytext());}
+<YYINITIAL> {NUM}        {if(yytext().contains(".")) return symbol(sym.FLOAT, yytext()); else return symbol(sym.INTEGER, yytext());}
 //comentarios
 <YYINITIAL> {COMENTARIO} { }
 <YYINITIAL> "//".*            { }

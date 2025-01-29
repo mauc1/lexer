@@ -265,7 +265,7 @@ funciones_produ ::=
     tipos:t MAIN PARENIZQ PARENDER
     {://Funcion main
         ArrayList<String> listaDatos = new ArrayList<String>();
-        currHash = "main";
+        currHash = "_verano_";
         String nombre_func = "\nnombre: _verano_";
         String tipo_dato = "tipo: " + t.toString();
         String ambito = "ambito: Funcion Main\n";
@@ -287,7 +287,7 @@ funciones_produ ::=
         listaDatos.add(ambito);
         listaTablasSimbolos.put(currHash, listaDatos);
     :}
-    | tipos:t IDENTIFICADOR:idd PARENIZQ
+    | tipos:t IDENTIFICADOR:idd PARENIZQ parametros PARENDER
     {://tipo
         ArrayList<String> listaDatos = new ArrayList<String>();
         currHash = "funcion " + idd.toString();
@@ -298,7 +298,7 @@ funciones_produ ::=
         listaDatos.add(tipo_dato);
         listaDatos.add(ambito);
         listaTablasSimbolos.put(currHash, listaDatos);
-    :} parametros PARENDER
+    :} 
     | error {:System.out.println("Error: encabezado no coincide con la gramatica. Buscando el '}' final para salir de esta funcion");
         Symbol token;
         do {
@@ -308,8 +308,7 @@ funciones_produ ::=
                 break; 
             }
         } while (token != null);
-    :}
-    funcionRecur;
+    :};
     
 
 tipos ::= 
@@ -363,14 +362,17 @@ operandoUnario ::= IDENTIFICADOR INCREMENTO
  
 accesoArreglo ::= IDENTIFICADOR CORCHETEIZQ exprPrin CORCHETEDER ;
  
-factor ::= NUMERO
+factor ::= INTEGER
     | CHAR
     | STRING
-    | BOOL
+    | TRUE
+    | FALSE
+    | FLOAT
     | llamadaFuncion
 	| operandoUnario
 	| accesoArreglo
-	| IDENTIFICADOR /* XXX faltan factores: literal char, literal string, litaral bool, funcion, acceso arreglo*/
+	| IDENTIFICADOR 
+    | tipos IDENTIFICADOR
 	| PARENIZQ exprPrin PARENDER  ;
  
 operadorArit ::=  SUMA | RESTA | DIVISION | MULTIPLICACION | MODULO | POTENCIA ; 
@@ -397,7 +399,7 @@ if_produ ::=
 
 //for
 for_produ ::= 
-    FOR PARENIZQ asignacion ENDEXPR exprPrin ENDEXPR exprPrin PARENDER bloque_produ 
+    FOR PARENIZQ asignacion exprPrin ENDEXPR exprPrin PARENDER bloque_produ 
     | FOR PARENIZQ creacionasignacion ENDEXPR exprPrin ENDEXPR exprPrin PARENDER bloque_produ 
     ;
 
@@ -418,8 +420,8 @@ llamadaFuncion ::= IDENTIFICADOR PARENIZQ parametrosOpcionales PARENDER ENDEXPR 
 parametrosOpcionales ::= parametros | /* vacío */ ;
 parametros ::= exprPrin | parametros COMMA exprPrin ;
 
-creacionArreglo ::= tipos IDENTIFICADOR CORCHETEIZQ NUMERO CORCHETEDER ENDEXPR 
-                  | tipos IDENTIFICADOR CORCHETEIZQ NUMERO CORCHETEDER ASIGNACION CORCHETEIZQ valoresArreglo CORCHETEDER ENDEXPR ;
+creacionArreglo ::= tipos IDENTIFICADOR CORCHETEIZQ INTEGER CORCHETEDER ENDEXPR 
+                  | tipos IDENTIFICADOR CORCHETEIZQ INTEGER CORCHETEDER ASIGNACION CORCHETEIZQ valoresArreglo CORCHETEDER ENDEXPR ;
 valoresArreglo ::= exprPrin | valoresArreglo COMMA exprPrin ;
 
 modificacionArreglo ::= IDENTIFICADOR CORCHETEIZQ exprPrin CORCHETEDER ASIGNACION exprPrin ENDEXPR ;

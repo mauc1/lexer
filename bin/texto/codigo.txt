@@ -1,3 +1,47 @@
-bromista  _func1_  abreregalo cierraregalo abrecuento  
-	 bromista _h_ finregalo  #error sintactico 
-cierracuento
+rodolfo _verano_  abreregalo cierraregalo abrecuento  #semantico borrar parametro
+
+	 bromista  _o_ entrega -0.01 finregalo  #error sintactico
+	 cupido  _x22_ entrega 'a' finregalo  \_semantico x22_/
+	 cupido  _miChar_ entrega '!' finregalo #error sintactico
+	 cupido  _miChar2_ entrega '!' finregalo  #sintactico-semantico
+
+	 rodolfo  _x30_ entrega -1 finregalo 
+	 trueno  _x40_ entrega false finregalo 
+	 cupido  _x50_ abreempaque 1000 cierraempaque  finregalo 
+	 
+	 cometa  _x50_ entrega "Hola a todos los que est abreempaque a cierraempaque  haciendo un compilador nuevo\n" finregalo 
+	elfo  abreregalo _x22_ evergreen 45 melchor _var_ minstix 5.6 cierraregalo  abrecuento  #semantico x22 ,  var
+		 rodolfo  _y_ finregalo 
+		_x22_ entrega 10 finregalo 
+		 cupido  _ch33_ entrega 'a' finregalo 
+	 cierracuento   hada   abrecuento 
+		 rodolfo  _y_ finregalo #no error o no???
+		 cometa  _str2_ entrega "sdff" finregalo 
+	 cierracuento 
+
+	 duende   abreregalo _i_ entrega 0 finregalo _i_ snowball 4 navidad _j_ finregalo _i_ quien  cierraregalo  
+	 abrecuento  narra  abreregalo _i_ cierraregalo  finregalo  cierracuento  #semantico i y j
+
+	 narra  abreregalo "Hola mundo" cierraregalo  finregalo 
+	 escucha  abreregalo _x22_ cierraregalo  finregalo 
+	 envia -5.6 finregalo #cambio en retorno genera semantico
+
+	_func2_ abreregalo _h_, 0 cierraregalo finregalo
+
+ cierracuento 
+
+trueno  _func2_  abreregalo cometa _h_, _g_ cierraregalo   abrecuento 
+	 rodolfo  _h_ entrega 0 finregalo  #sintactico
+	 envia _h_ finregalo  #generar error con -5.6 y con i1
+  cierracuento 
+
+  cometa  _func3_  abreregalo  cierraregalo   abrecuento 
+	 rodolfo  _h_ entrega 0 finregalo  #sintactico
+	 envia _h_ finregalo  #generar error con -5.6 y con i1
+  cierracuento 
+
+  cometa  _func4_  abreregalo  cierraregalo   abrecuento  #semantico  cometa 
+	 cometa  _b1_ finregalo 
+	 envia _b1_ finregalo  
+  cierracuento 
+
