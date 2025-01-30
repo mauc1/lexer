@@ -10,6 +10,8 @@ import ParserLexer.Lexer;
 import ParserLexer.parser;
 import java_cup.runtime.Symbol;
 import ParserLexer.sym;
+import ParserLexer.arbol.ASTPrinter;
+import ParserLexer.arbol.ProgramNode;
 
 public class App {
     //Correr este archivo para ejecutar el programa, 
@@ -29,22 +31,31 @@ public class App {
         //espera 4 segundos
         Thread.sleep(5000);
         //PASO 3 : Ejecutar el parser
-        ejecutarParser(ruta);
+        ProgramNode ast = ejecutarParser(ruta);
+        if (ast != null) {
+            System.out.println("AST generado correctamente");
+            ASTPrinter printer = new ASTPrinter();
+            ast.accept(printer);
+        }
 
         //adicional: probar el lexer del proyecto 1
        // pruebaLexer(ruta); 
     }
 
-    public static void ejecutarParser(String ruta) throws Exception {
+    public static ProgramNode ejecutarParser(String ruta) throws Exception {
         FileInputStream fileInputStream = new FileInputStream(ruta);
         Reader reader = new InputStreamReader(fileInputStream);
         Lexer lexer = new Lexer(reader);
         parser parser = new parser(lexer);
-        parser.parse();
+
+        Symbol parseResult = parser.parse();
+        ProgramNode ast = (ProgramNode) parseResult.value;
 
         // Cerrar el flujo de entrada
         reader.close();
         fileInputStream.close();
+
+        return ast;
     }
 
      //funcion para probar el lexer (contar lexemas)

@@ -4,10 +4,11 @@ import java_cup.runtime.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import ParserLexer.arbol.*;
+import java.util.List;
 
 action code {:
     LinkedHashMap<String, ArrayList<String>> listaTablasSimbolos = new LinkedHashMap<String, ArrayList<String>>();
@@ -219,11 +220,8 @@ terminal DEFAULT;
 
 //no terminales 
 //funciones
-non terminal funcion, inicio, funciones_produ, parametros, funcionRecur, funcion_produ, parametrosOpcionales;
-
-//sentencias
+non terminal inicio, funciones_produ, parametros, funcionRecur, funcion_produ, parametrosOpcionales;
 non terminal tipos;
-non terminal bloque_produ, sentencias, sentencia;
 
 //flujos
 non terminal if_produ, for_produ, while_produ, switch_produ, historia_produ, casodefault, estructurasControl;  
@@ -234,6 +232,13 @@ non terminal exprArit, exprLog, exprRel, factor, exprPrin ;
 non terminal operadorLog, operadorRel, operadorArit, operandoUnario;
 non terminal accesoArreglo, creacion, asignacion, creacionasignacion, creacionArreglo, modificacionArreglo, valoresArreglo;
 
+// Declaración de no terminales
+non terminal ProgramNode program;
+non terminal FunctionNode funcion; //esto es funcion
+non terminal List<FunctionNode> funciones; //esto es funcionessss
+non terminal BlockNode bloque_produ;
+non terminal List<StatementNode> sentencias;
+non terminal StatementNode sentencia;
 
 //poner precedencias
 
@@ -241,8 +246,9 @@ start with inicio;
 
 
 inicio ::= 
-    funcion
+    funciones:f
     {: 
+        RESULT = new ProgramNode(f);
         if (!listaTablasSimbolos.containsKey("_verano_")) {
             System.out.println("Error: no se encontro la funcion main");
             //syntaxErrorPrograma = true;
@@ -252,65 +258,39 @@ inicio ::=
         System.out.println("---Fin---");
     :};
 
-funcion ::= {:System.out.println("\nInicio");:} funcionRecur;
+funciones ::= funcion:f {: List<FunctionNode> list = new ArrayList<>(); list.add(f); RESULT = list; :}
+            | funciones:f1 funcion:f2 {: f1.add(f2); RESULT = f1; :};
 
-//llamada recursiva para llamar varias funciones
-funcionRecur ::= funcion_produ | funcionRecur funcion_produ ;
 
-//funciona como el encabezado
-funcion_produ ::= funciones_produ bloque_produ ;
+funcion ::= 
+            //funcion sin parametros 
+            tipos:t IDENTIFICADOR:id PARENIZQ PARENDER bloque_produ:b 
+            {: RESULT = new FunctionNode(id.toString(), b); 
+                ArrayList<String> listaDatos = new ArrayList<String>();
+                currHash = "funcion " + id.toString();
+                String nombre_func = "\nnombre: " + id.toString();
+                String tipo_dato = "tipo: " + t.toString();
+                String ambito = "ambito: Funcion\n";
+                listaDatos.add(nombre_func);
+                listaDatos.add(tipo_dato);
+                listaDatos.add(ambito);
+                listaTablasSimbolos.put(currHash, listaDatos);
+            :}
 
-funciones_produ ::= 
-//int _verano_ ()
-    tipos:t MAIN PARENIZQ PARENDER
-    {://Funcion main
-        ArrayList<String> listaDatos = new ArrayList<String>();
-        currHash = "main";
-        String nombre_func = "\nnombre: _verano_";
-        String tipo_dato = "tipo: " + t.toString();
-        String ambito = "ambito: Funcion Main\n";
-        listaDatos.add(nombre_func);
-        listaDatos.add(tipo_dato);
-        listaDatos.add(ambito);
-        listaTablasSimbolos.put(currHash, listaDatos);
-    :}
-    //cualquier funcion sin parametros
-    | tipos:t IDENTIFICADOR:idd PARENIZQ PARENDER
-    {://Funcion sin parametros
-        ArrayList<String> listaDatos = new ArrayList<String>();
-        currHash = "funcion " + idd.toString();
-        String nombre_func = "\nnombre: " + idd.toString();
-        String tipo_dato = "tipo: " + t.toString();
-        String ambito = "ambito: Funcion\n";
-        listaDatos.add(nombre_func);
-        listaDatos.add(tipo_dato);
-        listaDatos.add(ambito);
-        listaTablasSimbolos.put(currHash, listaDatos);
-    :}
-    | tipos:t IDENTIFICADOR:idd PARENIZQ
-    {://tipo
-        ArrayList<String> listaDatos = new ArrayList<String>();
-        currHash = "funcion " + idd.toString();
-        String nombre_func = "\nnombre: " + idd.toString();
-        String tipo_dato = "tipo: " + t.toString();
-        String ambito = "ambito: Funcion\n";
-        listaDatos.add(nombre_func);
-        listaDatos.add(tipo_dato);
-        listaDatos.add(ambito);
-        listaTablasSimbolos.put(currHash, listaDatos);
-    :} parametros PARENDER
-    | error {:System.out.println("Error: encabezado no coincide con la gramatica. Buscando el '}' final para salir de esta funcion");
-        Symbol token;
-        do {
-            token = lex.next_token(); //este metodo ya lo trae el lexer
-            if (token.sym == sym.BRACEDER || token.sym == sym.EOF) { //busca el } final
-                System.out.println("Encontrado el } final");
-                break; 
-            }
-        } while (token != null);
-    :}
-    funcionRecur;
-    
+            //funcion con parametros
+            | tipos:t IDENTIFICADOR:id PARENIZQ parametros PARENDER bloque_produ:b {: RESULT = new FunctionNode(id.toString(), b); :}
+
+            //error en la declaracion de la funcion
+            | error {:System.out.println("Error: encabezado no coincide con la gramatica.");
+                Symbol token;
+                do {
+                    token = lex.next_token(); //este metodo ya lo trae el lexer
+                    if (token.sym == sym.BRACEDER || token.sym == sym.EOF) { //busca el } final
+                        System.out.println("Encontrado el } final");
+                        break; 
+                    }
+                } while (token != null);
+            :};
 
 tipos ::= 
     INTEGER {:RESULT = "int";:}
@@ -323,11 +303,11 @@ tipos ::=
 //cuerpo de las funciones
 
 bloque_produ ::= 
-    BRACEIZQ sentencias BRACEDER
-    ;
+    BRACEIZQ sentencias:s BRACEDER {: RESULT = new BlockNode(s); :};
 
-sentencias ::= sentencia | sentencias sentencia |
-                error 
+sentencias ::= sentencia:s {: List<StatementNode> list = new ArrayList<>(); list.add(s); RESULT = list; :}
+            | sentencias:s1 sentencia:s2 {: s1.add(s2); RESULT = s1; :}
+            | error 
                 {:
                     System.out.println("Error: error en sentencia. Recuperando...");
 
@@ -346,7 +326,7 @@ sentencias ::= sentencia | sentencias sentencia |
 sentencia ::= creacion | asignacion | creacionasignacion | estructurasControl | return_produ | break_produ | print_produ | read_produ | llamadaFuncion | modificacionArreglo | creacionArreglo;
 creacionasignacion ::= tipos IDENTIFICADOR ASIGNACION exprPrin ENDEXPR ;
 asignacion ::= IDENTIFICADOR ASIGNACION exprPrin ENDEXPR ;
-creacion ::= tipos IDENTIFICADOR ENDEXPR ;
+creacion ::= tipos:t IDENTIFICADOR:id ENDEXPR {: RESULT = new CreacionNode(t.toString(), id.toString()); :};
  
 exprPrin ::= exprLog ;
 exprLog ::= exprLog operadorLog exprRel | exprRel | NEGACION exprRel ;
