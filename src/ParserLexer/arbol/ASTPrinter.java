@@ -34,13 +34,13 @@ public class ASTPrinter implements Visitor {
         printIndent();
         System.out.println("BlockNode");
         indent++;
-        if (node.statement != null) {
+        //if (node.statement != null) {
             for (StatementNode statement : node.statement) {
                 if (statement != null) {
                     statement.accept(this);
                 }
             }
-        }
+        //}
         indent--;
     }
 

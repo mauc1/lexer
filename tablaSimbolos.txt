@@ -1,24 +1,6 @@
 
-Tabla de simbolo: _verano_
+Tabla de simbolo: funcion _func1_
 Valores : 
 
-nombre: _verano_tipo: intambito: Funcion Main
-
-
-Tabla de simbolo: funcion _func2_
-Valores : 
-
-nombre: _func2_tipo: boolambito: Funcion
-
-
-Tabla de simbolo: funcion _func3_
-Valores : 
-
-nombre: _func3_tipo: stringambito: Funcion
-
-
-Tabla de simbolo: funcion _func4_
-Valores : 
-
-nombre: _func4_tipo: stringambito: Funcion
+nombre: _func1_tipo: floatambito: Funcion
 

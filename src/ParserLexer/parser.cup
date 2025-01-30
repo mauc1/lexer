@@ -249,10 +249,7 @@ inicio ::=
     funciones:f
     {: 
         RESULT = new ProgramNode(f);
-        if (!listaTablasSimbolos.containsKey("_verano_")) {
-            System.out.println("Error: no se encontro la funcion main");
-            //syntaxErrorPrograma = true;
-        }
+        
         imprimirTablaSimbolos();
         escribirTablaSimbolos("tablaSimbolos.txt");
         System.out.println("---Fin---");
@@ -323,7 +320,7 @@ sentencias ::= sentencia:s {: List<StatementNode> list = new ArrayList<>(); list
 
 sentencia ::= creacion | asignacion | creacionasignacion | estructurasControl | return_produ | break_produ | print_produ | read_produ | llamadaFuncion | modificacionArreglo | creacionArreglo;
 creacionasignacion ::= tipos IDENTIFICADOR ASIGNACION exprPrin ENDEXPR ;
-asignacion ::= IDENTIFICADOR ASIGNACION exprPrin ENDEXPR ;
+asignacion ::= IDENTIFICADOR ASIGNACION exprPrin ENDEXPR;
 creacion ::= tipos:t IDENTIFICADOR:id ENDEXPR {: RESULT = new CreacionNode(t.toString(), id.toString()); :};
  
 exprPrin ::= exprLog ;
