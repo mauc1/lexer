@@ -220,7 +220,7 @@ terminal DEFAULT;
 
 //no terminales 
 //funciones
-non terminal inicio, funciones_produ, parametros, funcionRecur, funcion_produ, parametrosOpcionales;
+non terminal inicio, parametros, parametrosOpcionales;
 non terminal tipos;
 
 //flujos
@@ -228,19 +228,21 @@ non terminal if_produ, for_produ, while_produ, switch_produ, historia_produ, cas
 non terminal return_produ, break_produ, print_produ, read_produ, llamadaFuncion;
 
 
-non terminal exprArit, exprLog, exprRel, factor, exprPrin ;
+//non terminal exprArit, exprLog, exprRel, factor, exprPrin ;
 non terminal operadorLog, operadorRel, operadorArit, operandoUnario;
-non terminal accesoArreglo, creacionasignacion, creacionArreglo, modificacionArreglo, valoresArreglo;
+non terminal accesoArreglo, creacionArreglo, modificacionArreglo, valoresArreglo;
 
 // Declaración de no terminales
 non terminal ProgramNode program;
 non terminal FunctionNode funcion; //esto es funcion
 non terminal List<FunctionNode> funciones; //esto es funcionessss
 non terminal BlockNode bloque_produ;
-non terminal List<StatementNode> sentencias;
+non terminal List<StatementNode> sentencias; //parametro de bloque
 non terminal StatementNode sentencia;
 non terminal CreacionNode creacion;
 non terminal AsignacionNode asignacion;
+non terminal CreacionAsignacionNode creacionasignacion;
+non terminal ExpressionNode exprPrin, exprLog, exprRel, exprArit, factor;
 
 //poner precedencias
 
@@ -328,44 +330,32 @@ sentencias ::= sentencia:s {: List<StatementNode> list = new ArrayList<>(); if (
 
                 :};
 
-sentencia ::= creacion:c {: 
-    if (c == null) {
-        System.out.println("⚠️ ADVERTENCIA: `creacion` devolvió NULL en `sentencia`");
-    } else {
-        System.out.println(" creacion detectada correctamente.");
-        RESULT = c;
-    }
-    
-:} | asignacion:a {: 
-    if (a == null) {
-        System.out.println("⚠️ `asignacion` devolvió NULL en `sentencia`");
-    } else {
-        System.out.println("✅ `asignacion` detectada en `sentencia`.");
-        
-    }
-:}  | creacionasignacion | estructurasControl | return_produ | break_produ | print_produ | read_produ | llamadaFuncion | modificacionArreglo | creacionArreglo;
-creacionasignacion ::= tipos IDENTIFICADOR ASIGNACION exprPrin ENDEXPR ;
-asignacion ::= IDENTIFICADOR:id ASIGNACION exprPrin:e ENDEXPR; //{: RESULT = new AsignacionNode(id.toString(), e); :};
-creacion ::= tipos:t IDENTIFICADOR:id ENDEXPR {: 
-//System.out.println("Creando variable de tipo: " + t.toString() + " con nombre: " + id);
-RESULT = new CreacionNode(t.toString(), id.toString()); :};
- 
-exprPrin ::= exprLog ;
-exprLog ::= exprLog operadorLog exprRel | exprRel | NEGACION exprRel ;
+sentencia ::= 
+      creacion:c {: RESULT = c; :} 
+    | asignacion:a {: RESULT = a; :}
+    | creacionasignacion:ca {: RESULT = ca; :}
+    | estructurasControl | return_produ | break_produ | print_produ | read_produ | llamadaFuncion | modificacionArreglo | creacionArreglo;
+
+creacion ::= tipos:t IDENTIFICADOR:id ENDEXPR {: RESULT = new CreacionNode(t.toString(), id.toString()); :};
+asignacion ::= IDENTIFICADOR:id ASIGNACION exprPrin:e ENDEXPR {: RESULT = new AsignacionNode(id.toString(), (ExpressionNode) e); :};
+creacionasignacion ::= tipos:t IDENTIFICADOR:id ASIGNACION exprPrin:e ENDEXPR {: RESULT = new CreacionAsignacionNode(t.toString(), id.toString(), (ExpressionNode) e); :};
+
+exprPrin ::= exprLog:elog {: RESULT = elog; :};
+exprLog ::= exprLog operadorLog exprRel | exprRel:erel {: RESULT = erel; :} | NEGACION exprRel ;
 operadorLog ::= DISYUNCION | CONJUNCION ;
  
-exprRel ::= exprArit operadorRel exprArit | exprArit ;
+exprRel ::= exprArit operadorRel exprArit | exprArit:eArit {: RESULT = eArit; :};
 operadorRel ::= MAYOR | MENOR | MENORIGUAL | MAYORIGUAL | IGUALDAD | DIFERENTE; //XXX TERMINAR
  
 exprArit ::= exprArit operadorArit factor
-	| factor ;
+	| factor:fact {: RESULT = fact; :} ;
  
 operandoUnario ::= IDENTIFICADOR INCREMENTO
 		| IDENTIFICADOR DECREMENTO ;
  
 accesoArreglo ::= IDENTIFICADOR CORCHETEIZQ exprPrin CORCHETEDER ;
  
-factor ::= INTEGER
+factor ::= INTEGER:inte {: RESULT = new LiteralNode(Integer.parseInt(inte.toString())); :}
     | CHAR
     | STRING
     | TRUE

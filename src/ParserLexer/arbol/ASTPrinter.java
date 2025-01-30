@@ -47,11 +47,14 @@ public class ASTPrinter implements Visitor {
     @Override
     public void visit(StatementNode node) {
         printIndent();
-        System.out.println("StatementNode");
+        System.out.println("StatementNode"); //esto nunca se imprime
     }
     
     @Override
     public void visit(CreacionNode node) {
+        printIndent();
+        System.out.println("StatementNode");
+        printIndent(); 
         printIndent();
         System.out.println("CreacionNode: tipo=" + node.tipo + ", identificador=" + node.identificador);
     }
@@ -60,6 +63,25 @@ public class ASTPrinter implements Visitor {
     public void visit(AsignacionNode node) {
         printIndent();
         System.out.println("AsignacionNode: identificador=" + node.identificador);
+    }
+
+    @Override
+    public void visit(ExpressionNode node) {
+        printIndent();
+        System.out.println("ExpressionNode: " + node.result);
+    }
+
+    @Override
+    public void visit(CreacionAsignacionNode node) {
+        printIndent();
+        System.out.println("CreacionAsignacionNode: tipo=" + node.tipo + ", identificador=" + node.identificador);
+        indent++;
+        node.expresion.accept(this);
+        indent--;
+    }
+
+    @Override
+    public void visit(LiteralNode node) {
     }
 
 }

@@ -29,8 +29,8 @@ public class App {
        GenerarLexerParser(); //comienza a generar el lexer y parser    
         
         //PASO 2: Set de ruta
-        //String ruta = "C:\\Users\\mauri\\OneDrive\\Documentos\\GitHub\\lexer\\src\\texto\\codigo.txt";
-        String ruta = "C:\\Users\\julil\\OneDrive\\Documentos\\GitHub\\lexer\\src\\texto\\codigo.txt";
+        String ruta = "C:\\Users\\mauri\\OneDrive\\Documentos\\GitHub\\lexer\\src\\texto\\codigo.txt";
+        //String ruta = "C:\\Users\\julil\\OneDrive\\Documentos\\GitHub\\lexer\\src\\texto\\codigo.txt";
         //String ruta = "";
         //espera 4 segundos
         Thread.sleep(5000);
@@ -42,7 +42,7 @@ public class App {
             ast.accept(printer);
         
             //intermedio
-           /* TACGenerator tacGenerator = new TACGenerator();
+            /*TACGenerator tacGenerator = new TACGenerator();
             ast.accept(tacGenerator);
             List<ThreeAddressCode> code = tacGenerator.getCode();
 

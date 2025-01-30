@@ -7,4 +7,7 @@ public interface Visitor {
     void visit(StatementNode node);
     void visit(CreacionNode node);
     void visit(AsignacionNode node);
+    void visit(ExpressionNode node);
+    void visit(CreacionAsignacionNode node);
+    void visit(LiteralNode node);
 }

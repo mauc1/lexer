@@ -3,9 +3,13 @@ package ParserLexer.intermedio;
 import java.util.ArrayList;
 import java.util.List;
 
+import ParserLexer.arbol.AsignacionNode;
 import ParserLexer.arbol.BlockNode;
+import ParserLexer.arbol.CreacionAsignacionNode;
 import ParserLexer.arbol.CreacionNode;
+import ParserLexer.arbol.ExpressionNode;
 import ParserLexer.arbol.FunctionNode;
+import ParserLexer.arbol.LiteralNode;
 import ParserLexer.arbol.ProgramNode;
 import ParserLexer.arbol.StatementNode;
 import ParserLexer.arbol.Visitor;
@@ -41,9 +45,9 @@ public class TACGenerator implements Visitor {
 
     @Override
     public void visit(BlockNode node) {
-        for (StatementNode statement : node.statement) {
+       /*  for (StatementNode statement : node.statement) {
             statement.accept(this);
-        }
+        }*/
     }
 
    // @Override
@@ -53,5 +57,30 @@ public class TACGenerator implements Visitor {
 
     @Override
     public void visit(StatementNode node) {
+    }
+
+    @Override
+    public void visit(CreacionNode node) {
+        //no se necesita generar código para la creación de variables sin asignación
+    }
+
+    @Override
+    public void visit(AsignacionNode node) {
+        node.expresion.accept(this);
+        code.add(new ThreeAddressCode("=", node.expresion.result, null, node.identificador));
+    }
+
+    @Override
+    public void visit(ExpressionNode node) {
+        // Implementar la generación de código para las expresiones
+    }
+
+    @Override
+    public void visit(CreacionAsignacionNode node) {
+        // Implementar la generación de código para la creación de variables con asignación
+    }
+
+    @Override
+    public void visit(LiteralNode node) {
     }
 }
