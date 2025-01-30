@@ -12,6 +12,15 @@ public class BlockNode extends ASTNode {
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
+        for (StatementNode stmt : statement) {
+            if (stmt == null) {
+                System.out.println("ADVERTENCIA: Hay un statement NULL en BlockNode.");
+            } else {
+                
+                stmt.accept(visitor);
+            }
+            
+        }
     }
     
 }

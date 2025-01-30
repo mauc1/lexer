@@ -11,6 +11,7 @@ public class CreacionNode extends StatementNode {
 
     @Override
     public void accept(Visitor visitor) {
+        //System.out.println("Visitando CreacionNode: tipo=" + tipo + ", identificador=" + identificador);
         visitor.visit(this);
     }   
 }

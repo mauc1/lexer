@@ -50,5 +50,16 @@ public class ASTPrinter implements Visitor {
         System.out.println("StatementNode");
     }
     
+    @Override
+    public void visit(CreacionNode node) {
+        printIndent();
+        System.out.println("CreacionNode: tipo=" + node.tipo + ", identificador=" + node.identificador);
+    }
+
+    @Override
+    public void visit(AsignacionNode node) {
+        printIndent();
+        System.out.println("AsignacionNode: identificador=" + node.identificador);
+    }
 
 }
