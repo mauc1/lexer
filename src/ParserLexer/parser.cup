@@ -347,7 +347,7 @@ operadorLog ::= DISYUNCION | CONJUNCION ;
 exprRel ::= exprArit operadorRel exprArit | exprArit:eArit {: RESULT = eArit; :};
 operadorRel ::= MAYOR | MENOR | MENORIGUAL | MAYORIGUAL | IGUALDAD | DIFERENTE; //XXX TERMINAR
  
-exprArit ::= exprArit operadorArit factor
+exprArit ::= exprArit operadorArit factor 
 	| factor:fact {: RESULT = fact; :} ;
  
 operandoUnario ::= IDENTIFICADOR INCREMENTO
