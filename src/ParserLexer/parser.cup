@@ -244,7 +244,6 @@ non terminal StatementNode sentencia;
 
 start with inicio;
 
-
 inicio ::= 
     funciones:f
     {: 

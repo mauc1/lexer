@@ -6,12 +6,16 @@ import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.file.*;
+import java.util.List;
+
 import ParserLexer.Lexer;
 import ParserLexer.parser;
 import java_cup.runtime.Symbol;
 import ParserLexer.sym;
 import ParserLexer.arbol.ASTPrinter;
 import ParserLexer.arbol.ProgramNode;
+import ParserLexer.intermedio.TACGenerator;
+import ParserLexer.intermedio.ThreeAddressCode;
 
 public class App {
     //Correr este archivo para ejecutar el programa, 
@@ -36,6 +40,16 @@ public class App {
             System.out.println("AST generado correctamente");
             ASTPrinter printer = new ASTPrinter();
             ast.accept(printer);
+        
+            //intermedio
+           /* TACGenerator tacGenerator = new TACGenerator();
+            ast.accept(tacGenerator);
+            List<ThreeAddressCode> code = tacGenerator.getCode();
+
+            //imprimir codigo intermedio
+            for (ThreeAddressCode tac : code) {
+                System.out.println(tac);
+            }*/
         }
 
         //adicional: probar el lexer del proyecto 1
