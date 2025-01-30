@@ -230,7 +230,7 @@ non terminal return_produ, break_produ, print_produ, read_produ, llamadaFuncion;
 
 non terminal exprArit, exprLog, exprRel, factor, exprPrin ;
 non terminal operadorLog, operadorRel, operadorArit, operandoUnario;
-non terminal accesoArreglo, creacion, asignacion, creacionasignacion, creacionArreglo, modificacionArreglo, valoresArreglo;
+non terminal accesoArreglo, creacionasignacion, creacionArreglo, modificacionArreglo, valoresArreglo;
 
 // Declaración de no terminales
 non terminal ProgramNode program;
@@ -239,6 +239,8 @@ non terminal List<FunctionNode> funciones; //esto es funcionessss
 non terminal BlockNode bloque_produ;
 non terminal List<StatementNode> sentencias;
 non terminal StatementNode sentencia;
+non terminal CreacionNode creacion;
+non terminal AsignacionNode asignacion;
 
 //poner precedencias
 
@@ -301,8 +303,17 @@ tipos ::=
 bloque_produ ::= 
     BRACEIZQ sentencias:s BRACEDER {: RESULT = new BlockNode(s); :};
 
-sentencias ::= sentencia:s {: List<StatementNode> list = new ArrayList<>(); list.add(s); RESULT = list; :}
-            | sentencias:s1 sentencia:s2 {: s1.add(s2); RESULT = s1; :}
+sentencias ::= sentencia:s {: List<StatementNode> list = new ArrayList<>(); if (s == null) {
+        System.out.println("ADVERTENCIA: Se intentó agregar una sentencia NULL a `sentencias`");
+    } else {
+        System.out.println(" Agregando sentencia de tipo: " + s.getClass().getSimpleName());
+        list.add(s);
+    }
+    RESULT = list;  :}
+            | sentencias:s1 sentencia:s2 {: 
+             s1.add(s2); 
+             System.out.println("Se agregó un statement a la lista. Total ahora: " + s1.size());
+             RESULT = s1; :}
             | error 
                 {:
                     System.out.println("Error: error en sentencia. Recuperando...");
@@ -317,10 +328,27 @@ sentencias ::= sentencia:s {: List<StatementNode> list = new ArrayList<>(); list
 
                 :};
 
-sentencia ::= creacion | asignacion | creacionasignacion | estructurasControl | return_produ | break_produ | print_produ | read_produ | llamadaFuncion | modificacionArreglo | creacionArreglo;
+sentencia ::= creacion:c {: 
+    if (c == null) {
+        System.out.println("⚠️ ADVERTENCIA: `creacion` devolvió NULL en `sentencia`");
+    } else {
+        System.out.println(" creacion detectada correctamente.");
+        RESULT = c;
+    }
+    
+:} | asignacion:a {: 
+    if (a == null) {
+        System.out.println("⚠️ `asignacion` devolvió NULL en `sentencia`");
+    } else {
+        System.out.println("✅ `asignacion` detectada en `sentencia`.");
+        
+    }
+:}  | creacionasignacion | estructurasControl | return_produ | break_produ | print_produ | read_produ | llamadaFuncion | modificacionArreglo | creacionArreglo;
 creacionasignacion ::= tipos IDENTIFICADOR ASIGNACION exprPrin ENDEXPR ;
-asignacion ::= IDENTIFICADOR ASIGNACION exprPrin ENDEXPR;
-creacion ::= tipos:t IDENTIFICADOR:id ENDEXPR {: RESULT = new CreacionNode(t.toString(), id.toString()); :};
+asignacion ::= IDENTIFICADOR:id ASIGNACION exprPrin:e ENDEXPR; //{: RESULT = new AsignacionNode(id.toString(), e); :};
+creacion ::= tipos:t IDENTIFICADOR:id ENDEXPR {: 
+//System.out.println("Creando variable de tipo: " + t.toString() + " con nombre: " + id);
+RESULT = new CreacionNode(t.toString(), id.toString()); :};
  
 exprPrin ::= exprLog ;
 exprLog ::= exprLog operadorLog exprRel | exprRel | NEGACION exprRel ;

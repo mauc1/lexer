@@ -5,4 +5,6 @@ public interface Visitor {
     void visit(FunctionNode node);
     void visit(BlockNode node);
     void visit(StatementNode node);
+    void visit(CreacionNode node);
+    void visit(AsignacionNode node);
 }
