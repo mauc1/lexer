@@ -321,8 +321,6 @@ sentencias ::= sentencia:s {: List<StatementNode> list = new ArrayList<>(); list
 
                 :};
 
-
-
 sentencia ::= creacion | asignacion | creacionasignacion | estructurasControl | return_produ | break_produ | print_produ | read_produ | llamadaFuncion | modificacionArreglo | creacionArreglo;
 creacionasignacion ::= tipos IDENTIFICADOR ASIGNACION exprPrin ENDEXPR ;
 asignacion ::= IDENTIFICADOR ASIGNACION exprPrin ENDEXPR ;
@@ -343,14 +341,17 @@ operandoUnario ::= IDENTIFICADOR INCREMENTO
  
 accesoArreglo ::= IDENTIFICADOR CORCHETEIZQ exprPrin CORCHETEDER ;
  
-factor ::= NUMERO
+factor ::= INTEGER
     | CHAR
     | STRING
-    | BOOL
+    | TRUE
+    | FALSE
+    | FLOAT
     | llamadaFuncion
 	| operandoUnario
 	| accesoArreglo
-	| IDENTIFICADOR /* XXX faltan factores: literal char, literal string, litaral bool, funcion, acceso arreglo*/
+	| IDENTIFICADOR 
+    | tipos IDENTIFICADOR
 	| PARENIZQ exprPrin PARENDER  ;
  
 operadorArit ::=  SUMA | RESTA | DIVISION | MULTIPLICACION | MODULO | POTENCIA ; 
@@ -377,7 +378,7 @@ if_produ ::=
 
 //for
 for_produ ::= 
-    FOR PARENIZQ asignacion ENDEXPR exprPrin ENDEXPR exprPrin PARENDER bloque_produ 
+    FOR PARENIZQ asignacion exprPrin ENDEXPR exprPrin PARENDER bloque_produ 
     | FOR PARENIZQ creacionasignacion ENDEXPR exprPrin ENDEXPR exprPrin PARENDER bloque_produ 
     ;
 
@@ -398,8 +399,8 @@ llamadaFuncion ::= IDENTIFICADOR PARENIZQ parametrosOpcionales PARENDER ENDEXPR 
 parametrosOpcionales ::= parametros | /* vacío */ ;
 parametros ::= exprPrin | parametros COMMA exprPrin ;
 
-creacionArreglo ::= tipos IDENTIFICADOR CORCHETEIZQ NUMERO CORCHETEDER ENDEXPR 
-                  | tipos IDENTIFICADOR CORCHETEIZQ NUMERO CORCHETEDER ASIGNACION CORCHETEIZQ valoresArreglo CORCHETEDER ENDEXPR ;
+creacionArreglo ::= tipos IDENTIFICADOR CORCHETEIZQ INTEGER CORCHETEDER ENDEXPR 
+                  | tipos IDENTIFICADOR CORCHETEIZQ INTEGER CORCHETEDER ASIGNACION CORCHETEIZQ valoresArreglo CORCHETEDER ENDEXPR ;
 valoresArreglo ::= exprPrin | valoresArreglo COMMA exprPrin ;
 
 modificacionArreglo ::= IDENTIFICADOR CORCHETEIZQ exprPrin CORCHETEDER ASIGNACION exprPrin ENDEXPR ;
