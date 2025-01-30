@@ -42,14 +42,15 @@ public class App {
             ast.accept(printer);
         
             //intermedio
-            /*TACGenerator tacGenerator = new TACGenerator();
+            System.out.println("\n---------Codigo intermedio generado------");
+            TACGenerator tacGenerator = new TACGenerator();
             ast.accept(tacGenerator);
             List<ThreeAddressCode> code = tacGenerator.getCode();
 
             //imprimir codigo intermedio
             for (ThreeAddressCode tac : code) {
                 System.out.println(tac);
-            }*/
+            }
         }
 
         //adicional: probar el lexer del proyecto 1

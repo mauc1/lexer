@@ -77,7 +77,9 @@ public class TACGenerator implements Visitor {
 
     @Override
     public void visit(CreacionAsignacionNode node) {
-        // Implementar la generación de código para la creación de variables con asignación
+        //tree address code for a variable creation with assignment
+        node.expresion.accept(this);
+        code.add(new ThreeAddressCode("=", node.expresion.result, null, node.identificador));
     }
 
     @Override

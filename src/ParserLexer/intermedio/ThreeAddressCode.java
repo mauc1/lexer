@@ -16,7 +16,8 @@ public class ThreeAddressCode {
     @Override
     public String toString() {
         if (arg2 == null) {
-            return result + " = " + op + " " + arg1;
+            if (op != "=") return result + " = " + op + " " + arg1;
+            else return result + " " + op + " " + arg1;
         } else {
             return result + " = " + arg1 + " " + op + " " + arg2;
         }
