@@ -229,8 +229,8 @@ non terminal return_produ, break_produ, print_produ, read_produ, llamadaFuncion;
 
 
 //non terminal exprArit, exprLog, exprRel, factor, exprPrin ;
-non terminal operadorLog, operadorRel, operadorArit, operandoUnario;
 non terminal accesoArreglo, creacionArreglo, modificacionArreglo, valoresArreglo;
+non terminal operadorLog, operadorRel, operadorArit;
 
 // Declaración de no terminales
 non terminal ProgramNode program;
@@ -242,7 +242,10 @@ non terminal StatementNode sentencia;
 non terminal CreacionNode creacion;
 non terminal AsignacionNode asignacion;
 non terminal CreacionAsignacionNode creacionasignacion;
-non terminal ExpressionNode exprPrin, exprLog, exprRel, exprArit, factor;
+non terminal ExpressionNode exprPrin, exprLog, exprRel, exprArit, operandoUnario, factor;
+
+
+
 
 //poner precedencias
 
@@ -337,38 +340,58 @@ sentencia ::=
     | estructurasControl | return_produ | break_produ | print_produ | read_produ | llamadaFuncion | modificacionArreglo | creacionArreglo;
 
 creacion ::= tipos:t IDENTIFICADOR:id ENDEXPR {: RESULT = new CreacionNode(t.toString(), id.toString()); :};
-asignacion ::= IDENTIFICADOR:id ASIGNACION exprPrin:e ENDEXPR {: RESULT = new AsignacionNode(id.toString(), (ExpressionNode) e); :};
+asignacion ::= IDENTIFICADOR:id ASIGNACION exprPrin:e ENDEXPR {: System.out.println("Asignando a " + id.toString() + " la expresión: " + e); RESULT = new AsignacionNode(id.toString(), (ExpressionNode)e); :};
 creacionasignacion ::= tipos:t IDENTIFICADOR:id ASIGNACION exprPrin:e ENDEXPR {: RESULT = new CreacionAsignacionNode(t.toString(), id.toString(), (ExpressionNode) e); :};
 
 exprPrin ::= exprLog:elog {: RESULT = elog; :};
-exprLog ::= exprLog operadorLog exprRel | exprRel:erel {: RESULT = erel; :} | NEGACION exprRel ;
-operadorLog ::= DISYUNCION | CONJUNCION ;
+
+exprLog ::= exprLog:e1 operadorLog:op exprRel:e2 {: RESULT = new ExpresionLogicaNode(op.toString(), e1, e2); :} 
+            | exprRel:erel {: RESULT = erel; :} | NEGACION exprRel:e {: RESULT = new NegacionNode(e); :};
+operadorLog ::= DISYUNCION:op {: RESULT = "AND"; :} 
+            | CONJUNCION:op {: RESULT = "OR"; :};
  
-exprRel ::= exprArit operadorRel exprArit | exprArit:eArit {: RESULT = eArit; :};
-operadorRel ::= MAYOR | MENOR | MENORIGUAL | MAYORIGUAL | IGUALDAD | DIFERENTE; //XXX TERMINAR
+exprRel ::= exprArit:e1 operadorRel:op exprArit:e2 {: RESULT = new ExpresionRelaNode(op.toString(), e1, e2); :}
+            | exprArit:eArit {: RESULT = eArit; :};
+operadorRel ::= MAYOR:op {: RESULT = ">";:} 
+            | MENOR:op {: RESULT = "<"; :} 
+            | MENORIGUAL:op {: RESULT = "=<"; :}
+            | MAYORIGUAL:op {: RESULT = "=>"; :} 
+            | IGUALDAD:op {: RESULT = "=="; :} 
+            | DIFERENTE:op {: RESULT = "!="; :}; 
  
-exprArit ::= exprArit operadorArit factor 
-	| factor:fact {: RESULT = fact; :} ;
+exprArit ::= exprArit:earit1 operadorArit:op factor:fact {: 
+                if (earit1 == null || fact == null || op == null) {
+                    System.out.println("ERROR: earit1 o fact es null antes de construir ExpresionAritNode");
+                }
+                System.out.println("Creando ExpresionAritNode con operador: " + op.toString());
+                System.out.println("Izquierda: " + earit1);
+                System.out.println("Derecha: " + fact); RESULT = new ExpresionAritNode(op.toString(), earit1, fact); :}
+    | factor:fact {: RESULT = fact; :} ; 
  
-operandoUnario ::= IDENTIFICADOR INCREMENTO
-		| IDENTIFICADOR DECREMENTO ;
+operandoUnario ::= IDENTIFICADOR:id INCREMENTO {: RESULT = new ExpresionUnariaNode(id.toString(), "++"); :}
+                | IDENTIFICADOR:id DECREMENTO {: RESULT = new ExpresionUnariaNode(id.toString(), "--"); :};
  
 accesoArreglo ::= IDENTIFICADOR CORCHETEIZQ exprPrin CORCHETEDER ;
  
-factor ::= INTEGER:inte {: RESULT = new LiteralNode(Integer.parseInt(inte.toString())); :}
-    | CHAR
-    | STRING
-    | TRUE
-    | FALSE
-    | FLOAT
+factor ::= INTEGER:inte {: System.out.println("integer:" + inte.toString()); RESULT = new LiteralNode(Integer.parseInt(inte.toString())); :}
+    | CHAR:ch {: RESULT = new LiteralNode(ch.toString()); :}
+    | STRING:st {: RESULT = new LiteralNode(st.toString()); :}
+    | TRUE:tr {: RESULT = new LiteralNode(Boolean.parseBoolean(tr.toString())); :}
+    | FALSE:fa {: RESULT = new LiteralNode(Boolean.parseBoolean(fa.toString())); :}
+    | FLOAT:fl {: RESULT = new LiteralNode(Float.parseFloat(fl.toString())); :}
     | llamadaFuncion
-	| operandoUnario
+	| operandoUnario:opuni {: RESULT = opuni; :}
 	| accesoArreglo
 	| IDENTIFICADOR 
     | tipos IDENTIFICADOR
-	| PARENIZQ exprPrin PARENDER  ;
+	| PARENIZQ exprPrin PARENDER ;
  
-operadorArit ::=  SUMA | RESTA | DIVISION | MULTIPLICACION | MODULO | POTENCIA ; 
+operadorArit ::=  SUMA:op {: RESULT = "+" ;:} 
+            | RESTA:op {: RESULT = "-"; :}
+            | DIVISION:op {: RESULT = "/"; :}
+            | MULTIPLICACION:op {: RESULT = "*"; :} 
+            | MODULO:op {: RESULT = "%"; :} 
+            | POTENCIA:op {: RESULT = "^"; :} ; 
 
 //produccion de return
 return_produ ::= RETURN exprPrin ENDEXPR ;

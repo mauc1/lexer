@@ -7,6 +7,7 @@ import ParserLexer.arbol.AsignacionNode;
 import ParserLexer.arbol.BlockNode;
 import ParserLexer.arbol.CreacionAsignacionNode;
 import ParserLexer.arbol.CreacionNode;
+import ParserLexer.arbol.ExpresionAritNode;
 import ParserLexer.arbol.ExpressionNode;
 import ParserLexer.arbol.FunctionNode;
 import ParserLexer.arbol.LiteralNode;
@@ -84,5 +85,10 @@ public class TACGenerator implements Visitor {
 
     @Override
     public void visit(LiteralNode node) {
+    }
+
+       @Override
+    public void visit(ExpresionAritNode node) {
+
     }
 }

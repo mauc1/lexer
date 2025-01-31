@@ -63,6 +63,9 @@ public class ASTPrinter implements Visitor {
     public void visit(AsignacionNode node) {
         printIndent();
         System.out.println("AsignacionNode: identificador=" + node.identificador);
+        indent++;
+        node.expresion.accept(this);
+        indent--;
     }
 
     @Override
@@ -82,6 +85,46 @@ public class ASTPrinter implements Visitor {
 
     @Override
     public void visit(LiteralNode node) {
+    }
+
+    @Override
+    public void visit(ExpresionAritNode node) {
+        printIndent();
+        System.out.println("ExpresionAritNode: operador=" + node.operador);
+        indent++;
+        printIndent();
+        System.out.println("izquierda: " + node.izquierda);
+        printIndent();
+        System.out.println("derecha: " + node.derecha);
+        indent--;
+    }
+
+    @Override
+    public void visit(ExpresionLogicaNode node) {
+        printIndent();
+        System.out.println("ExpresionLogicaNode: operador=" + node.operador);
+        indent++;
+        node.izquierda.accept(this);
+        node.derecha.accept(this);
+        indent--;
+    }
+
+    @Override
+    public void visit(ExpresionRelaNode node) {
+        printIndent();
+        System.out.println("ExpresionRelaNode: operador=" + node.operador);
+        indent++;
+        printIndent();
+        System.out.println("izquierda: " + node.izquierda);
+        printIndent();
+        System.out.println("derecha: " + node.derecha);
+        indent--;
+    }
+
+    @Override
+    public void visit(ExpresionUnariaNode node) {
+        printIndent();
+        System.out.println("ExpresionUnariaNode: identificador=" + node.identificador + ", operador=" + node.operador);
     }
 
 }

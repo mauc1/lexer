@@ -10,4 +10,8 @@ public interface Visitor {
     void visit(ExpressionNode node);
     void visit(CreacionAsignacionNode node);
     void visit(LiteralNode node);
+    void visit(ExpresionAritNode node);
+    void visit(ExpresionLogicaNode node);
+    void visit(ExpresionRelaNode node);
+    void visit(ExpresionUnariaNode node);
 }

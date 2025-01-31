@@ -1,5 +1,7 @@
 bromista  _func1_  abreregalo cierraregalo abrecuento  
 	 bromista _h_ finregalo 
-	 rodolfo _i_ entrega 2 finregalo
-	# _i_ entrega rodolfo finregalo
+	 rodolfo _i_ entrega _u_ quien finregalo
+	 _h_ entrega 4 navidad 2 finregalo
+	 trueno _l_ entrega 3 minstix 5 finregalo
+	# _z_ entrega rodolfo 2 finregalo
 cierracuento
