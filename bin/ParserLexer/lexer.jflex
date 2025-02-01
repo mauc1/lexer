@@ -115,7 +115,7 @@ COMENTARIO = {COMENTARIOSIMPLE} | {MULTICOMENTARIO}
 <YYINITIAL> "último"          { return symbol(sym.DEFAULT); }
 <YYINITIAL> "corta"           { return symbol(sym.BREAK); }
 <YYINITIAL> "envia"           { return symbol(sym.RETURN); }
-<YYINITIAL> "sigue"           { return symbol(sym.DOSPUNTOS); }
+<YYINITIAL> "sigue"           { return symbol(sym.DOSPUNTOS, yytext()); }
 <YYINITIAL> "narra"           { return symbol(sym.PRINT); }
 <YYINITIAL> "escucha"         { return symbol(sym.READ); }
 <YYINITIAL> "_verano_"        { return symbol(sym.MAIN); }

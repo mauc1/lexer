@@ -127,4 +127,163 @@ public class ASTPrinter implements Visitor {
         System.out.println("ExpresionUnariaNode: identificador=" + node.identificador + ", operador=" + node.operador);
     }
 
+    @Override
+    public void visit(IfNode node) {
+        printIndent();
+        System.out.println("IfNode");
+        indent++;
+        printIndent();
+        System.out.println("Condicion:");
+        node.condicion.accept(this);
+        printIndent();
+        System.out.println("Bloque If:");
+        node.bloqueIf.accept(this);
+        if (node.bloqueElse != null) {
+            printIndent();
+            System.out.println("Bloque Else:");
+            node.bloqueElse.accept(this);
+        }
+        indent--;
+    }
+
+    @Override
+    public void visit(ForNode node) {
+        printIndent();
+        System.out.println("ForNode");
+        indent++;
+        printIndent();
+        System.out.println("Creacion:");
+        node.creacion.accept(this);
+        printIndent();
+        System.out.println("Condicion:");
+        node.condicion.accept(this);
+        printIndent();
+        System.out.println("Operacion:");
+        node.operacion.accept(this);
+        printIndent();
+        System.out.println("Bloque:");
+        node.bloque.accept(this);
+        indent--;
+    }
+
+    @Override
+    public void visit(WhileNode node) {
+        printIndent();
+        System.out.println("WhileNode");
+        indent++;
+        printIndent();
+        System.out.println("Condicion:");
+        node.condicion.accept(this);
+        printIndent();
+        System.out.println("Bloque:");
+        node.bloque.accept(this);
+        indent--;
+    }
+
+    @Override
+    public void visit(SwitchNode node) {
+        printIndent();
+        System.out.println("SwitchNode");
+        indent++;
+        printIndent();
+        System.out.println("Expresion:");
+        node.condicion.accept(this);
+        for (CaseNode caso : node.casos) {
+            printIndent();
+            System.out.println("Caso:");
+            caso.accept(this);
+        }
+        indent--;
+    }
+
+    @Override
+    public void visit(ReturnNode node) {
+        printIndent();
+        System.out.println("ReturnNode");
+        indent++;
+        node.expresion.accept(this);
+        indent--;
+    }
+
+    @Override
+    public void visit(BreakNode node) {
+        printIndent();
+        System.out.println("BreakNode");
+    }
+
+    @Override
+    public void visit(ReadNode node) {
+        printIndent();
+        System.out.println("ReadNode: identificador=" + node.id);
+    }
+
+    @Override
+    public void visit(PrintNode node) {
+        printIndent();
+        System.out.println("PrintNode");
+        indent++;
+        node.expresion.accept(this);
+        indent--;
+    }
+
+    @Override
+    public void visit(LlamadaFuncionNode node) {
+        printIndent();
+        System.out.println("LlamadaFuncion: nombre=" + node.nombre);
+        indent++;
+        for (ExpressionNode argumento : node.argumentos) {
+            argumento.accept(this);
+        }
+        indent--;
+    }
+
+    @Override
+    public void visit(CreacionArregloNode node) {
+        printIndent();
+        System.out.println("CreacionArregloNode: tipo=" + node.tipo + ", identificador=" + node.identificador);
+        indent++;
+        //for (ExpressionNode valores : node.valores) {
+        //    valores.accept(this);
+        //}
+        indent--;
+    }
+
+    @Override
+    public void visit(ModificarArregloNode node) {
+        printIndent();
+        System.out.println("ModificarArregloNode: identificador=" + node.identificador);
+        indent++;
+        printIndent();
+        System.out.println("Posicion:");
+        node.posicion.accept(this);
+        printIndent();
+        System.out.println("Valor:");
+        node.valor.accept(this);
+        indent--;
+    }
+
+    @Override
+    public void visit(TipoVariableNode node) {
+        printIndent();
+        System.out.println("TipoVariableNode: tipo=" + node.tipo + ", identificador=" + node.identificador);
+    }
+
+    @Override
+    public void visit(VariableNode node) {
+        printIndent();
+        System.out.println("VariableNode: identificador=" + node.identificador);
+    }
+
+    @Override
+    public void visit(AccesoArregloNode node) {
+        printIndent();
+        System.out.println("AccesoArregloNode: identificador=" + node.identificador);
+        indent++;
+        printIndent();
+        System.out.println("Posicion:");
+        node.index.accept(this);
+        indent--;
+    }
+
+
 }

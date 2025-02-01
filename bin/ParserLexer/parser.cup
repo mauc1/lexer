@@ -220,16 +220,16 @@ terminal DEFAULT;
 
 //no terminales 
 //funciones
-non terminal inicio, parametros, parametrosOpcionales;
+non terminal inicio;
 non terminal tipos;
 
 //flujos
-non terminal if_produ, for_produ, while_produ, switch_produ, historia_produ, casodefault, estructurasControl;  
-non terminal return_produ, break_produ, print_produ, read_produ, llamadaFuncion;
+non terminal estructurasControl;  
+
 
 
 //non terminal exprArit, exprLog, exprRel, factor, exprPrin ;
-non terminal accesoArreglo, creacionArreglo, modificacionArreglo, valoresArreglo;
+
 non terminal operadorLog, operadorRel, operadorArit;
 
 // Declaración de no terminales
@@ -238,11 +238,11 @@ non terminal FunctionNode funcion; //esto es funcion
 non terminal List<FunctionNode> funciones; //esto es funcionessss
 non terminal BlockNode bloque_produ;
 non terminal List<StatementNode> sentencias; //parametro de bloque
-non terminal StatementNode sentencia;
-non terminal CreacionNode creacion;
-non terminal AsignacionNode asignacion;
-non terminal CreacionAsignacionNode creacionasignacion;
-non terminal ExpressionNode exprPrin, exprLog, exprRel, exprArit, operandoUnario, factor;
+non terminal List<CaseNode> historia_produ;
+non terminal List<ExpressionNode> parametrosOpcionales;
+non terminal List<ExpressionNode> parametros, valoresArreglo;
+non terminal StatementNode sentencia, if_produ, for_produ, while_produ, switch_produ, creacion, asignacion, creacionasignacion, return_produ, break_produ, print_produ, read_produ, creacionArreglo, modificacionArreglo;
+non terminal ExpressionNode  exprPrin, exprLog, exprRel, exprArit, operandoUnario, factor, casodefault, llamadaFuncion, accesoArreglo;
 
 
 
@@ -337,10 +337,16 @@ sentencia ::=
       creacion:c {: RESULT = c; :} 
     | asignacion:a {: RESULT = a; :}
     | creacionasignacion:ca {: RESULT = ca; :}
-    | estructurasControl | return_produ | break_produ | print_produ | read_produ | llamadaFuncion | modificacionArreglo | creacionArreglo;
+    | estructurasControl:ec {: RESULT = (StatementNode)ec; :} 
+    | return_produ:re {: RESULT = (StatementNode)re; :} 
+    | break_produ:br {: RESULT = br; :} 
+    | print_produ:pr {: RESULT = (StatementNode)pr; :} 
+    | read_produ:rd {: RESULT = (StatementNode)rd; :} 
+    | modificacionArreglo:ma {: RESULT = ma; :}
+    | creacionArreglo:ca {: RESULT = ca; :};
 
 creacion ::= tipos:t IDENTIFICADOR:id ENDEXPR {: RESULT = new CreacionNode(t.toString(), id.toString()); :};
-asignacion ::= IDENTIFICADOR:id ASIGNACION exprPrin:e ENDEXPR {: System.out.println("Asignando a " + id.toString() + " la expresión: " + e); RESULT = new AsignacionNode(id.toString(), (ExpressionNode)e); :};
+asignacion ::= IDENTIFICADOR:id ASIGNACION exprPrin:e ENDEXPR {: RESULT = new AsignacionNode(id.toString(), (ExpressionNode)e); :};
 creacionasignacion ::= tipos:t IDENTIFICADOR:id ASIGNACION exprPrin:e ENDEXPR {: RESULT = new CreacionAsignacionNode(t.toString(), id.toString(), (ExpressionNode) e); :};
 
 exprPrin ::= exprLog:elog {: RESULT = elog; :};
@@ -360,31 +366,26 @@ operadorRel ::= MAYOR:op {: RESULT = ">";:}
             | DIFERENTE:op {: RESULT = "!="; :}; 
  
 exprArit ::= exprArit:earit1 operadorArit:op factor:fact {: 
-                if (earit1 == null || fact == null || op == null) {
-                    System.out.println("ERROR: earit1 o fact es null antes de construir ExpresionAritNode");
-                }
-                System.out.println("Creando ExpresionAritNode con operador: " + op.toString());
-                System.out.println("Izquierda: " + earit1);
-                System.out.println("Derecha: " + fact); RESULT = new ExpresionAritNode(op.toString(), earit1, fact); :}
+                RESULT = new ExpresionAritNode(op.toString(), earit1, fact); :}
     | factor:fact {: RESULT = fact; :} ; 
  
 operandoUnario ::= IDENTIFICADOR:id INCREMENTO {: RESULT = new ExpresionUnariaNode(id.toString(), "++"); :}
                 | IDENTIFICADOR:id DECREMENTO {: RESULT = new ExpresionUnariaNode(id.toString(), "--"); :};
  
-accesoArreglo ::= IDENTIFICADOR CORCHETEIZQ exprPrin CORCHETEDER ;
+accesoArreglo ::= IDENTIFICADOR:id CORCHETEIZQ exprPrin:e CORCHETEDER {: RESULT = new AccesoArregloNode(id.toString(), e); :};
  
-factor ::= INTEGER:inte {: System.out.println("integer:" + inte.toString()); RESULT = new LiteralNode(Integer.parseInt(inte.toString())); :}
+factor ::= INTEGER:inte {: RESULT = new LiteralNode(Integer.parseInt(inte.toString())); :}
     | CHAR:ch {: RESULT = new LiteralNode(ch.toString()); :}
     | STRING:st {: RESULT = new LiteralNode(st.toString()); :}
     | TRUE:tr {: RESULT = new LiteralNode(Boolean.parseBoolean(tr.toString())); :}
     | FALSE:fa {: RESULT = new LiteralNode(Boolean.parseBoolean(fa.toString())); :}
     | FLOAT:fl {: RESULT = new LiteralNode(Float.parseFloat(fl.toString())); :}
-    | llamadaFuncion
+    | llamadaFuncion:lf {: RESULT = lf; :} 
 	| operandoUnario:opuni {: RESULT = opuni; :}
-	| accesoArreglo
-	| IDENTIFICADOR 
-    | tipos IDENTIFICADOR
-	| PARENIZQ exprPrin PARENDER ;
+	| accesoArreglo:acc {: RESULT = acc; :}
+	| IDENTIFICADOR:id {: RESULT = new VariableNode(id.toString()); :} 
+    //| tipos IDENTIFICADOR
+	| PARENIZQ exprPrin:e PARENDER {: RESULT = e; :};
  
 operadorArit ::=  SUMA:op {: RESULT = "+" ;:} 
             | RESTA:op {: RESULT = "-"; :}
@@ -394,53 +395,65 @@ operadorArit ::=  SUMA:op {: RESULT = "+" ;:}
             | POTENCIA:op {: RESULT = "^"; :} ; 
 
 //produccion de return
-return_produ ::= RETURN exprPrin ENDEXPR ;
+return_produ ::= RETURN exprPrin:e ENDEXPR {: RESULT = new ReturnNode(e); :} ;
 
 //produccion de break
-break_produ ::= BREAK ENDEXPR ;
+break_produ ::= BREAK ENDEXPR {: RESULT = new BreakNode(); :} ;
 
 //produccion de print
-print_produ ::= PRINT PARENIZQ exprPrin PARENDER ENDEXPR ;
+print_produ ::= PRINT PARENIZQ exprPrin:e PARENDER ENDEXPR {: RESULT = new PrintNode(e); :} ;
 
 //produccion de read
-read_produ ::= READ PARENIZQ IDENTIFICADOR PARENDER ENDEXPR ;
+read_produ ::= READ PARENIZQ IDENTIFICADOR:id PARENDER ENDEXPR {: RESULT = new ReadNode(id.toString()); :} ;
 
 //estructuras de control de flujo
-estructurasControl ::= if_produ | for_produ | while_produ | switch_produ ;
+estructurasControl ::= if_produ:ifnod {: RESULT = ifnod;:}
+                    | for_produ:fornod {:RESULT = fornod; :}
+                    | while_produ:whilenod {: RESULT = whilenod; :} 
+                    | switch_produ:switchnod {: RESULT = switchnod; :}; 
 //if y else
 if_produ ::= 
-    IF PARENIZQ exprPrin PARENDER bloque_produ
-    | IF PARENIZQ exprPrin PARENDER bloque_produ ELSE bloque_produ
+    IF PARENIZQ exprPrin:e PARENDER bloque_produ:b {: RESULT = new IfNode(e, b, null); :}
+    | IF PARENIZQ exprPrin:e1 PARENDER bloque_produ:b1 ELSE bloque_produ:b2 {: RESULT = new IfNode(e1, b1, b2); :}
     ;
 
 //for
 for_produ ::= 
-    FOR PARENIZQ asignacion exprPrin ENDEXPR exprPrin PARENDER bloque_produ 
-    | FOR PARENIZQ creacionasignacion ENDEXPR exprPrin ENDEXPR exprPrin PARENDER bloque_produ 
+    FOR PARENIZQ asignacion:a exprPrin:e ENDEXPR exprPrin:e1 ENDEXPR PARENDER bloque_produ:b {: RESULT = new ForNode(a, e, e1, b); :} 
+    | FOR PARENIZQ creacionasignacion:a1 exprPrin:e2 ENDEXPR exprPrin:e3 ENDEXPR PARENDER bloque_produ:b1 {: RESULT = new ForNode(a1, e2, e3, b1); :} 
     ;
 
 //while
 while_produ ::= 
-    WHILE PARENIZQ exprPrin PARENDER bloque_produ
-    ;
+    WHILE PARENIZQ exprPrin:e PARENDER bloque_produ:b3 {: RESULT = new WhileNode(e, b3); :} ;
 
 //switch
 
-switch_produ ::= SWITCH PARENIZQ exprPrin PARENDER BRACEIZQ historia_produ casodefault BRACEDER ;
+switch_produ ::= SWITCH PARENIZQ exprPrin:e PARENDER BRACEIZQ historia_produ:casos casodefault:d BRACEDER {: RESULT = new SwitchNode(e, casos, d); :};
 
-historia_produ ::= CASE factor DOSPUNTOS bloque_produ | historia_produ CASE tipos DOSPUNTOS bloque_produ ;
-casodefault ::= DEFAULT DOSPUNTOS bloque_produ | /* vacío */ ;
+historia_produ ::= CASE factor:f DOSPUNTOS exprPrin:e1 ENDEXPR 
+                {: System.out.println("etiqueta:" );
+                List<CaseNode> list = new ArrayList<>(); list.add(new CaseNode(f.toString(), (ExpressionNode)e1)); RESULT = list; :}
+                | historia_produ:casos2 CASE factor:f DOSPUNTOS exprPrin:e2 ENDEXPR {: casos2.add(new CaseNode(f.toString(), (ExpressionNode)e2)); RESULT = casos2; :};
+casodefault ::= DEFAULT DOSPUNTOS exprPrin:e3 ENDEXPR {: RESULT =  e3 ; :} | /* vacío */ {: RESULT = null; :} ;
 
 //llamada de funciones
-llamadaFuncion ::= IDENTIFICADOR PARENIZQ parametrosOpcionales PARENDER ENDEXPR ;
-parametrosOpcionales ::= parametros | /* vacío */ ;
-parametros ::= exprPrin | parametros COMMA exprPrin ;
+llamadaFuncion ::= IDENTIFICADOR:id PARENIZQ parametrosOpcionales:params PARENDER 
+                    {: RESULT = new LlamadaFuncionNode(id.toString(), params); :};
+parametrosOpcionales ::= parametros:param {: RESULT = param; :}| {: RESULT = new ArrayList<ExpressionNode>(); :}/* vacío */ ;
+parametros ::= exprPrin:e {: List<ExpressionNode> list = new ArrayList<>(); list.add(e); RESULT = list; :}
+            | parametros:p COMMA exprPrin:e1 {: p.add(e1); RESULT = p; :};
 
-creacionArreglo ::= tipos IDENTIFICADOR CORCHETEIZQ INTEGER CORCHETEDER ENDEXPR 
-                  | tipos IDENTIFICADOR CORCHETEIZQ INTEGER CORCHETEDER ASIGNACION CORCHETEIZQ valoresArreglo CORCHETEDER ENDEXPR ;
-valoresArreglo ::= exprPrin | valoresArreglo COMMA exprPrin ;
+creacionArreglo ::= tipos:t IDENTIFICADOR:id CORCHETEIZQ exprPrin:i CORCHETEDER ENDEXPR 
+                  {: List<ExpressionNode> list1 = new ArrayList<>(); RESULT = new CreacionArregloNode(t.toString(), id.toString(), i, list1); :}
+                  | tipos:t IDENTIFICADOR:id CORCHETEIZQ exprPrin:i CORCHETEDER ASIGNACION CORCHETEIZQ valoresArreglo:vals CORCHETEDER ENDEXPR 
+                  {: RESULT = new CreacionArregloNode(t.toString(), id.toString(), i, vals); :};
+valoresArreglo ::= exprPrin:e {: List<ExpressionNode> list = new ArrayList<>(); list.add(e); RESULT = list; :}
+                 | valoresArreglo:lst COMMA exprPrin:e1 
+                 {: lst.add(e1); RESULT = lst; :};
 
-modificacionArreglo ::= IDENTIFICADOR CORCHETEIZQ exprPrin CORCHETEDER ASIGNACION exprPrin ENDEXPR ;
+modificacionArreglo ::= IDENTIFICADOR:id CORCHETEIZQ exprPrin:e CORCHETEDER ASIGNACION exprPrin:valor ENDEXPR 
+                        {: RESULT = new ModificarArregloNode(id.toString(), e, valor); :};
 
 //arreglo
 /*

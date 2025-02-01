@@ -8,9 +8,18 @@ import ParserLexer.arbol.BlockNode;
 import ParserLexer.arbol.CreacionAsignacionNode;
 import ParserLexer.arbol.CreacionNode;
 import ParserLexer.arbol.ExpresionAritNode;
+import ParserLexer.arbol.ExpresionUnariaNode;
 import ParserLexer.arbol.ExpressionNode;
 import ParserLexer.arbol.FunctionNode;
 import ParserLexer.arbol.LiteralNode;
+import ParserLexer.arbol.LlamadaFuncionNode;
+import ParserLexer.arbol.IfNode;
+import ParserLexer.arbol.ForNode;
+import ParserLexer.arbol.WhileNode;
+import ParserLexer.arbol.SwitchNode;
+import ParserLexer.arbol.ModificarArregloNode;
+import ParserLexer.arbol.CreacionArregloNode;
+import ParserLexer.arbol.AccesoArregloNode;
 import ParserLexer.arbol.ProgramNode;
 import ParserLexer.arbol.StatementNode;
 import ParserLexer.arbol.Visitor;
@@ -90,5 +99,37 @@ public class TACGenerator implements Visitor {
        @Override
     public void visit(ExpresionAritNode node) {
 
+    }
+
+    @Override
+    public void visit(ExpresionUnariaNode node) {
+    }
+
+    @Override
+    public void visit(IfNode node) {
+    }
+
+    @Override
+    public void visit(ForNode node) {
+    }
+
+    @Override
+    public void visit(WhileNode node) {
+    }
+
+    @Override
+    public void visit(SwitchNode node) {
+    }
+
+    @Override
+    public void visit(LlamadaFuncionNode node) {
+    }
+
+    @Override
+    public void visit(CreacionArregloNode node) {
+    }
+
+    @Override
+    public void visit(ModificarArregloNode node) {
     }
 }
