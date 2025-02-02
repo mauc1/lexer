@@ -18,7 +18,7 @@ public class ThreeAddressCode {
         if (arg2 == null) {
             //ThreeAddressCode("=", node.expresion.result, null, node.identificador)
                                // = , 1, null, _i_
-            if (op != "=") return ident + " " + op + " " + arg1;
+            if (op != "=") return ident + " = " + op + " " + arg1;
             else return ident + " " + op + " " + arg1;
         } else {
             return ident + " = " + arg1 + " " + op + " " + arg2;
