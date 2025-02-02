@@ -2,7 +2,7 @@ package ParserLexer;
 
 //Constantes de los tipos de datos empleados en la gramaticaa
 enum TipoDato{
-    INT, CHAR, FLOAT, STRING, BOOLEAN, INTARR, CHARARR, NULO, VOID;
+    INT, CHAR, FLOAT, STRING, BOOL, INTARR, CHARARR, NULO, VOID;
 }
 
 public class Dato {
@@ -36,7 +36,7 @@ public class Dato {
            case "string":
                return TipoDato.STRING;
            case "bool":
-               return TipoDato.BOOLEAN;
+               return TipoDato.BOOL;
            case "char":
                return TipoDato.CHAR;
            case "char[]":

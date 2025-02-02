@@ -1,7 +1,17 @@
-bromista  _func1_  abreregalo cierraregalo abrecuento  
-	 _h_ entrega _gg_ abreregalo 2, 2, 2 cierraregalo finregalo
-	 bromista _array_ abreempaque 2 cierraempaque entrega abreempaque 2, 3 cierraempaque finregalo
-	 _array_ abreempaque 0 cierraempaque entrega 34 finregalo
-	 bromista _h_ entrega _array_ abreempaque 2 cierraempaque finregalo
-	# _z_ entrega rodolfo 2 finregalo
+rodolfo _func1_  abreregalo cierraregalo abrecuento  
+	 rodolfo _varInt_ finregalo
+	 _varquenoexiste_ entrega 3 finregalo #intento de asignar a var no existente
+	 cometa _varInt_ finregalo #error (bien)
+	 #_varInt_ entrega 3.3 finregalo  #error (bien)
+	cometa _varString_ entrega "aaa" finregalo
+
+	#elfo abreregalo _varString_ mary _varString_ cierracuento abrecuento
+	#	cometa _varInt_ finregalo
+	#cierracuento
+	#envia "3" finregalo
 cierracuento
+
+#bromista  _func1_  abreregalo cierraregalo abrecuento  
+#	 rodolfo _varInt_ finregalo
+#cierracuento
+

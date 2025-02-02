@@ -9,6 +9,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import ParserLexer.arbol.*;
 import java.util.List;
+import ParserLexer.TipoDato;
 
 action code {:
     LinkedHashMap<String, ArrayList<String>> listaTablasSimbolos = new LinkedHashMap<String, ArrayList<String>>();
@@ -78,7 +79,8 @@ action code {:
     public TipoDato getTipo(String pId, boolean reportar){
         for (Simbolo dato : pilaSimbolos.get(currHash).getTablaSimbolos()) {
               System.out.println("A: "+dato.getId());
-          if (dato.getId().equals(pId)) {
+          if (dato.getId().equals(pId.toString())) {
+            System.out.println();
             return Dato.tipoFromString(dato.getTipo());
           }
         }
@@ -86,6 +88,43 @@ action code {:
           semantic_error("misc", ("Error semantico en la linea " + (lex.getLine() + 1) + " columna " + (lex.getColumn() + 1) + ": " + "Ya que no se ha definido el id: " + pId));
         }
         return TipoDato.NULO;
+    }
+
+    public TipoDato getTipoExpr(ExpressionNode expr) {
+        if (expr instanceof LiteralNode) {
+            Object value = ((LiteralNode) expr).value;
+            if (value instanceof Integer) {
+                return TipoDato.INT;
+            } else if (value instanceof Float) {
+                return TipoDato.FLOAT;
+            } else if (value instanceof Boolean) {
+                return TipoDato.BOOL;
+            } else if (value instanceof String) {
+                return TipoDato.STRING;
+            }
+        } else if (expr instanceof VariableNode) {
+            //
+        }
+        return TipoDato.NULO;
+    }
+
+    public TipoDato convert_a_TipoDato (String tipo_var) {
+        switch (tipo_var) {
+            case "int":
+                return TipoDato.INT;
+            case "float":
+                return TipoDato.FLOAT;
+            case "bool":
+                return TipoDato.BOOL;
+            case "char":
+                return TipoDato.CHAR;
+            case "string":
+                return TipoDato.STRING;
+            case "void":
+                return TipoDato.VOID;
+            default:
+                return TipoDato.NULO;
+        }
     }
 :}
 
@@ -116,7 +155,7 @@ parser code {:
 
     public void semantic_error(String pTipo, String pExpresion){
         switch(pTipo){
-          case "local":
+          case "var":
               //System.out.println("Error semantico local en la linea " + (lex.getLine()+1) + " columna " + lex.getColumn() + ": " + "Debido al dato ya existente: " + pExpresion);
               errorActual = "Error semantico en la linea " + (lex.getLine()+1) + " columna " + lex.getColumn() + ": " + "Debido a la variable ya existente: " + pExpresion;
               this.errores.add(errorActual);
@@ -267,21 +306,95 @@ funciones ::= funcion:f {: List<FunctionNode> list = new ArrayList<>(); list.add
 
 funcion ::= 
             //funcion sin parametros 
-            tipos:t IDENTIFICADOR:id PARENIZQ PARENDER bloque_produ:b 
-            {: RESULT = new FunctionNode(id.toString(), b); 
+            tipos:t IDENTIFICADOR:id PARENIZQ PARENDER
+            {: 
+                //semantica 
+                if (listaTablasSimbolos.containsKey(id.toString())) {
+                    semantic_error("fun", id.toString());
+                    System.out.println("Funcion " + id.toString() + " ya creada");
+                } else {
+                //agregar a la tabla de simbolos
                 ArrayList<String> listaDatos = new ArrayList<String>();
-                currHash = "funcion " + id.toString();
-                String nombre_func = "\nnombre: " + id.toString();
-                String tipo_dato = "tipo: " + t.toString();
-                String ambito = "ambito: Funcion\n";
-                listaDatos.add(nombre_func);
-                listaDatos.add(tipo_dato);
-                listaDatos.add(ambito);
+                currHash = id.toString();
+                String nombre_func = " nombre: " + id.toString();
+                String tipo_dato = "tipo: " + t.toString() + ", ";
+                String datos = "Funcion: ";
+                datos = datos + tipo_dato + nombre_func;
+                listaDatos.add(datos);
+                pilaSimbolos.put(currHash, new TablaSimbolo());
+                pilaSimbolos.get(currHash).getTablaSimbolos().add(new Simbolo("funcion", t.toString(), id.toString()));
                 listaTablasSimbolos.put(currHash, listaDatos);
-            :}
+                switch (t.toString()) {
+                    case "int":
+                        funcs.add(new FunctionObject(id.toString(), TipoDato.INT, new TipoDato[] {}, true));
+                        break;
+                    case "float":
+                        funcs.add(new FunctionObject(id.toString(), TipoDato.FLOAT, new TipoDato[] {}, true));
+                        break;
+                    case "bool":
+                        funcs.add(new FunctionObject(id.toString(), TipoDato.BOOL, new TipoDato[] {}, true));
+                        break;
+                    case "char":
+                        funcs.add(new FunctionObject(id.toString(), TipoDato.CHAR, new TipoDato[] {}, true));
+                        break;
+                    case "string":
+                        funcs.add(new FunctionObject(id.toString(), TipoDato.STRING, new TipoDato[] {}, true));
+                        break;
+                    case "void":
+                        funcs.add(new FunctionObject(id.toString(), TipoDato.VOID, new TipoDato[] {}, true));
+                        break;
+                    default:
+                        semantic_error("tipo de funcion ", t.toString());
+                        System.out.println("Error semantico en la linea " + (lex.getLine()) + " Debido a que el tipo de funcion no es valido");
+                        break;
+                }
+                }
+            :} bloque_produ:b {: RESULT = new FunctionNode(id.toString(), b); :} 
 
             //funcion con parametros
-            | tipos:t IDENTIFICADOR:id PARENIZQ parametros PARENDER bloque_produ:b {: RESULT = new FunctionNode(id.toString(), b); :}
+            | tipos:t IDENTIFICADOR:id PARENIZQ parametros PARENDER 
+            {: 
+                //semantica
+                if (listaTablasSimbolos.containsKey("funcion " + id.toString())) {
+                    semantic_error("fun", id.toString());
+                    System.out.println("Funcion " + id.toString() + " ya creada");
+                } else {
+                //agregar a la tabla de simbolos
+                ArrayList<String> listaDatos = new ArrayList<String>();
+                currHash = id.toString();
+                String nombre_func = "nombre: " + id.toString();
+                String tipo_dato = "tipo: " + t.toString();
+                String datos = "Funcion ,";
+                datos = datos + tipo_dato + nombre_func;
+                listaDatos.add(datos);
+                pilaSimbolos.put(currHash, new TablaSimbolo());
+                pilaSimbolos.get(currHash).getTablaSimbolos().add(new Simbolo("funcion", t.toString(), id.toString()));
+                listaTablasSimbolos.put(currHash, listaDatos);
+                switch (t.toString()) {
+                    case "rodolfo":
+                        funcs.add(new FunctionObject(id.toString(), TipoDato.INT, new TipoDato[] {}, true));
+                        break;
+                    case "bromista":
+                        funcs.add(new FunctionObject(id.toString(), TipoDato.FLOAT, new TipoDato[] {}, true));
+                        break;
+                    case "trueno":
+                        funcs.add(new FunctionObject(id.toString(), TipoDato.BOOL, new TipoDato[] {}, true));
+                        break;
+                    case "cupido":
+                        funcs.add(new FunctionObject(id.toString(), TipoDato.CHAR, new TipoDato[] {}, true));
+                        break;
+                    case "cometa":
+                        funcs.add(new FunctionObject(id.toString(), TipoDato.STRING, new TipoDato[] {}, true));
+                        break;
+                    case "void":
+                        funcs.add(new FunctionObject(id.toString(), TipoDato.VOID, new TipoDato[] {}, true));
+                        break;
+                    default:
+                        semantic_error("tipo de funcion ", t.toString());
+                        break;
+                }
+                }
+            :} bloque_produ:b {: RESULT = new FunctionNode(id.toString(), b); :}
 
             //error en la declaracion de la funcion
             | error {:System.out.println("Error: encabezado no coincide con la gramatica.");
@@ -308,30 +421,41 @@ tipos ::=
 bloque_produ ::= 
     BRACEIZQ sentencias:s BRACEDER {: RESULT = new BlockNode(s); :};
 
-sentencias ::= sentencia:s {: List<StatementNode> list = new ArrayList<>(); if (s == null) {
-        System.out.println("ADVERTENCIA: Se intentó agregar una sentencia NULL a `sentencias`");
-    } else {
-        System.out.println(" Agregando sentencia de tipo: " + s.getClass().getSimpleName());
-        list.add(s);
-    }
-    RESULT = list;  :}
-            | sentencias:s1 sentencia:s2 {: 
-             s1.add(s2); 
-             System.out.println("Se agregó un statement a la lista. Total ahora: " + s1.size());
-             RESULT = s1; :}
-            | error 
-                {:
-                    System.out.println("Error: error en sentencia. Recuperando...");
+sentencias ::= 
+    sentencia:s 
+        {: 
+            List<StatementNode> list = new ArrayList<>(); 
+            if (s == null) {
+                System.out.println("ADVERTENCIA: Se intentó agregar una sentencia NULL a `sentencias`");
+            } else {
+                list.add(s);
+            }
+            RESULT = list;  
+        :}
+    | sentencias:s1 sentencia:s2 
+        {: 
+            if (s1 == null) {
+                s1 = new ArrayList<>();
+            }
+            if (s2 == null) {
+                System.out.println("ADVERTENCIA: Se intentó agregar una sentencia NULL a `sentencias`");
+            } else {
+                s1.add(s2);
+            }
+            RESULT = s1; 
+        :}
+    | error 
+        {:
+            System.out.println("Error: error en sentencia. Recuperando...");
 
-                    Symbol token;
-                    do {
-                        token = lex.next_token(); //este metodo ya lo trae el lexer
-                        if (token.sym == sym.ENDEXPR || token.sym == sym.EOF) {
-                            break; 
-                        }
-                    } while (token != null); 
-
-                :};
+            Symbol token;
+                do {
+                    token = lex.next_token(); //este metodo ya lo trae el lexer
+                    if (token.sym == sym.ENDEXPR || token.sym == sym.EOF) {
+                        break; 
+                    }
+                } while (token != null); 
+        :};
 
 sentencia ::= 
       creacion:c {: RESULT = c; :} 
@@ -345,14 +469,100 @@ sentencia ::=
     | modificacionArreglo:ma {: RESULT = ma; :}
     | creacionArreglo:ca {: RESULT = ca; :};
 
-creacion ::= tipos:t IDENTIFICADOR:id ENDEXPR {: RESULT = new CreacionNode(t.toString(), id.toString()); :};
-asignacion ::= IDENTIFICADOR:id ASIGNACION exprPrin:e ENDEXPR {: RESULT = new AsignacionNode(id.toString(), (ExpressionNode)e); :};
-creacionasignacion ::= tipos:t IDENTIFICADOR:id ASIGNACION exprPrin:e ENDEXPR {: RESULT = new CreacionAsignacionNode(t.toString(), id.toString(), (ExpressionNode) e); :};
+creacion ::= tipos:t IDENTIFICADOR:id ENDEXPR 
+    {: 
+        //preparar para agregar a la tabla de simbolos
+        String tipoDato = " Tipo Dato: " + t.toString() + ", ";
+        String nombre = " Nombre: " + id.toString() + ", ";
+        String ambito = " Var Local: ";
+        ambito = ambito + nombre + tipoDato;
+        List<String> entradas = listaTablasSimbolos.get(currHash);
+
+        //semantica
+        Boolean elementoExiste = false;
+        if (entradas != null) {
+            for (String entrada : entradas) {
+                if (entrada.contains(id.toString())) {
+                    elementoExiste = true;
+                    System.out.println("Variable " + id.toString() + " ya existe");
+                    break;
+                }
+            }
+        }
+        if (elementoExiste) {
+            semantic_error("var", id.toString());
+        } else {
+            pilaSimbolos.get(currHash).getTablaSimbolos().add(new Simbolo("Var local", t.toString(), id.toString()));
+            pilaSimbolos.get(currHash).incrementarIndice(4);
+            listaTablasSimbolos.get(currHash).add(ambito);
+            RESULT = new CreacionNode(t.toString(), id.toString()); 
+        }
+    :};
+asignacion ::= IDENTIFICADOR:id ASIGNACION exprPrin:e ENDEXPR 
+    {: 
+        //revisar si la variable existe
+        if (existeValor(id.toString()) == null) {
+            semantic_error("var", id.toString());
+            System.out.println("Error semantico en la linea " + (lex.getLine()) + " Debido a que la variable no existe: " + id.toString());
+        } else {
+            RESULT = new AsignacionNode(id.toString(), (ExpressionNode)e); 
+            //semantica
+            var typeVar = getTipo(id.toString(), true);
+            var typeExpr = getTipoExpr(e);
+            if (typeVar != typeExpr) {
+                semantic_error("assign", id.toString());
+                System.out.println("Error semantico en la linea " + (lex.getLine() -1) + " Debido a que la asignacion es invalida para la variable de tipo: " + typeVar.toString());
+            }
+        }
+    :};
+creacionasignacion ::= tipos:t IDENTIFICADOR:id ASIGNACION exprPrin:e ENDEXPR 
+    {: 
+        //preparar para agregar a la tabla de simbolos
+        String tipoDato = " Tipo Dato: " + t.toString() + ", ";
+        String nombre = " Nombre: " + id.toString() + ", ";
+        String ambito = " Var Local, ";
+        ambito = ambito + nombre + tipoDato;
+        List<String> entradas = listaTablasSimbolos.get(currHash);
+        Boolean elementoExiste = false;
+        if (entradas != null) {
+            for (String entrada : entradas) {
+                if (entrada.contains(nombre)) {
+                    elementoExiste = true;
+                    System.out.println("Variable " + id.toString() + " ya existe");
+                    break;
+                }
+            }
+        }
+
+        if (elementoExiste) {
+            semantic_error("var", id.toString());
+        } else {
+            //semantica una vez ingresamos
+            var typeExpr = getTipoExpr(e);
+            if (convert_a_TipoDato(t.toString()) != typeExpr) {
+                semantic_error("assign", id.toString());
+                System.out.println("Error semantico en la linea " + (lex.getLine() ) + " Debido a que la asignacion es invalida para la variable de tipo: " + t.toString());
+            }
+
+            pilaSimbolos.get(currHash).getTablaSimbolos().add(new Simbolo("Var local", t.toString(), id.toString()));
+            pilaSimbolos.get(currHash).incrementarIndice(4);
+            listaTablasSimbolos.get(currHash).add(ambito);
+            RESULT = new CreacionAsignacionNode(t.toString(), id.toString(), (ExpressionNode) e); 
+        }
+    :};
 
 exprPrin ::= exprLog:elog {: RESULT = elog; :};
 
-exprLog ::= exprLog:e1 operadorLog:op exprRel:e2 {: RESULT = new ExpresionLogicaNode(op.toString(), e1, e2); :} 
-            | exprRel:erel {: RESULT = erel; :} | NEGACION exprRel:e {: RESULT = new NegacionNode(e); :};
+exprLog ::= 
+    exprLog:e1 operadorLog:op exprRel:e2 
+        {: 
+            RESULT = new ExpresionLogicaNode(op.toString(), e1, e2); 
+        :} 
+    | exprRel:erel 
+        {: RESULT = erel; :} 
+    | NEGACION exprRel:e 
+        {: RESULT = new NegacionNode(e); :};
+
 operadorLog ::= DISYUNCION:op {: RESULT = "AND"; :} 
             | CONJUNCION:op {: RESULT = "OR"; :};
  
@@ -395,7 +605,16 @@ operadorArit ::=  SUMA:op {: RESULT = "+" ;:}
             | POTENCIA:op {: RESULT = "^"; :} ; 
 
 //produccion de return
-return_produ ::= RETURN exprPrin:e ENDEXPR {: RESULT = new ReturnNode(e); :} ;
+return_produ ::= RETURN exprPrin:e ENDEXPR 
+    {: 
+        RESULT = new ReturnNode(e);
+
+        var typeFunc = funcs.get(funcs.size()-1).getTipoReturn(); 
+        var typeExpr = getTipoExpr(e);
+
+        if (typeExpr != typeFunc) {semantic_error("misc", "return"); System.out.println("Error semantico en la linea " + (lex.getLine()) + " columna " + (lex.getColumn()) + ": " + "Debido a que el retorno es invalido para la funcion de tipo: " + typeFunc.toString() );}
+       // else {funcs.get(funcs.size()-1).setTHayRetorno(true);}
+    :} ;
 
 //produccion de break
 break_produ ::= BREAK ENDEXPR {: RESULT = new BreakNode(); :} ;
@@ -413,7 +632,29 @@ estructurasControl ::= if_produ:ifnod {: RESULT = ifnod;:}
                     | switch_produ:switchnod {: RESULT = switchnod; :}; 
 //if y else
 if_produ ::= 
-    IF PARENIZQ exprPrin:e PARENDER bloque_produ:b {: RESULT = new IfNode(e, b, null); :}
+    IF PARENIZQ exprPrin:e PARENDER bloque_produ:b 
+    {: 
+        System.out.println((e).toString());
+        /*
+        //comparar tipos
+        if (e instanceof ExpresionRelaNode) {
+            var operando1 = ((ExpresionRelaNode)e).op1;
+            var operando2 = ((ExpresionRelaNode)e).op2;
+            var tipos = new ArrayList<TipoDato>(){{
+                add(TipoDato.INT);
+                add(TipoDato.FLOAT);
+                add(TipoDato.BOOL);
+                add(TipoDato.CHAR);
+                add(TipoDato.STRING);
+            }};
+            var tipo = validarTipos(((ExpresionRelaNode)e).operador, operando1, operando2, tipos);
+            if (tipo == TipoDato.NULO) {
+                semantic_error("misc", "Error en la comparacion de tipos");
+            }
+        }*/
+        RESULT = new IfNode(e, b, null); 
+
+    :}
     | IF PARENIZQ exprPrin:e1 PARENDER bloque_produ:b1 ELSE bloque_produ:b2 {: RESULT = new IfNode(e1, b1, b2); :}
     ;
 

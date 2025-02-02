@@ -5,9 +5,13 @@ import java.util.List;
 
 import ParserLexer.arbol.AsignacionNode;
 import ParserLexer.arbol.BlockNode;
+import ParserLexer.arbol.BreakNode;
+import ParserLexer.arbol.CaseNode;
 import ParserLexer.arbol.CreacionAsignacionNode;
 import ParserLexer.arbol.CreacionNode;
 import ParserLexer.arbol.ExpresionAritNode;
+import ParserLexer.arbol.ExpresionLogicaNode;
+import ParserLexer.arbol.ExpresionRelaNode;
 import ParserLexer.arbol.ExpresionUnariaNode;
 import ParserLexer.arbol.ExpressionNode;
 import ParserLexer.arbol.FunctionNode;
@@ -17,10 +21,15 @@ import ParserLexer.arbol.IfNode;
 import ParserLexer.arbol.ForNode;
 import ParserLexer.arbol.WhileNode;
 import ParserLexer.arbol.SwitchNode;
+import ParserLexer.arbol.TipoVariableNode;
+import ParserLexer.arbol.VariableNode;
 import ParserLexer.arbol.ModificarArregloNode;
+import ParserLexer.arbol.PrintNode;
 import ParserLexer.arbol.CreacionArregloNode;
 import ParserLexer.arbol.AccesoArregloNode;
 import ParserLexer.arbol.ProgramNode;
+import ParserLexer.arbol.ReadNode;
+import ParserLexer.arbol.ReturnNode;
 import ParserLexer.arbol.StatementNode;
 import ParserLexer.arbol.Visitor;
 
@@ -89,7 +98,8 @@ public class TACGenerator implements Visitor {
     public void visit(CreacionAsignacionNode node) {
         //tree address code for a variable creation with assignment
         node.expresion.accept(this);
-        code.add(new ThreeAddressCode("=", node.expresion.result, null, node.identificador));
+        String nombre = newTemp();
+        code.add(new ThreeAddressCode("=", node.expresion.result, null, nombre));//node.identificador));
     }
 
     @Override
@@ -132,4 +142,45 @@ public class TACGenerator implements Visitor {
     @Override
     public void visit(ModificarArregloNode node) {
     }
+
+    @Override
+    public void visit(ExpresionLogicaNode node) {
+    }
+
+    @Override
+    public void visit(ExpresionRelaNode node) {
+    }
+
+    @Override
+    public void visit(CaseNode node) {
+    }
+
+    @Override
+    public void visit(BreakNode node) {
+    }
+
+    @Override
+    public void visit(ReturnNode node) {
+    }
+
+    @Override
+    public void visit(ReadNode node) {
+    }
+
+    @Override
+    public void visit(PrintNode node) {
+    }
+
+    @Override
+    public void visit(TipoVariableNode node) {
+    }
+
+    @Override
+    public void visit(VariableNode node) {
+    }
+
+    @Override
+    public void visit(AccesoArregloNode node) {
+    }
+
 }

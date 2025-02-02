@@ -285,5 +285,9 @@ public class ASTPrinter implements Visitor {
         indent--;
     }
 
+    @Override
+    public void visit(CaseNode node) {
+    }
+
 
 }
