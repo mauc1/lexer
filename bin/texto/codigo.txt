@@ -1,13 +1,13 @@
 rodolfo _func1_  abreregalo cierraregalo abrecuento  
 	 rodolfo _varInt_ finregalo
-	 _varquenoexiste_ entrega 3 finregalo #intento de asignar a var no existente
-	 cometa _varInt_ finregalo #error (bien)
+	# _varquenoexiste_ entrega 3 finregalo #intento de asignar a var no existente
+	# cometa _varInt_ finregalo #error (bien)
 	 #_varInt_ entrega 3.3 finregalo  #error (bien)
 	cometa _varString_ entrega "aaa" finregalo
 
-	#elfo abreregalo _varString_ mary _varString_ cierracuento abrecuento
-	#	cometa _varInt_ finregalo
-	#cierracuento
+	elfo abreregalo _varString_ mary _varString_ cierracuento abrecuento
+		cometa _varInt_ finregalo
+	cierracuento
 	#envia "3" finregalo
 cierracuento
 
