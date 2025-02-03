@@ -29,7 +29,10 @@ public class App {
        GenerarLexerParser(); //comienza a generar el lexer y parser    
         
         //PASO 2: Set de ruta
-        String ruta = "C:\\Users\\mauri\\OneDrive\\Documentos\\GitHub\\lexer\\src\\texto\\codigo.txt";
+        //pedir la ruta del archivo a leer al usuario
+        System.out.println("Ingrese la ruta del archivo a leer: ");
+        String ruta = System.console().readLine();
+       // String ruta = "C:\\Users\\mauri\\OneDrive\\Documentos\\GitHub\\lexer\\src\\texto\\codigo.txt";
        // String ruta = "C:\\Users\\julil\\OneDrive\\Documentos\\GitHub\\lexer\\src\\texto\\codigo.txt";
         //String ruta = "";
         //espera 4 segundos
